@@ -9,9 +9,10 @@ const router = createRouter({
 });
 //全局路由前置守卫
 router.beforeEach((to, from, next) => {
-	console.log('to:' + to.path);
-	console.log('from:' + from.path);
-	console.log(witeList.indexOf(to.path));
+	if (process.env.NODE_ENV === 'development') { 
+		console.log('to:' + to.path);
+		console.log('from:' + from.path);
+	}
 	const hasLogin = uni.getStorageSync('token')
 	if (!hasLogin) {
 		// 是否是在白名单中的界面
