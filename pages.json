@@ -4,72 +4,37 @@
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/home/index",
+			"path": "pages/index/index",
 			"style": {
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 50
-			}
-		},
-		{
-			"path": "pages/work/index",
-			"style": {
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 50
-			}
-		},
-		{
-			"path": "pages/profile/index",
-			"style": {
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 50
-			}
-		},
-		{
-			"path": "pages/public/login",
-			"style": {
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/public/register",
-			"style": {
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/public/forget-pwd",
-			"style": {
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "首页"
 			}
 		}
 	],
+	"subPackages": [
+		{
+			"root": "pages/sub-page",
+			"pages": [
+				{
+					"path": "home/notice",
+					"style": {
+						"navigationBarTitleText": "通知"
+					}
+				}
+			]
+		}
+	],
 	"globalStyle": {
-		"navigationStyle": "custom"
+	  "navigationStyle": "custom",
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "房间预约与流动统计",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
 	},
-	"tabBar": {
-		"color": "#C0C4CC",
-		"selectedColor": "#3D7EFF",
-		"borderStyle": "black",
-		"backgroundColor": "#ffffff",
-		"list": [{
-				"pagePath": "pages/home/index",
-				"iconPath": "static/icons/home.png",
-				"selectedIconPath": "static/icons/home_fill.png",
-				"text": "首页"
-			},
-			{
-				"pagePath": "pages/work/index",
-				"iconPath": "static/icons/work.png",
-				"selectedIconPath": "static/icons/work_fill.png",
-				"text": "工作台"
-			},
-			{
-				"pagePath": "pages/profile/index",
-				"iconPath": "static/icons/my.png",
-				"selectedIconPath": "static/icons/my_fill.png",
-				"text": "我的"
-			}
-		]
+	"preloadRule": {
+	  "pages/index/index": {
+	    "packages": ["pages/sub-page"],
+	    "network": "all"
+	  }
 	},
 	"uniIdRouter": {}
 }
