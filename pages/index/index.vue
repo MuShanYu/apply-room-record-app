@@ -139,7 +139,7 @@
 		methods: {
 			// 导航页面滚动到底部
 			tabbarPageScrollLower(e) {
-				
+
 			},
 
 			// 修改当前选中的tabbar
@@ -167,106 +167,122 @@
 </script>
 
 <style lang="scss" scoped>
-/* 波浪*/
-  .template-outset{
-    // background-image: linear-gradient(to top, #4C3FAE 20%, #6E26BA 80%);
-    width: 100vw;
-    height: 100vh;
-  }
-  @keyframes move_wave {
-      0% {
-          transform: translateX(0) translateZ(0) scaleY(1)
-      }
-      50% {
-          transform: translateX(-25%) translateZ(0) scaleY(1)
-      }
-      100% {
-          transform: translateX(-50%) translateZ(0) scaleY(1)
-      }
-  }
-  .tnwave {
-      overflow: hidden;
-      position: absolute;
-      left: 0;
-      right: 0;
-      // bottom: 100rpx;
-      bottom: calc(50rpx + constant(safe-area-inset-bottom));
-      bottom: calc(50rpx + env(safe-area-inset-bottom));
-      // top: 0;
-      z-index: 997;
-      margin: auto;
-      height: 90rpx;
-      // background-color: chartreuse;
-  }
-  .waveWrapperInner {
-      position: absolute;
-      width: 100%;
-      overflow: hidden;
-      height: 100%;
-  }
-  .wave {
-      position: absolute;
-      left: 0;
-      width: 200%;
-      height: 100%;
-      background-repeat: repeat no-repeat;
-      background-position: 0 bottom;
-      transform-origin: center bottom;
-  }
- 
-  
-  .bgTop {
-      opacity: 0.4;
-  }
-  .waveTop {
-      background-size: 50% 45px;
-  }
-  .waveAnimation .waveTop {
-    animation: move_wave 4s linear infinite;
-  }
-  
-  .bgMiddle {
-      opacity: 0.6;
-  }
-  .waveMiddle {
-      background-size: 50% 40px;
-  }
-  .waveAnimation .waveMiddle {
-      animation: move_wave 3.5s linear infinite;
-  }
-  
-  .bgBottom {
-      opacity: 0.95;
-  }
-  .waveBottom {
-      background-size: 50% 35px;
-  }
-  .waveAnimation .waveBottom {
-      animation: move_wave 2s linear infinite;
-  }
+	/* 波浪*/
+	.template-outset {
+		// background-image: linear-gradient(to top, #4C3FAE 20%, #6E26BA 80%);
+		width: 100vw;
+		height: 100vh;
+	}
 
-  
-  @for $i from 0 through 20 { 
-      .g-bubble:nth-child(#{$i}) {
-          opacity: 0.2;
-          border-radius: 100%;
-          position: fixed;
-          background: #26b4f5;
-          $width: random(20) + px;
-          right: #{(random(100)) + '%'};
-          bottom: - #{(random(60))}px;
-          width: $width;
-          height: $width;
-          animation: moveToTop #{(random(9500) + 1500) / 1000}s ease-in-out -#{random(9000)/1000}s infinite;
-      }
-  }
-  @keyframes moveToTop {
-      70% {
-          opacity: 0.05;
-      }
-      100% {
-          opacity: 0.01;
-          transform: translate(-50%, -180px) scale(0.3);
-      }
-  }
+	@keyframes move_wave {
+		0% {
+			transform: translateX(0) translateZ(0) scaleY(1)
+		}
+
+		50% {
+			transform: translateX(-25%) translateZ(0) scaleY(1)
+		}
+
+		100% {
+			transform: translateX(-50%) translateZ(0) scaleY(1)
+		}
+	}
+
+	.tnwave {
+		overflow: hidden;
+		position: absolute;
+		left: 0;
+		right: 0;
+		// bottom: 100rpx;
+		bottom: calc(50rpx + constant(safe-area-inset-bottom));
+		bottom: calc(50rpx + env(safe-area-inset-bottom));
+		// top: 0;
+		z-index: 997;
+		margin: auto;
+		height: 90rpx;
+		// background-color: chartreuse;
+	}
+
+	.waveWrapperInner {
+		position: absolute;
+		width: 100%;
+		overflow: hidden;
+		height: 100%;
+	}
+
+	.wave {
+		position: absolute;
+		left: 0;
+		width: 200%;
+		height: 100%;
+		background-repeat: repeat no-repeat;
+		background-position: 0 bottom;
+		transform-origin: center bottom;
+	}
+
+
+	.bgTop {
+		opacity: 0.4;
+	}
+
+	.waveTop {
+		background-size: 50% 45px;
+	}
+
+	.waveAnimation .waveTop {
+		animation: move_wave 4s linear infinite;
+	}
+
+	.bgMiddle {
+		opacity: 0.6;
+	}
+
+	.waveMiddle {
+		background-size: 50% 40px;
+	}
+
+	.waveAnimation .waveMiddle {
+		animation: move_wave 3.5s linear infinite;
+	}
+
+	.bgBottom {
+		opacity: 0.95;
+	}
+
+	.waveBottom {
+		background-size: 50% 35px;
+	}
+
+	.waveAnimation .waveBottom {
+		animation: move_wave 2s linear infinite;
+	}
+
+
+	@for $i from 0 through 20 {
+		.g-bubble:nth-child(#{$i}) {
+			opacity: 0.2;
+			border-radius: 100%;
+			position: fixed;
+			background: #26b4f5;
+			$width: random(20)+px;
+			right: #{(random(100)) + '%'};
+			bottom: - #{(random(60))}px;
+			width: $width;
+			height: $width;
+			animation: moveToTop #{(random(9500) + 1500) / 1000}s ease-in-out -#{random(9000)/1000}s infinite;
+		}
+	}
+
+	@keyframes moveToTop {
+		70% {
+			opacity: 0.05;
+		}
+
+		100% {
+			opacity: 0.01;
+			transform: translate(-50%, -180px) scale(0.3);
+		}
+	}
+	
+	
 </style>
