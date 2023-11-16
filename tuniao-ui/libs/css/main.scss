@@ -2,11 +2,11 @@ $direction: top, right, bottom, left;
 
 body {
   // 全局灰白效果
-  /* filter: grayscale(100%);
-  -webkit-filter: grayscale(100%); */
+	// filter: grayscale(100%);
+	// -webkit-filter: grayscale(100%);
   
-	background-color: $tn-bg-color;
-	/* background-color: #ffffff; */
+	// background-color: $tn-bg-color;
+	background-color: #f7f7f7;
 	font-size: 28rpx;
 	color: $tn-font-color;
 	font-family: Helvetica Neue, Helvetica, sans-serif;
