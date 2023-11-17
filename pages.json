@@ -8,6 +8,24 @@
 			"style": {
 				"navigationBarTitleText": "首页"
 			}
+		},
+		{
+			"path": "pages/public/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
+			"path": "pages/public/forget-pwd",
+			"style": {
+				"navigationBarTitleText": "忘记密码"
+			}
+		},
+		{
+			"path": "pages/public/register",
+			"style": {
+				"navigationBarTitleText": "注册"
+			}
 		}
 	],
 	"subPackages": [

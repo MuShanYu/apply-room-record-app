@@ -8,12 +8,13 @@ export default {
 	config: {
 		baseUrl: indexConfig.baseUrl,
 		header: {
-			'Content-Type':'application/json;charset=UTF-8',
-			'Content-Type':'application/x-www-form-urlencoded'
-		},  
+			'Content-Type': 'application/json;charset=UTF-8',
+			'Content-Type': 'application/x-www-form-urlencoded'
+		},
 		data: {},
 		method: "GET",
-		dataType: "json",  /* 如设为json，会对返回的数据做一次 JSON.parse */
+		dataType: "json",
+		/* 如设为json，会对返回的数据做一次 JSON.parse */
 		responseType: "text",
 		success() {},
 		fail() {},
@@ -35,12 +36,14 @@ export default {
 		// token处理
 		if (uni.getStorageSync('token')) {
 			// 可以在此通过vm引用vuex中的变量，具体值在vm.$store.state中
-			_token = {'token': uni.getStorageSync('token') || 'undefined'}
-			options.header = Object.assign({}, options.header, _token) 
+			let _token = {
+				'token': uni.getStorageSync('token') || 'undefined'
+			}
+			options.header = Object.assign({}, options.header, _token)
 		}
 		return new Promise((resolve, reject) => {
 			let _config = null
-			
+
 			options.complete = (response) => {
 				let statusCode = response.statusCode
 				response.config = _config
@@ -75,7 +78,7 @@ export default {
 			if (this.interceptor.request) {
 				this.interceptor.request(_config)
 			}
-			
+
 			// 统一的请求日志记录
 			_reqlog(_config)
 
@@ -88,7 +91,7 @@ export default {
 		}
 		options.url = url
 		options.data = data
-		options.method = 'GET'  
+		options.method = 'GET'
 		return this.request(options)
 	},
 	post(url, data, options) {
@@ -98,6 +101,9 @@ export default {
 		options.url = url
 		options.data = data
 		options.method = 'POST'
+		options.header = {
+			'Content-Type': 'application/json;charset=UTF-8',
+		}
 		return this.request(options)
 	},
 	put(url, data, options) {
@@ -107,6 +113,9 @@ export default {
 		options.url = url
 		options.data = data
 		options.method = 'PUT'
+		options.header = {
+			'Content-Type': 'application/json;charset=UTF-8',
+		}
 		return this.request(options)
 	},
 	delete(url, data, options) {
@@ -144,7 +153,7 @@ function _reslog(res) {
 		console.log("【" + new Date().toTimeString() + "】 结果：" + JSON.stringify(res.data))
 	}
 	//TODO 除了接口服务错误外，其他日志调接口异步写入日志数据库
-	switch(_statusCode){
+	switch (_statusCode) {
 		case 200:
 			break;
 		case 401:
@@ -160,8 +169,8 @@ function handleServiceError(code) {
 	if (code === -2 || code === -3 || code === -4 || code === -5) {
 		uni.showToast({
 			title: '您的登录状态过期或者无效，3秒后跳转至登录页面',
-			icon:'none',
-			duration:3000
+			icon: 'none',
+			duration: 3000
 		})
 		setTimeout(() => {
 			store.dispatch('logout').then(() => {
@@ -174,8 +183,8 @@ function handleServiceError(code) {
 	} else if (code === -1) {
 		uni.showToast({
 			title: '请您在登录后使用，3s后跳转至登录界面',
-			icon:'none',
-			duration:3000
+			icon: 'none',
+			duration: 3000
 		})
 		setTimeout(() => {
 			store.dispatch('logout').then(() => {
@@ -195,12 +204,11 @@ function handleServiceError(code) {
 				if (res.confirm) {
 					// 重定向到登录页面
 					uni.showToast({
-						title:'系统错误',
-						icon:'none'
+						title: '系统错误',
+						icon: 'none'
 					})
 				}
 			}
 		})
 	}
 }
-
