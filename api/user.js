@@ -1,5 +1,10 @@
 import http from '@/config/request.config.js'
 
+export function login (userLoginDTO) {
+	return http.post('/user/login', userLoginDTO)
+}
+
+
 export default {
 
 	login: (userLoginDTO) => {
@@ -25,7 +30,7 @@ export default {
 	updateInfo: (userUpdateDTO) => {
 		return http.post('/user/update/userInfo', userUpdateDTO)
 	},
-	
+
 	updateUserNickname: (userUpdateNicknameDTO) => {
 		return http.post('/user/update/nickname', userUpdateNicknameDTO)
 	},

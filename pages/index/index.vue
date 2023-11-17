@@ -155,13 +155,9 @@
 
 		},
 		methods: {
-
-
 			// 导航页面滚动到底部
 			tabbarPageScrollLower(e) {
-				if (this.currentTabbarIndex === 1) {
-					this.$refs.pageB.getRandomData && this.$refs.pageB.getRandomData()
-				}
+				
 			},
 
 			// 修改当前选中的tabbar

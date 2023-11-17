@@ -1,5 +1,5 @@
 <template>
-	<view class="template-login">
+	<view class="template-login" style="background-color: #FFFFFF;min-height: 100vh;">
 		<!-- 顶部自定义导航 -->
 		<tn-nav-bar fixed alpha customBack>
 			<view slot="back" class='tn-custom-nav-bar__back' @click="goBack">
@@ -105,8 +105,7 @@
 	export default {
 		name: 'login',
 		onLoad() {
-			// 更新顶部导航栏信息
-			this.updateCustomBarInfo()
+			
 		},
 		data() {
 			return {
@@ -119,44 +118,6 @@
 			// 跳转
 			tn(url) {
 				this.$Router.push(url)
-			},
-			// 点击左上角返回按钮时触发事件
-			goBack() {
-				// 通过判断当前页面的页面栈信息，是否有上一页进行返回，如果没有则跳转到首页
-				const pages = getCurrentPages()
-				if (pages && pages.length > 0) {
-					const firstPage = pages[0]
-					if (pages.length == 1 && (!firstPage.route || firstPage.route != 'pages/home/index')) {
-						this.$Router.pushTab('/pages/home/index')
-					} else {
-						this.$Router.back(1)
-					}
-				} else {
-					this.$Router.pushTab('/pages/home/index')
-				}
-			},
-			// 更新顶部导航栏信息
-			async updateCustomBarInfo() {
-				// 获取vuex中的自定义顶栏的高度
-				let customBarHeight = this.vuex_custom_bar_height
-				let statusBarHeight = this.vuex_status_bar_height
-				// 如果获取失败则重新获取
-				if (!customBarHeight) {
-					try {
-						const navBarInfo = await this.$tn.updateCustomBar()
-						customBarHeight = navBarInfo.customBarHeight
-						statusBarHeight = navBarInfo.statusBarHeight
-					} catch (e) {
-						setTimeout(() => {
-							this.updateCustomBarInfo()
-						}, 10)
-						return
-					}
-				}
-
-				// 更新vuex中的导航栏信息
-				this.$tn.vuex('vuex_status_bar_height', statusBarHeight)
-				this.$tn.vuex('vuex_custom_bar_height', customBarHeight)
 			}
 		}
 	}
@@ -165,7 +126,7 @@
 <style lang="scss" scoped>
 	/* 胶囊*/
 	.tn-custom-nav-bar__back {
-		width: 100%;
+		width: 75%;
 		height: 100%;
 		position: relative;
 		display: flex;

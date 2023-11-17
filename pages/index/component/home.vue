@@ -4,7 +4,9 @@
 		<tn-nav-bar :isBack='false'>首页</tn-nav-bar>
 		<!-- 页面内容 -->
 		<view :style="{paddingTop: vuex_custom_bar_height + 'px'}">
-			
+			<tn-button @click='test()' backgroundColor="#01BEFF" :plain="false">
+				点击进行登录
+			</tn-button>
 		</view>
 	</view>
 </template>
@@ -14,13 +16,12 @@
 	export default {
 		data() {
 			return {
-				title: 'aaaaa',
 				show: true
 			}
 		},
 		methods: {
 			test() {
-				this.show = !this.show
+				this.$Router.push('/pages/public/login')
 			},
 			test1() {
 				recordApi.userAccessRecordListApi(1, 20)
