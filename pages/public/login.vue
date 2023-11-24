@@ -78,7 +78,7 @@
 					<view class="tn-flex tn-flex-row-center">
 						<view class="tn-padding-sm tn-margin-sm tn-radius">
 							<view class="tn-flex tn-flex-direction-column tn-flex-row-center tn-flex-col-center">
-								<view @tap="wxLogin"
+								<view @tap="showLoginModal = true"
 									class="icon13__item--icon tn-flex tn-flex-row-center tn-flex-col-center tn-shadow-blur tn-main-gradient-green--light tn-color-green">
 									<view class="tn-icon-wechat-fill tn-three"></view>
 								</view>
@@ -89,6 +89,8 @@
 			</view>
 		</view>
 		<tn-toast ref="toast"></tn-toast>
+		<tn-modal @click="handleClickModal" :radius='40' v-model="showLoginModal" :title="'提示'" :content="'授权系统获取您的用户标识ID，方便您使用微信快捷登录App。'" :button="button"></tn-modal>
+		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 	</view>
 </template>
 
@@ -109,7 +111,19 @@
 					tel: '',
 					pwd: ''
 				},
-				btnLoading: false
+				btnLoading: false,
+				showLoginModal: false,
+				button: [{
+						text: '取消',
+						backgroundColor: 'tn-bg-gray',
+						fontColor: '#FFFFFF',
+					},
+					{
+						text: '确定',
+						backgroundColor: '#3668FC',
+						fontColor: '#FFFFFF'
+					}
+				],
 			}
 		},
 		watch: {
@@ -145,7 +159,7 @@
 					})
 					return
 				}
-				console.log(this.userLoginDTO);
+				// console.log(this.userLoginDTO);
 				this.btnLoading = true
 				login(this.userLoginDTO).then(res => {
 					this.btnLoading = false
@@ -160,48 +174,23 @@
 					this.btnLoading = false
 				})
 			},
-			wxLogin() {
+			handleClickModal(e) {
+				this.showLoginModal = false
+				if (e.index === 1) {
+					// 确定按钮
+					this.$refs.loading.open();
+					this.handleWXLogin()
+				}
+			},
+			handleWXLogin() {
 				let that = this
-				console.log('wx');
 				uni.login({
 					provider: 'weixin',
 					scopes: '',
 					success(res) {
-						console.log(res);
 						let code = res.code
-						uni.getUserInfo({
-							provider:'weixin',
-							success(userInfo) {
-								console.log(userInfo);
-							},
-							fail(e) {
-								console.log(e);
-							}
-						})
-					},
-					fail(e) {
-						console.log(e);
-					}
-				})
-				// wx.login({
-				// 	success(res) {
-				// 		if (res.code) {
-				// 			that.handleWXLogin(res.code)
-				// 		} else {
-				// 			that.$refs.toast.show({
-				// 				title: '微信登录失败'
-				// 			})
-				// 		}
-				// 	}
-				// })
-			},
-			handleWXLogin(code) {
-				console.log(code);
-				wx.getUserProfile({
-					lang: 'zh_CN',
-					desc: '完善用户个人信息',
-					success(res) {
-						console.log(res);
+						that.$refs.loading.close()
+						console.log(code);
 					},
 					fail(e) {
 						console.log(e);

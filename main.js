@@ -17,6 +17,9 @@ Vue.mixin(vuexStore)
 let globalPageCode = require('@/mixin/global_page_mixin.js')
 Vue.mixin(globalPageCode)
 
+import wLoading from "@/components/w-loading.vue";
+Vue.component('w-loading', wLoading)
+
 import {
 	router,
 	RouterMount
