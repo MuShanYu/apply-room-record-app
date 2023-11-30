@@ -74,10 +74,12 @@ const store = new Vuex.Store({
 			// 存储信息到内存中
 			uni.setStorageSync('token', loginInfo.token);
 			uni.setStorageSync('userInfo', loginInfo.user);
+			uni.setStorageSync('isBindWx', loginInfo.isBindWx);
 		},
 		LOGOUT(state) {
 			uni.removeStorageSync('token');
 			uni.removeStorageSync('userInfo');
+			uni.removeStorageSync('isBindWx');
 		},
 	},
 	actions: {

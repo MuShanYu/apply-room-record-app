@@ -61,10 +61,10 @@ export default {
 					if (response.data) {
 						let serviceCode = response.data.code
 						if (serviceCode !== 200) {
-							handleServiceError(serviceCode)
+							handleServiceError(serviceCode, response.data.message)
 							reject(response.data)
 						} else {
-							resolve(response.data);
+							resolve(response.data.queryData);
 						}
 					}
 				} else {
@@ -92,6 +92,9 @@ export default {
 		options.url = url
 		options.data = data
 		options.method = 'GET'
+		options.header = {
+			'Content-Type': 'application/x-www-form-urlencoded'
+		}
 		return this.request(options)
 	},
 	post(url, data, options) {
@@ -165,7 +168,7 @@ function _reslog(res) {
 	}
 }
 
-function handleServiceError(code) {
+function handleServiceError(code, message) {
 	if (code === -2 || code === -3 || code === -4 || code === -5) {
 		uni.showToast({
 			title: '您的登录状态过期或者无效，3秒后跳转至登录页面',
