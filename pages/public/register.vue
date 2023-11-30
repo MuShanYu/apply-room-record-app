@@ -12,7 +12,7 @@
 
       <view class="login__wrapper">
         <view class="tn-margin-left tn-margin-right tn-text-bold" style="font-size: 48rpx;">
-          房间预约与流动统计
+          App用户注册
         </view>
        <view class="tn-margin tn-color-gray--dark tn-text-sm">
           这是一句很厉害的App介绍！
@@ -27,7 +27,7 @@
                 <view class="tn-icon-identity"></view>
               </view>
               <view class="login__info__item__input__content">
-                <input maxlength="16" placeholder-class="input-placeholder" placeholder="学号/工号" />
+                <input v-model="registerDTO.stuNum" maxlength="16" placeholder-class="input-placeholder" placeholder="学号/工号" />
               </view>
             </view>
 						
@@ -36,7 +36,7 @@
 						    <view class="tn-icon-my"></view>
 						  </view>
 						  <view class="login__info__item__input__content">
-						    <input maxlength="16" placeholder-class="input-placeholder" placeholder="姓名" />
+						    <input v-model="registerDTO.name" maxlength="16" placeholder-class="input-placeholder" placeholder="姓名" />
 						  </view>
 						</view>
             
@@ -45,25 +45,16 @@
                 <view class="tn-icon-company"></view>
               </view>
               <view class="login__info__item__input__content">
-								<tn-input @click="showPicker = true" type="select" placeholder="请选择您所在的学院" placeholder-class="input-placeholder"/>
+								<tn-input v-model="registerDTO.institute" @click="showPicker = true" type="select" placeholder="请选择您所在的学院" placeholder-class="input-placeholder"/>
               </view>
             </view>
-            
-						<view class="login__info__item__input tn-flex tn-flex-direction-row tn-flex-nowrap tn-flex-col-center tn-flex-row-left">
-						  <view class="login__info__item__input__left-icon">
-						    <view class="tn-icon-phone"></view>
-						  </view>
-						  <view class="login__info__item__input__content">
-						    <input type="select" maxlength="16" placeholder-class="input-placeholder" placeholder="联系电话" />
-						  </view>
-						</view>
 						
 						<view class="login__info__item__input tn-flex tn-flex-direction-row tn-flex-nowrap tn-flex-col-center tn-flex-row-left">
 						  <view class="login__info__item__input__left-icon">
 						    <view class="tn-icon-email"></view>
 						  </view>
 						  <view class="login__info__item__input__content">
-						    <input type="select" maxlength="16" placeholder-class="input-placeholder" placeholder="邮箱" />
+						    <input v-model="registerDTO.mail" type="select" placeholder-class="input-placeholder" placeholder="邮箱" />
 						  </view>
 						</view>
             
@@ -73,7 +64,7 @@
           <!-- 悬浮按钮-->
           <view class="tn-margin-top-lg" style="width: 100%;position: relative;">
             <view class="tn-margin-top-lg">
-              <tn-button backgroundColor="#3668FC" padding="40rpx 0" width="100%" :fontSize="28" fontColor="#FFFFFF" @click="tn('')">
+              <tn-button backgroundColor="#3668FC" padding="40rpx 0" width="100%" :fontSize="28" fontColor="#FFFFFF" @click="register">
                 <text class="">注 册</text>
               </tn-button>
             </view>
@@ -91,29 +82,125 @@
       
     </view>
 		
-		<tn-picker mode="selector" v-model="showPicker"  :defaultSelector="[0]" :range="institutes"></tn-picker>
+		<tn-picker @confirm='pickerConfirm' mode="selector" v-model="showPicker"  :defaultSelector="[0]" :range="institutes"></tn-picker>
+		<tn-toast ref="toast"></tn-toast>
+    <w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 		
-    
+		<tn-modal @click="showServiceErrorModal = false" :radius='40' v-model="showServiceErrorModal" :title="'系统提示'"
+			:content="message" :button="serviceErrorModalButton">
+		</tn-modal>
   </view>
 </template>
 
 <script>
+	import { querySysConfigByKeyApi } from '@/api/config.js'
+	import { register, login } from '@/api/user.js'
   export default {
-    name: 'login',
-		onLoad() {
-			
+    name: 'register',
+		mounted() {
+			querySysConfigByKeyApi('institutes').then(res => {
+				let configValue = JSON.parse(res.configValue)
+				this.institutes = configValue.institutes
+			})
 		},
     data() {
       return {
 				showPicker: false,
-				institutes: ['1', '2', '3']
+				institutes: [],
+				registerDTO: {
+					stuNum: '',
+					name: '',
+					institute: '',
+					mail: ''
+				},
+				showServiceErrorModal: false,
+				message: '',
+				serviceErrorModalButton: [{
+					text: '我知道了',
+					backgroundColor: '#3668FC',
+					fontColor: '#FFFFFF',
+				}],
+				
       }
     },
     methods: {
       // 跳转
       tn(url) {
         this.$Router.push(url)
-      }
+      },
+			pickerConfirm(e) {
+				this.registerDTO.institute = this.institutes[e[0]]
+			},
+			register() {
+				if (!this.verifyForm()) {
+					return
+				}
+				let that = this
+				this.$refs.loading.open()
+				register(this.registerDTO).then(res => {
+					that.$refs.loading.close()
+					this.$refs.toast.show({
+						title: '注册成功，正在自动登录',
+						duration: 1000
+					})
+					setTimeout(() => {
+						let loginDTO = {
+							stuNum: that.registerDTO.stuNum,
+							pwd: that.registerDTO.stuNum
+						}
+						login(loginDTO).then(res => {
+							that.$store.dispatch('login', res).then(() => {
+								that.$refs.toast.show({
+									title: '登录成功,正在跳转',
+									duration: 1500
+								})
+								setTimeout(() => {
+									that.$Router.replaceAll('/pages/index/index')
+								}, 1500)
+							})
+						}).catch(e => {
+							that.$refs.loading.close()
+						})
+					}, 1000)
+				}).catch(e => {
+					this.$refs.loading.close()
+					if (e.success ===  false) {
+						this.message = e.message
+						this.showServiceErrorModal = true
+					}
+				})
+			},
+			verifyForm() {
+				if (this.registerDTO.stuNum.length < 5 || this.registerDTO.stuNum.length > 16) {
+					this.$refs.toast.show({
+						title: '请输入正确的学号',
+						duration: 1000
+					})
+					return false
+				}
+				if (this.registerDTO.name.length < 2 || this.registerDTO.name.length > 10) {
+					this.$refs.toast.show({
+						title: '请输入正确的姓名',
+						duration: 1000
+					})
+					return false
+				}
+				if (this.registerDTO.institute == '') {
+					this.$refs.toast.show({
+						title: '请选择您所在的学院',
+						duration: 1000
+					})
+					return false
+				}
+				if (!/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.registerDTO.mail)) {
+					this.$refs.toast.show({
+						title: '请输入正确的邮箱地址',
+						duration: 1000
+					})
+					return false
+				}
+				return true
+			}
     }
   }
 </script>
@@ -121,7 +208,7 @@
 <style lang="scss" scoped>
   /* 胶囊*/
   .tn-custom-nav-bar__back {
-    width: 75%;
+    width: 80%;
     height: 100%;
     position: relative;
     display: flex;

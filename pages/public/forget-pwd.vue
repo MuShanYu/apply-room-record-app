@@ -11,10 +11,10 @@
 
 			<view class="login__wrapper">
 				<view class="tn-margin-left tn-margin-right tn-text-bold" style="font-size: 48rpx;">
-					房间预约与流动统计
+					App密码找回
 				</view>
 				<view class="tn-margin tn-color-gray--dark tn-text-sm">
-					这是一句很厉害的App介绍！
+					tip:如未绑定邮箱请联系客服重置密码。
 				</view>
 
 				<!-- 输入框内容-->
@@ -24,10 +24,11 @@
 						<view
 							class="login__info__item__input tn-flex tn-flex-direction-row tn-flex-nowrap tn-flex-col-center tn-flex-row-left">
 							<view class="login__info__item__input__left-icon">
-								<view class="tn-icon-phone"></view>
+								<view class="tn-icon-identity"></view>
 							</view>
 							<view class="login__info__item__input__content">
-								<input maxlength="16" placeholder-class="input-placeholder" placeholder="请输入登录手机号" />
+								<input v-model="form.stuNum" maxlength="16" placeholder-class="input-placeholder"
+									placeholder="请输入用于登录的学号/工号" />
 							</view>
 						</view>
 
@@ -37,11 +38,11 @@
 								<view class="tn-icon-safe"></view>
 							</view>
 							<view class="login__info__item__input__content login__info__item__input__content--verify-code">
-								<input maxlength="6" placeholder-class="input-placeholder" placeholder="请输入验证码" />
+								<input v-model="form.code" maxlength="4" placeholder-class="input-placeholder" placeholder="请输入验证码" />
 							</view>
 							<view class="login__info__item__input__right-verify-code">
-								<tn-button backgroundColor="#3668FC" fontColor="#FFFFFF" size="sm" padding="5rpx 10rpx" width="100%"
-									shape="round">{{ tip }}</tn-button>
+								<tn-button @click="getCode" backgroundColor="#3668FC" fontColor="#FFFFFF" size="sm" padding="5rpx 10rpx"
+									width="100%" shape="round">{{ codeTips }}</tn-button>
 							</view>
 						</view>
 
@@ -51,7 +52,7 @@
 								<view class="tn-icon-lock"></view>
 							</view>
 							<view class="login__info__item__input__content">
-								<input maxlength="12" :password="!showPassword" placeholder-class="input-placeholder"
+								<input v-model="form.pwd" maxlength="32" :password="!showPassword" placeholder-class="input-placeholder"
 									placeholder="请输入新密码" />
 							</view>
 							<view class="login__info__item__input__right-icon" @click="showPassword = !showPassword">
@@ -66,8 +67,8 @@
 							<view class="tn-icon-lock"></view>
 						</view>
 						<view class="login__info__item__input__content">
-							<input maxlength="12" :password="!showPassword" placeholder-class="input-placeholder"
-								placeholder="请确认新密码" />
+							<input v-model="form.newPwd" maxlength="32" :password="!showPassword"
+								placeholder-class="input-placeholder" placeholder="请确认新密码" />
 						</view>
 						<view class="login__info__item__input__right-icon" @click="showPassword = !showPassword">
 							<view :class="[showPassword ? 'tn-icon-eye' : 'tn-icon-eye-hide']"></view>
@@ -80,7 +81,7 @@
 					<view class="tn-margin-top-lg" style="width: 100%;position: relative;">
 						<view class="tn-margin-top-lg">
 							<tn-button backgroundColor="#3668FC" padding="40rpx 0" width="100%" :fontSize="28" fontColor="#FFFFFF"
-								@click="tn('')">
+								@click="handleRestPwd">
 								<text class="">修 改 密 码</text>
 							</tn-button>
 						</view>
@@ -88,7 +89,10 @@
 
 					<view class="login__info__item__tips">
 						<view class="tn-flex tn-flex-row-between">
-							<view class="tn-color-gray" @tap="goBack()">点击返回登录</view>
+							<button class="tn-button--clear-style" open-type="contact">
+								<view class="tn-padding-right tn-color-red">联系客服申请重置密码</view>
+							</button>
+							<view class="tn-padding-left-lg tn-color-gray" @tap="goBack()">返回登录</view>
 						</view>
 					</view>
 
@@ -98,26 +102,145 @@
 
 		</view>
 
+		<!-- 验证码倒计时 -->
+		<tn-verification-code :keepRunning='true' uniqueKey='forgetPwdCode' countDownText='s秒' ref="code" :seconds="60" @change="codeChange"></tn-verification-code>
+		
+		<tn-modal @click="showFalseModal = false" :radius='40' v-model="showFalseModal" :title="'系统提示'"
+			:content="message" :button="falseModalButton">
+		</tn-modal>
+		<tn-toast ref="toast"></tn-toast>
+
+		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 	</view>
 </template>
 
 <script>
+	import {
+		getVerifyCode,
+		updatePwd
+	} from '@/api/user.js'
 	export default {
-		name: 'login',
-		onLoad() {
-			
-		},
+		name: 'forget-pwd',
 		data() {
 			return {
 				// 是否显示密码
 				showPassword: false,
-				tip: '获取验证码'
+				codeTips: '获取验证码',
+				form: {
+					stuNum: '',
+					code: '',
+					pwd: '',
+					newPwd: ''
+				},
+				message: '',
+				showFalseModal: false,
+				falseModalButton: [{
+					text: '我知道了',
+					backgroundColor: '#3668FC',
+					fontColor: '#FFFFFF',
+				}],
+				mail: ''
 			}
 		},
 		methods: {
 			// 跳转
 			tn(url) {
 				this.$Router.push(url)
+			},
+			// 获取验证码
+			getCode() {
+				if (this.form.stuNum.length == '') {
+					this.$tn.message.toast('请输入学号/工号')
+					return
+				}
+				if (this.$refs.code.canGetCode) {
+					this.$refs.loading.open()
+					getVerifyCode(this.form.stuNum).then(() => {
+						this.$refs.loading.close()
+						this.$tn.message.toast('验证码已经发送至您绑定的邮箱')
+						// 通知组件开始计时
+						this.$refs.code.start()
+					}).catch(e => {
+						// 不一定存在success，所以进行Boolean判断
+						if (e.success == false) {
+							this.message = e.message + '。' + '1.如果已经注册,但未绑定过邮箱或忘记绑定邮箱,请点击下方联系客服申请重置密码。2.未注册请注册。'
+							this.showFalseModal = true
+						}
+						this.$refs.loading.close()
+					})
+				} else {
+					this.$tn.message.toast(this.$refs.code.secNum + '秒后再重试')
+				}
+			},
+			codeChange(text) {
+				this.codeTips = text
+			},
+			handleRestPwd() {
+				let that = this
+				if (!this.verifyInfo()) {
+					return
+				}
+				this.$refs.loading.open()
+				let updatePwdDTO = {
+					stuNum: that.form.stuNum,
+					code: that.form.code,
+					pwd: that.form.newPwd
+				}
+				updatePwd(updatePwdDTO).then(res => {
+					this.$refs.loading.close()
+					this.$refs.toast.show({
+						title: '密码修改成功',
+						duration: 1500
+					})
+					setTimeout(() => {
+						this.goBack()
+					}, 1500)
+				}).catch(e => {
+					// 不一定存在success，所以进行Boolean判断
+					this.$refs.loading.close()
+					if (e.success == false) {
+						this.message = e.message
+						this.showFalseModal = true
+					}
+				})
+			},
+			verifyInfo() {
+				if (this.form.stuNum === '') {
+					this.$refs.toast.show({
+						title: '请输入学号',
+						duration: 1000
+					})
+					return false
+				}
+				if (this.form.code.length !== 4) {
+					this.$refs.toast.show({
+						title: '验证码长度为4位',
+						duration: 1000
+					})
+					return false
+				}
+				if (this.form.pwd.length < 6) {
+					this.$refs.toast.show({
+						title: '新密码长度不低于6位',
+						duration: 1000
+					})
+					return false
+				}
+				if (this.form.newPwd.length < 6) {
+					this.$refs.toast.show({
+						title: '确认新密码长度不低于6位',
+						duration: 1000
+					})
+					return false
+				}
+				if (this.form.pwd !== this.form.newPwd) {
+					this.$refs.toast.show({
+						title: '两次输入的密码不一致',
+						duration: 1000
+					})
+					return false
+				}
+				return true
 			}
 		}
 	}
@@ -126,7 +249,7 @@
 <style lang="scss" scoped>
 	/* 胶囊*/
 	.tn-custom-nav-bar__back {
-		width: 75%;
+		width: 80%;
 		height: 100%;
 		position: relative;
 		display: flex;

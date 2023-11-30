@@ -23,11 +23,11 @@
 						<view
 							class="login__info__item__input tn-flex tn-flex-direction-row tn-flex-nowrap tn-flex-col-center tn-flex-row-left">
 							<view class="login__info__item__input__left-icon">
-								<view class="tn-icon-phone"></view>
+								<view class="tn-icon-identity"></view>
 							</view>
 							<view class="login__info__item__input__content">
-								<input v-model="userLoginDTO.tel" maxlength="11" placeholder-class="input-placeholder"
-									placeholder="请输入登录手机号" />
+								<input v-model="userLoginDTO.stuNum" maxlength="16" placeholder-class="input-placeholder"
+									placeholder="请输入学号/工号登录" />
 							</view>
 						</view>
 
@@ -89,14 +89,23 @@
 			</view>
 		</view>
 		<tn-toast ref="toast"></tn-toast>
-		<tn-modal @click="handleClickModal" :radius='40' v-model="showLoginModal" :title="'提示'" :content="'授权系统获取您的用户标识ID，方便您使用微信快捷登录App。'" :button="button"></tn-modal>
+		<tn-modal @click="handleClickModal" :radius='40' v-model="showLoginModal" :title="'提示'"
+			:content="'授权系统获取您的用户标识ID，方便您使用微信快捷登录App。'" :button="button"></tn-modal>
+		<tn-modal @click="handleFalseModalClick" :radius='40' v-model="showFalseModal" :title="'抱歉，无法使用微信登录'"
+			content="1.登陆后未绑定微信，请使用账号密码登陆后在账号中心绑定微信。2.您未注册并使用过本App，请注册后绑定微信。" :button="falseModalButton">
+		</tn-modal>
+		
+		<tn-modal @click="showServiceErrorModal = false" :radius='40' v-model="showServiceErrorModal" :title="'系统提示'"
+			:content="message" :button="serviceErrorModalButton">
+		</tn-modal>
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 	</view>
 </template>
 
 <script>
 	import {
-		login
+		login,
+		wxLogin
 	} from '@/api/user.js'
 	export default {
 		name: 'login',
@@ -108,11 +117,14 @@
 				// 是否显示密码
 				showPassword: false,
 				userLoginDTO: {
-					tel: '',
+					stuNum: '',
 					pwd: ''
 				},
 				btnLoading: false,
 				showLoginModal: false,
+				showFalseModal: false,
+				showServiceErrorModal: false,
+				message: '',
 				button: [{
 						text: '取消',
 						backgroundColor: 'tn-bg-gray',
@@ -124,6 +136,16 @@
 						fontColor: '#FFFFFF'
 					}
 				],
+				falseModalButton: [{
+					text: '已知晓',
+					backgroundColor: '#3668FC',
+					fontColor: '#FFFFFF',
+				}],
+				serviceErrorModalButton: [{
+					text: '我知道了',
+					backgroundColor: '#3668FC',
+					fontColor: '#FFFFFF',
+				}]
 			}
 		},
 		watch: {
@@ -143,11 +165,12 @@
 				this.showPassword = false
 			},
 			loginByTel() {
+				let that = this
 				// 校验
-				const reg = /^1[3-9]\d{9}$/
-				if (!reg.test(this.userLoginDTO.tel)) {
+				if (this.userLoginDTO.stuNum.length < 5 || this.userLoginDTO.stuNum.length > 16) {
+					this.$tn.mes
 					this.$refs.toast.show({
-						title: '请输入正确的手机号',
+						title: '请输入正确的学号',
 						duration: 1000
 					})
 					return
@@ -163,40 +186,68 @@
 				this.btnLoading = true
 				login(this.userLoginDTO).then(res => {
 					this.btnLoading = false
-					this.$store.dispatch('login', res.queryData).then(() => {
+					this.$store.dispatch('login', res).then(() => {
 						this.$refs.toast.show({
-							title: '登录成功',
+							title: '登录成功,正在跳转',
 							duration: 1500
 						})
-						this.$Router.replaceAll('/pages/index/index')
+						setTimeout(() => {
+							that.$Router.replaceAll('/pages/index/index')
+						}, 1500)
 					})
 				}).catch(e => {
 					this.btnLoading = false
+					if (e.success === false) {
+						this.message = e.message
+						this.showServiceErrorModal = true
+					}
 				})
+			},
+			handleFalseModalClick(e) {
+				this.showFalseModal = false
 			},
 			handleClickModal(e) {
 				this.showLoginModal = false
 				if (e.index === 1) {
 					// 确定按钮
-					this.$refs.loading.open();
 					this.handleWXLogin()
 				}
 			},
 			handleWXLogin() {
+				this.$refs.loading.open();
 				let that = this
 				uni.login({
 					provider: 'weixin',
 					scopes: '',
 					success(res) {
 						let code = res.code
-						that.$refs.loading.close()
-						console.log(code);
+						console.log(res);
+						wxLogin(code).then(response => {
+							that.$refs.loading.close()
+							let canWxLogin = response.canWxLogin
+							if (!canWxLogin) {
+								that.showFalseModal = true
+							} else {
+								// 登录
+								that.$store.dispatch('login', response).then(() => {
+									that.$refs.toast.show({
+										title: '登录成功,正在跳转',
+										duration: 1500
+									})
+									setTimeout(() => {
+										that.$Router.replaceAll('/pages/index/index')
+									}, 1500)
+								})
+							}
+						})
 					},
 					fail(e) {
 						console.log(e);
+						that.$refs.loading.close()
 					}
 				})
-			}
+			},
+			
 		}
 	}
 </script>
@@ -204,7 +255,7 @@
 <style lang="scss" scoped>
 	/* 胶囊*/
 	.tn-custom-nav-bar__back {
-		width: 75%;
+		width: 80%;
 		height: 100%;
 		position: relative;
 		display: flex;
