@@ -20,6 +20,10 @@ export function updatePwd(userUpdatePwdDTO) {
 	return http.post('/user/update/pwd', userUpdatePwdDTO)
 }
 
+export function refreshTokenApi(userId, token) {
+	return http.get('/user/refresh/token', {userId, token})
+}
+
 
 export default {
 	updateInfo: (userUpdateDTO) => {

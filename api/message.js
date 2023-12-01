@@ -1,11 +1,9 @@
 import http from '@/config/request.config.js'
 
-export function queryMyMessageListApi(page, size=10) {
+export function queryMyMessageListApi(page, size = 10) {
 	return http.get('/message/list', {
-		params: {
-			page,
-			size
-		}
+		page,
+		size
 	})
 }
 
