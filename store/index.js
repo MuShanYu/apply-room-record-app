@@ -81,6 +81,9 @@ const store = new Vuex.Store({
 			uni.removeStorageSync('userInfo');
 			uni.removeStorageSync('isBindWx');
 		},
+		REFRESH_TOKEN(state, token) {
+			uni.setStorageSync('token', token);
+		}
 	},
 	actions: {
 		login({commit}, loginInfo) {
@@ -88,6 +91,9 @@ const store = new Vuex.Store({
 		},
 		logout({commit}) {
 			commit('LOGOUT')
+		},
+		refreshToken({commit}, token) {
+			commit('REFRESH_TOKEN', token)
 		}
 	}
 })

@@ -5,7 +5,8 @@
 		<view v-if="tabberPageLoadFlag[0]" :style="{
 		  display: currentTabbarIndex === 0 ? '' : 'none'
 		}">
-			<scroll-view class="custom-tabbar-page" scroll-y enable-back-to-top @scrolltolower="tabbarPageScrollLower">
+			<scroll-view class="custom-tabbar-page" @scroll="scroll" :scroll-top="scrollTop" scroll-y refresher-enabled
+				scroll-with-animation :refresher-threshold="10" enable-back-to-top @scrolltolower="tabbarPageScrollLower">
 				<home ref="home"></home>
 			</scroll-view>
 		</view>
@@ -13,7 +14,8 @@
 		<view v-if="tabberPageLoadFlag[1]" :style="{
 		  display: currentTabbarIndex === 1 ? '' : 'none'
 		}">
-			<scroll-view class="custom-tabbar-page" scroll-y enable-back-to-top @scrolltolower="tabbarPageScrollLower">
+			<scroll-view class="custom-tabbar-page" :refresher-threshold="10" scroll-y enable-back-to-top
+				@scrolltolower="tabbarPageScrollLower">
 				<work ref="work"></work>
 			</scroll-view>
 		</view>
@@ -21,17 +23,17 @@
 		<view v-if="tabberPageLoadFlag[2]" :style="{
 		  display: currentTabbarIndex === 2 ? '' : 'none'
 		}">
-			<scroll-view class="custom-tabbar-page" scroll-y enable-back-to-top @scrolltolower="tabbarPageScrollLower">
+			<scroll-view class="custom-tabbar-page" :refresher-threshold="10" scroll-y enable-back-to-top
+				@scrolltolower="tabbarPageScrollLower">
 				<profile ref="profile"></profile>
 			</scroll-view>
 		</view>
 
 		<!-- 右上角形式的tabbar按钮-->
-		<view class="">
+		<view class="" v-if="currentTabbarIndex === 0">
 			<view class="icon15__item--icon tn-flex tn-flex-row-center tn-flex-col-center tn-shadow-blur button-2"
-				@tap.stop="changeTabbar(4)">
-				<view class="tn-icon-ghost-fill"
-					:class="[currentTabbarIndex === 4 ? 'tn-color-blue' : 'tn-color-white']"></view>
+				@tap.stop="backTop">
+				<view class="tn-icon-up-arrow" :class="[currentTabbarIndex === 4 ? 'tn-color-blue' : 'tn-color-white']"></view>
 			</view>
 		</view>
 
@@ -77,8 +79,7 @@
 					<view class="nav-index-button__content">
 						<view class="nav-index-button__content--icon tn-flex tn-flex-row-center tn-flex-col-center">
 							<view class="bar-circle">
-								<image class=""
-									src='https://mushanyu-app-arr.oss-cn-beijing.aliyuncs.com/static/tab/faxian.png'>
+								<image class="" src='https://mushanyu-app-arr.oss-cn-beijing.aliyuncs.com/static/tab/faxian.png'>
 								</image>
 							</view>
 						</view>
@@ -140,7 +141,9 @@
 				currentTabbarIndex: 0,
 
 				// 自定义底栏对应页面的加载情况
-				tabberPageLoadFlag: []
+				tabberPageLoadFlag: [],
+				scrollTop: 0,
+				oldScrollTop: 0
 			}
 		},
 		onLoad(options) {
@@ -151,13 +154,12 @@
 			}
 			this.changeTabbar(index)
 		},
-		onReady() {
-
-		},
 		methods: {
 			// 导航页面滚动到底部
 			tabbarPageScrollLower(e) {
-				
+				if (this.currentTabbarIndex === 0) {
+					this.$refs.home.reachBottom()
+				}
 			},
 
 			// 修改当前选中的tabbar
@@ -180,7 +182,18 @@
 					this.tabberPageLoadFlag[index] = true
 				}
 			},
-
+			scroll(e) {
+				//记录scroll  位置
+				this.oldScrollTop = e.detail.scrollTop
+			},
+			backTop(e) {
+				//视图会发生重新渲染
+				this.scrollTop = this.oldScrollTop
+				//当视图渲染结束 重新设置为0
+				this.$nextTick(() => {
+					this.scrollTop = 0
+				});
+			},
 
 		}
 	}

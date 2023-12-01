@@ -131,7 +131,7 @@
 						fontColor: '#FFFFFF',
 					},
 					{
-						text: '确定',
+						text: '授权',
 						backgroundColor: '#3668FC',
 						fontColor: '#FFFFFF'
 					}

@@ -54,14 +54,14 @@ export default {
 					}
 				}
 				// 统一的响应日志记录
-				_reslog(response)
+				// _reslog(response)
 				// 返回结果
 				if (statusCode === 200) { //成功
 					// 处理响应结果
 					if (response.data) {
 						let serviceCode = response.data.code
 						if (serviceCode !== 200) {
-							handleServiceError(serviceCode, response.data.message)
+							// handleServiceError(serviceCode, response.data.message)
 							reject(response.data)
 						} else {
 							resolve(response.data.queryData);
@@ -178,7 +178,7 @@ function handleServiceError(code, message) {
 		setTimeout(() => {
 			store.dispatch('logout').then(() => {
 				// 重定向到登录页面
-				uni.reLaunch({
+				uni.navigateTo({
 					url: '/pages/public/login'
 				})
 			})
@@ -192,7 +192,7 @@ function handleServiceError(code, message) {
 		setTimeout(() => {
 			store.dispatch('logout').then(() => {
 				// 重定向到登录页面
-				uni.reLaunch({
+				uni.navigateTo({
 					url: '/pages/public/login'
 				})
 			})
