@@ -1,63 +1,85 @@
 <template>
 	<view class="pages-a">
-		<view class="" style="position: sticky;top: 0;">
-			<!-- 顶部自定义导航 -->
-			<tn-nav-bar fixed :isBack="false" :bottomShadow="false" backgroundColor="#FFFFFF">
-				<view class="custom-nav tn-flex tn-flex-col-center tn-flex-row-left">
-					<!-- 图标logo -->
-					<view class="custom-nav__back" @click="tn('/pageA/about/about')">
-						<view class="logo-pic png-sussuspension1"
-							style="background-image:url('https://mushanyu-app-arr.oss-cn-beijing.aliyuncs.com/static/logo.png')">
-							<view class="logo-image ">
-							</view>
-						</view>
-					</view>
-					<!-- notice bar -->
-					<view class="custom-nav__search tn-flex tn-flex-col-center tn-flex-row-center"
-						@click="tn('/pageA/search/search')">
-						<view class="custom-nav__search__box tn-flex tn-flex-col-center tn-flex-row-left"
-							style="background-color: rgba(230,230,230,0.3);">
-			
-							<view class="tn-color-gray" style="width: 100%;">
-								<tn-notice-bar :list="list" mode="vertical" :duration="5000" rightIconName="notice" :leftIcon="false"
-									:rightIcon="true"></tn-notice-bar>
-							</view>
+		<!-- 顶部自定义导航 -->
+		<tn-nav-bar fixed :isBack="false" :bottomShadow="false" backgroundColor="#FFFFFF">
+			<view class="custom-nav tn-flex tn-flex-col-center tn-flex-row-left">
+				<!-- 图标logo -->
+				<view class="custom-nav__back">
+					<view class="logo-pic png-sussuspension1"
+						style="background-image:url('https://mushanyu-app-arr.oss-cn-beijing.aliyuncs.com/static/logo.png')">
+						<view class="logo-image ">
 						</view>
 					</view>
 				</view>
-			</tn-nav-bar> 
-			<!-- tabs -->
-			<view class="tabs-fixed tn-bg-white">
-				<view class="tn-flex tn-flex-col-between tn-flex-col-center tn-padding-top-sm"
-					:style="{marginTop: vuex_custom_bar_height + 'px'}">
-					<view class="justify-content-item" style="width: 87vw;overflow: hidden;">
-						<tn-tabs :list="scrollList" :current="current" :isScroll="false" activeColor="#000" :bold="true"
-							:fontSize="32" :badgeOffset="[20, 50]" @change="tabChange" backgroundColor="#FFFFFF" :height="70"></tn-tabs>
+				<!-- notice bar -->
+				<view class="custom-nav__search tn-flex tn-flex-col-center tn-flex-row-center"
+					@click="tn('/pages/sub-page/home/notice')">
+					<view class="custom-nav__search__box tn-flex tn-flex-col-center tn-flex-row-left"
+						style="background-color: rgba(230,230,230,0.3);">
+
+						<view class="tn-color-gray" style="width: 100%;">
+							<tn-notice-bar :list="list" mode="vertical" :duration="5000" rightIconName="notice" :leftIcon="false"
+								:rightIcon="true"></tn-notice-bar>
+						</view>
 					</view>
 				</view>
 			</view>
+		</tn-nav-bar>
+		<!-- tabs -->
+		<view class="tabs-fixed tn-bg-white">
+			<view class="tn-flex tn-flex-col-between tn-flex-col-center tn-padding-top-sm"
+				:style="{marginTop: vuex_custom_bar_height + 'px'}">
+				<view class="justify-content-item" style="width: 87vw;overflow: hidden;">
+					<tn-tabs :list="scrollList" :current="current" :isScroll="false" activeColor="#000" :bold="true"
+						:fontSize="32" :badgeOffset="[20, 80]" @change="tabChange" backgroundColor="#FFFFFF" :height="70"></tn-tabs>
+				</view>
+			</view>
 		</view>
-		
+
 		<!-- 页面内容 -->
 		<view :style="{paddingTop: (vuex_custom_bar_height * 2) + 'px'}" class="tn-padding">
-			<view class="article-shadow tn-bg-white tn-padding tn-margin-bottom" v-for="item in messageList" :key="item.id">
-				<view class="tn-text-bold">
+			<view v-show="current === 0" style="position: relative;" @click="handleMessageClick(item, index)"
+				class="article-shadow tn-bg-white tn-padding tn-margin-bottom" v-for="(item, index) in messageList" :key="item.id">
+				<view class="tn-text-bold tn-text-ellipsis-2 tn-text-lg">	
 					{{item.content}}
 				</view>
-				<view class="tn-flex tn-flex-row-between tn-text-sm tn-color-gray tn-margin-top">
+				<view class="tn-flex tn-flex-row-between tn-color-gray tn-margin-top">
 					<view class="">
-						申请时间：{{item.createTime}}
+						申请时间：{{item.createTime | dataFormat}}
 					</view>
 					<view class="">
 						申请人：{{item.senderUserName}}
 					</view>
 				</view>
+				<tn-badge v-if="item.readState === 0" backgroundColor="#E83A30" :dot="true" :radius="15" :absolute="true"
+					:translateCenter="false"></tn-badge>
 			</view>
-			<tn-load-more :fontSize="20" status='nomore'></tn-load-more>
+			
+			<view v-show="current === 1" style="position: relative;" @click="handleMessageClick(item, index)"
+				class="article-shadow tn-bg-white tn-padding tn-margin-bottom" v-for="(item, index) in resultMessageList" :key="item.id">
+				<view class="tn-text-bold tn-text-ellipsis-2 tn-text-lg">	
+					{{item.content}}
+				</view>
+				<view class="tn-flex tn-flex-row-between tn-color-gray tn-margin-top">
+					<view class="">
+						申请时间：{{item.createTime | dataFormat}}
+					</view>
+					<view class="">
+						申请人：{{item.senderUserName}}
+					</view>
+				</view>
+				<tn-badge v-if="item.readState === 0" backgroundColor="#E83A30" :dot="true" :radius="15" :absolute="true"
+					:translateCenter="false"></tn-badge>
+			</view>
+			<tn-load-more :fontSize="20" :status='status'></tn-load-more>
 			<!-- <tn-empty text="登陆后查看" mode="permission"></tn-empty> -->
 		</view>
 
-
+		<tn-modal @click="handleTipModalConfirm" :radius='40' v-model="showTipModal" :title="'消息内容'" :content="message"
+			:button="tipModalBtn">
+		</tn-modal>
+		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
+		<tn-toast ref="toast"></tn-toast>
 		<view class='tn-tabbar-height'></view>
 		<view class="bg-tabbar-shadow"></view>
 	</view>
@@ -68,48 +90,57 @@
 		queryNoticeListApi
 	} from '@/api/notice.js'
 	import {
-		queryMyMessageListApi
+		queryMyMessageListApi,
+		setMessageToReadApi
 	} from '@/api/message.js'
+	
+	import {dateShow} from '@/utils/index.js'
 	export default {
 		data() {
 			return {
 				show: true,
 				current: 0,
+				list:[],
 				scrollList: [{
-						name: '待办通知'
+						name: '待办通知',
+						count: 0
 					},
 					{
-						name: '申请结果通知'
+						name: '结果通知',
+						count: 0
 					}
 				],
-				list: [],
-				query: {
-					page: 1,
-					size: 3
-				},
 				messageQuery: {
 					page: 1,
 					size: 10
 				},
+				resMessageQuery: {
+					page: 1,
+					size: 10
+				},
 				messageList: [],
+				resultMessageList: [],
 				loadmore: true,
-				options2: [{
-						text: '置顶',
-						style: {
-							backgroundColor: '#FFA726'
-						}
-					},
-					{
-						text: '删除',
-						style: {
-							backgroundColor: '#E83A30'
-						}
-					}
-				],
+				resultLoadmore: true,
+				showTipModal: false,
+				message: '',
+				tipModalBtn: [{
+					text: '已读',
+					backgroundColor: '#3668FC',
+					fontColor: '#FFFFFF',
+				}],
+				currentMessage: {},
+				currentMessageIndex: 0,
+				status: 'nomore'
+			}
+		},
+		filters: {
+			dataFormat(date) {
+				return dateShow(date)
 			}
 		},
 		mounted() {
-			queryNoticeListApi(this.query).then(res => {
+			queryNoticeListApi(1, 3).then(res => {
 				let resList = res.pageData
 				resList.forEach(item => {
 					this.list.push(item.title)
@@ -117,37 +148,122 @@
 			}).catch(e => {
 				// console.log(e);
 			})
-			queryMyMessageListApi(this.messageQuery.page, this.messageQuery.size).then(res => {
-				let list = res.pageData
-				console.log(list);
-				this.messageList = list
-			}).catch(e => {
-				// console.log(e);
-			})
+			this.getToDoMessageList()
+			this.getResultMessageList()
 		},
 		methods: {
+			tn(page) {
+				this.$Router.push(page)
+			},
+			getToDoMessageList() {
+				queryMyMessageListApi(this.messageQuery.page, this.messageQuery.size).then(res => {
+					let list = res.pageInfo.pageData
+					console.log(list);
+					this.scrollList[0].count = res.todoCount
+					this.scrollList[1].count = res.resultCount
+					this.messageList = list
+				}).catch(e => {
+					// console.log(e);
+				})
+			},
+			getResultMessageList() {
+				queryMyMessageListApi(this.messageQuery.page, this.messageQuery.size, 'RESULT').then(res => {
+					let list = res.pageInfo.pageData
+					console.log(list);
+					this.scrollList[0].count = res.todoCount
+					this.scrollList[1].count = res.resultCount
+					this.resultMessageList = list
+				}).catch(e => {
+					// console.log(e);
+				})
+			},
 			tabChange(index) {
 				this.current = index
 			},
 			reachBottom() {
+				if (this.current === 0) {
+					this.todoListReachBottom()
+				} else if (this.current === 1) {
+					this.resultListReachBottom()
+				}
+			},
+			todoListReachBottom() {
 				if (this.loadmore) {
-					console.log('bbbbb');
 					this.messageQuery.page += 1
+					this.status = 'loading'
 					queryMyMessageListApi(this.messageQuery.page, this.messageQuery.size).then(res => {
-						let list = res.pageData
+						let list = res.pageInfo.pageData
 						if (list.length !== 0) {
 							this.messageList.push(...list)
 						} else {
 							this.loadmore = false
 						}
+						this.status = 'nomore'
 					}).catch(e => {
 						// console.log(e);
+						this.status = 'nomore'
 						this.loadmore = false
 					})
 				}
-				
 			},
-			
+			resultListReachBottom() {
+				if (this.resultLoadmore) {
+					this.resMessageQuery.page += 1
+					this.status = 'loading'
+					queryMyMessageListApi(this.resMessageQuery.page, this.resMessageQuery.size, 'RESULT').then(res => {
+						let list = res.pageInfo.pageData
+						if (list.length !== 0) {
+							this.resultMessageList.push(...list)
+						} else {
+							this.resultLoadmore = false
+						}
+						this.status = 'nomore'
+					}).catch(e => {
+						// console.log(e);
+						this.status = 'nomore'
+						this.resultLoadmore = false
+					})
+				}
+			},
+			handleMessageClick(item, index) {
+				this.currentMessage = Object.assign({}, item)
+				this.currentMessageIndex = index
+				this.message = item.content
+				this.showTipModal = true
+			},
+			handleTipModalConfirm() {
+				this.showTipModal = false
+				if (this.currentMessage.readState === 0) {
+					this.$refs.loading.open()
+					setMessageToReadApi(this.currentMessage.id).then(res => {
+						if (this.current === 0) {
+							// todo设为已读
+							this.messageList[this.currentMessageIndex].readState = 1
+							this.scrollList[0].count -= 1
+						} else if (this.current === 1) {
+							// result设为已读
+							this.resultMessageList[this.currentMessageIndex].readState = 1
+							this.scrollList[1].count -= 1
+						}
+						this.$refs.loading.close()
+					}).catch(e => {
+						this.$refs.loading.close()
+						this.$refs.toast.show({
+							title: e.message,
+							duration: 1500
+						})
+					})
+				}
+			},
+			refresh() {
+				this.messageQuery.page = 1
+				this.resMessageQuery.page = 1
+				this.getToDoMessageList()
+				this.getResultMessageList()
+				this.current = 0
+				this.loadmore = true
+				this.resultLoadmore = true
+			}
 		}
 	}
 </script>
@@ -157,7 +273,6 @@
 		width: 100%;
 		height: 100%;
 		position: relative;
-		// background-image: linear-gradient(to top, #4C3FAE 20%, #6E26BA 80%);
 	}
 
 	/* 底部安全边距 start*/
@@ -209,7 +324,7 @@
 				height: 70%;
 				padding: 10rpx 0;
 				margin: 0 30rpx;
-				border-radius: 60rpx 60rpx 0 60rpx;
+				border-radius: 60rpx 60rpx 60rpx 60rpx;
 				font-size: 24rpx;
 			}
 
@@ -259,5 +374,6 @@
 	.article-shadow {
 		border-radius: 15rpx;
 		box-shadow: 0rpx 0rpx 50rpx 0rpx rgba(0, 0, 0, 0.07);
+		// position: relative;
 	}
 </style>

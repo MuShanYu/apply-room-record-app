@@ -1,5 +1,5 @@
 import http from '@/config/request.config.js'
 
-export function queryNoticeListApi(noticeQueryDTO) {
-	return http.post('/notice/query/list', noticeQueryDTO)
+export function queryNoticeListApi(page, size) {
+	return http.get('/notice/query/user/list', {page, size})
 }

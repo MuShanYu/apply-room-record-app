@@ -5,8 +5,8 @@
 		<view v-if="tabberPageLoadFlag[0]" :style="{
 		  display: currentTabbarIndex === 0 ? '' : 'none'
 		}">
-			<scroll-view class="custom-tabbar-page" @scroll="scroll" :scroll-top="scrollTop" scroll-y refresher-enabled
-				scroll-with-animation :refresher-threshold="10" enable-back-to-top @scrolltolower="tabbarPageScrollLower">
+			<scroll-view class="custom-tabbar-page" scroll-y 
+				 :refresher-threshold="10" enable-back-to-top @scrolltolower="tabbarPageScrollLower">
 				<home ref="home"></home>
 			</scroll-view>
 		</view>
@@ -32,8 +32,8 @@
 		<!-- 右上角形式的tabbar按钮-->
 		<view class="" v-if="currentTabbarIndex === 0">
 			<view class="icon15__item--icon tn-flex tn-flex-row-center tn-flex-col-center tn-shadow-blur button-2"
-				@tap.stop="backTop">
-				<view class="tn-icon-up-arrow" :class="[currentTabbarIndex === 4 ? 'tn-color-blue' : 'tn-color-white']"></view>
+				@tap.stop="handleBtnClick">
+				<view class="tn-icon-refresh tn-color-white"></view>
 			</view>
 		</view>
 
@@ -186,13 +186,17 @@
 				//记录scroll  位置
 				this.oldScrollTop = e.detail.scrollTop
 			},
-			backTop(e) {
-				//视图会发生重新渲染
-				this.scrollTop = this.oldScrollTop
-				//当视图渲染结束 重新设置为0
-				this.$nextTick(() => {
-					this.scrollTop = 0
-				});
+			handleBtnClick(e) {
+				if (this.currentTabbarIndex === 0) {
+					this.$refs.home.refresh()
+				}
+				// //视图会发生重新渲染
+				// this.scrollTop = this.oldScrollTop
+				// //当视图渲染结束 重新设置为0
+				// this.$nextTick(() => {
+				// 	this.scrollTop = 0
+				// });
+				// this.$refs.home.handleFilterClick()
 			},
 
 		}
