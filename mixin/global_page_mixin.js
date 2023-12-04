@@ -55,6 +55,7 @@ module.exports = {
       // 更新vuex中的导航栏信息
       this.$tn.vuex('vuex_status_bar_height', statusBarHeight)
       this.$tn.vuex('vuex_custom_bar_height', customBarHeight)
-    }
+    },
+		
   }
 }
