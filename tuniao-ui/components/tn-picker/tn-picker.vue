@@ -689,8 +689,8 @@
         }
         
         &--confirm {
-          background-color: #07C160;
-          color: #FFFFFF;
+          // background-color: #3668FC;
+          color: #3668FC;
           padding: 10rpx 25rpx;
           border-radius: 10rpx;
         }

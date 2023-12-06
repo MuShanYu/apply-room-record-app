@@ -71,8 +71,8 @@
 				<tn-badge v-if="item.readState === 0" backgroundColor="#E83A30" :dot="true" :radius="15" :absolute="true"
 					:translateCenter="false"></tn-badge>
 			</view>
-			<tn-load-more :fontSize="20" :status='status'></tn-load-more>
-			<!-- <tn-empty text="登陆后查看" mode="permission"></tn-empty> -->
+			<tn-load-more :status='status'></tn-load-more>
+			<!-- <tn-empty v-if="" text="登陆后查看" mode="permission"></tn-empty> -->
 		</view>
 
 		<tn-modal @click="handleTipModalConfirm" :radius='40' v-model="showTipModal" :title="'消息内容'" :content="message"
