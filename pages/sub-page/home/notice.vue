@@ -37,7 +37,7 @@
 				</view>
 			</view>
 		</tn-modal>
-		<tn-load-more :fontSize="20" :status='status'></tn-load-more>
+		<tn-load-more :status='status'></tn-load-more>
 		
 		<view class='tn-tabbar-height'></view>
 		

@@ -1,5 +1,6 @@
 export function dateShow(dateTime, format = 'yyyy-MM-dd hh:mm:ss') {
-	let threshold = [60000, 6000000] // 阈值
+	let threshold = [0, 0] // 阈值
+	// let threshold = [60000, 6000000] // 阈值
 	const text = {
 		year: '年',
 		month: '月',

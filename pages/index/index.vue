@@ -5,7 +5,7 @@
 		<view v-if="tabberPageLoadFlag[0]" :style="{
 		  display: currentTabbarIndex === 0 ? '' : 'none'
 		}">
-			<scroll-view class="custom-tabbar-page" scroll-y 
+			<scroll-view class="custom-tabbar-page" scroll-y :scroll-top="scrollTop" @scroll="scroll"
 				 :refresher-threshold="10" enable-back-to-top @scrolltolower="tabbarPageScrollLower">
 				<home ref="home"></home>
 			</scroll-view>
@@ -188,15 +188,15 @@
 			},
 			handleBtnClick(e) {
 				if (this.currentTabbarIndex === 0) {
-					this.$refs.home.refresh()
+					//视图会发生重新渲染
+					this.scrollTop = this.oldScrollTop
+					//当视图渲染结束 重新设置为0
+					this.$nextTick(() => {
+						this.scrollTop = 0
+						this.$refs.home.refresh()
+					});
+					
 				}
-				// //视图会发生重新渲染
-				// this.scrollTop = this.oldScrollTop
-				// //当视图渲染结束 重新设置为0
-				// this.$nextTick(() => {
-				// 	this.scrollTop = 0
-				// });
-				// this.$refs.home.handleFilterClick()
 			},
 
 		}
