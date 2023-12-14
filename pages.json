@@ -48,6 +48,14 @@
 						"enablePullDownRefresh" : true,
 						"onReachBottomDistance": 10
 					}
+				},
+				{
+					"path" : "work/apply-room-detail",
+					"style" : 
+					{
+						"navigationBarTitleText" : "",
+						"enablePullDownRefresh" : false
+					}
 				}
 			]
 		}
