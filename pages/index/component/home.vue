@@ -30,7 +30,7 @@
 			<view class="tn-flex tn-flex-col-between tn-flex-col-center tn-padding-top-sm"
 				:style="{marginTop: vuex_custom_bar_height + 'px'}">
 				<view class="justify-content-item" style="width: 87vw;overflow: hidden;">
-					<tn-tabs :list="scrollList" :current="current" :isScroll="false" activeColor="#000" :bold="true"
+					<tn-tabs :list="scrollList" :current="current" :isScroll="false" activeColor="#3668FC" :bold="true"
 						:fontSize="32" :badgeOffset="[20, 80]" @change="tabChange" backgroundColor="#FFFFFF" :height="70"></tn-tabs>
 				</view>
 			</view>
@@ -45,7 +45,7 @@
 				</view>
 				<view class="tn-flex tn-flex-row-between tn-color-gray tn-margin-top">
 					<view class="">
-						申请时间：{{item.createTime | dataFormat}}
+						申请时间：{{item.createTime | dateFormat}}
 					</view>
 					<view class="">
 						申请人：{{item.senderUserName}}
@@ -62,7 +62,7 @@
 				</view>
 				<view class="tn-flex tn-flex-row-between tn-color-gray tn-margin-top">
 					<view class="">
-						申请时间：{{item.createTime | dataFormat}}
+						申请时间：{{item.createTime | dateFormat}}
 					</view>
 					<view class="">
 						申请人：{{item.senderUserName}}
@@ -135,7 +135,7 @@
 			}
 		},
 		filters: {
-			dataFormat(date) {
+			dateFormat(date) {
 				return dateShow(date)
 			}
 		},

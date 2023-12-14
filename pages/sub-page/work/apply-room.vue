@@ -9,7 +9,7 @@
 			</view>
 		</tn-nav-bar>
 
-		<view style="" class="tn-bg-white tabs-fixed" :style="{marginTop: vuex_custom_bar_height + 'px'}">
+		<view class="tn-bg-white tabs-fixed box-shadow" :style="{marginTop: vuex_custom_bar_height + 'px'}">
 			<view class="tn-padding-sm">
 				<view class="tn-flex tn-flex-row-between">
 					<view class="tn-text-left" @click="showSchools = true">
@@ -38,14 +38,14 @@
 					</view>
 				</view>
 			</view>
-			<view class="tn-padding-left-sm tn-padding-right-sm">
+			<view class="tn-padding-left-sm tn-padding-right-sm tn-padding-bottom-xs">
 				<view class="tn-flex tn-flex-row-between">
 					<view class="" @click="showStartTime = true">
 						<view class="">
 							预约起始时间 <text class="tn-icon-down tn-margin-left-xs"></text>
 						</view>
 						<view class="tn-color-gray tn-margin-top-xs">
-							{{query.startTime | dataFormat}}
+							{{query.startTime | dateFormat}}
 						</view>
 					</view>
 					<view class="" @click="showEndTime = true">
@@ -53,29 +53,48 @@
 							预约结束时间 <text class="tn-icon-down tn-margin-left-xs"></text>
 						</view>
 						<view class="tn-color-gray tn-margin-top-xs">
-							{{query.endTime | dataFormat}}
+							{{query.endTime | dateFormat}}
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
 		<view class="tn-padding" :style="{marginTop: (vuex_custom_bar_height + optionHeight) + 'px'}">
-			<view class="tn-padding tn-margin-bottom tn-bg-white box-shadow" v-for="(item, index) in 20" :key="index">
-				akdfjlsajfla
+			<view @click="tn(item)" style="position: relative;" class="tn-padding tn-margin-bottom tn-bg-white box-shadow"
+				v-for="(item, index) in roomList" :key="item.id">
+				<view class="tn-text-lg tn-text-bold">
+					{{item.roomName}}
+				</view>
+				<view class="tn-color-gray tn-margin-top-xs tn-margin-bottom">
+					可容纳{{item.capacity}}人，拥有{{item.equipmentInfo}}等。
+				</view>
+				<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-df">
+					<view class="">
+						<text class="tn-icon-company tn-text-xl" style="padding-right: 8rpx;"></text> {{item.school}}
+					</view>
+					<view class="">
+						<text class="tn-icon-map tn-text-xl" style="padding-right: 8rpx;"></text> {{item.teachBuilding}}
+					</view>
+					<view class="">
+						<text class="tn-icon-menu tn-text-xl" style="padding-right: 8rpx;"></text> {{item.category}}
+					</view>
+				</view>
 			</view>
+			<tn-load-more :status='status'></tn-load-more>
 		</view>
 
-		<tn-picker mode="time" v-model="showStartTime" :params="params" :showTimeTag="true"></tn-picker>
-		<tn-picker mode="time" v-model="showEndTime" :params="params" :showTimeTag="true"></tn-picker>
-		<tn-picker mode="selector" v-model="showSchools" :defaultSelector="[0]" :range="schools"></tn-picker>
-		<tn-picker mode="selector" v-model="showTeachBuildings" :defaultSelector="[0]" :range="teachBuildings"></tn-picker>
-		<tn-picker mode="selector" v-model="showCategories" :defaultSelector="[0]" :range="categories"></tn-picker>
-		<!-- <view class="">
-			<view class="icon15__item--icon tn-flex tn-flex-row-center tn-flex-col-center tn-shadow-blur button-2"
-				@tap.stop="handleBtnClick">
-				<view class="tn-color-white">筛</view>
-			</view>
-		</view> -->
+		<tn-picker title="选择校区" mode="selector" v-model="showSchools" :defaultSelector="[0]" :range="schools"
+			@confirm="handleOptionClick($event, 0)"></tn-picker>
+		<tn-picker title="选择楼栋" mode="selector" v-model="showTeachBuildings" :defaultSelector="[0]"
+			@confirm="handleOptionClick($event, 1)" :range="teachBuildings"></tn-picker>
+		<tn-picker title="选择房间类别" mode="selector" v-model="showCategories" :defaultSelector="[0]"
+			@confirm="handleOptionClick($event, 2)" :range="categories"></tn-picker>
+		<tn-picker title="选择预约起始时间" mode="time" v-model="showStartTime" :params="params" :showTimeTag="true"
+			@confirm="handleOptionClick($event, 3)"></tn-picker>
+		<tn-picker title="选择预约结束时间" mode="time" v-model="showEndTime" :params="params" :showTimeTag="true"
+			@confirm="handleOptionClick($event, 4)"></tn-picker>
+
+		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 
 
 	</view>
@@ -85,7 +104,9 @@
 	import {
 		getRoomClassifyInfo
 	} from '@/api/data-statistics.js'
-
+	import {
+		reservationRoomList
+	} from '@/api/room.js'
 	import {
 		dateShow
 	} from '@/utils/index.js'
@@ -106,9 +127,6 @@
 				showSchools: false,
 				showTeachBuildings: false,
 				showCategories: false,
-				startTimeStr: 'start',
-				endTimeStr: 'end',
-				showFilterPopup: false,
 				schools: ['任意'],
 				teachBuildings: ['任意'],
 				categories: ['任意'],
@@ -120,11 +138,14 @@
 					school: '',
 					category: '',
 					teachBuilding: ''
-				}
+				},
+				roomList: [],
+				status: 'nomore',
+				loadmore: true
 			}
 		},
 		filters: {
-			dataFormat(date) {
+			dateFormat(date) {
 				return dateShow(date)
 			}
 		},
@@ -144,16 +165,112 @@
 				this.teachBuildings.push(...res.teachBuildings)
 				this.categories.push(...res.categories)
 			})
+			this.getRoomReserveList()
+		},
+		onReachBottom() {
+			if (this.loadmore) {
+				this.query.page += 1
+				this.status = 'loading'
+				reservationRoomList(this.query).then(res => {
+					let list = res.pageData
+					if (list.length !== 0) {
+						this.roomList.push(...list)
+					} else {
+						this.loadmore = false
+					}
+					this.status = 'nomore'
+				}).catch(e => {
+					console.log(e);
+					this.status = 'nomore'
+				})
+			}
 		},
 		methods: {
-			handleBtnClick() {
-				this.showFilterPopup = true
+			tn(item) {
+				let that = this
+				this.$Router.push({
+					path: '/pages/sub-page/work/apply-room-detail',
+					query: {
+						id: item.id,
+						name: item.chargePerson,
+						startTime: that.query.startTime,
+						endTime: that.query.endTime,
+						roomName: item.roomName,
+						equipmentInfo: item.equipmentInfo
+					}
+				})
+			},
+			getRoomReserveList() {
+				this.$refs.loading.open()
+				reservationRoomList(this.query).then(res => {
+					console.log(res);
+					this.roomList = res.pageData
+					this.$refs.loading.close()
+				}).catch(e => {
+					console.log(e);
+					this.$refs.loading.close()
+				})
+			},
+			refreshData() {
+				this.query.page = 1;
+				this.loadmore = true
+				// 返回顶部
+				uni.pageScrollTo({
+					scrollTop: 0,
+					duration: 0
+				})
+				// 查询
+				// 开始加载新数据
+				this.getRoomReserveList()
+			},
+			handleOptionClick(e, index) {
+				console.log(e);
+				console.log(index);
+				let that = this
+				switch (index) {
+					case 0:
+						that.query.school = that.schools[e[0]]
+						console.log(that.query.school)
+						break
+					case 1:
+						that.query.teachBuilding = that.teachBuildings[e[0]]
+						break
+					case 2:
+						that.query.category = that.categories[e[0]]
+						break
+					case 3:
+						// 起始时间
+						//毫秒
+						that.query.startTime = e.timestamp * 1000
+						break
+					case 4:
+						// 结束时间
+						that.query.endTime = e.timestamp * 1000
+						break
+				}
+				this.refreshData()
 			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
+	.image-pic {
+		border: 1rpx solid #F8F7F8;
+		background-size: cover;
+		background-repeat: no-repeat;
+		// background-attachment:fixed;
+		background-position: top;
+		border-radius: 10rpx;
+	}
+
+	.image-article {
+		border-radius: 8rpx;
+		width: 200rpx;
+		height: 200rpx;
+		position: relative;
+	}
+
 	/* 胶囊*/
 	.tn-custom-nav-bar__back {
 		width: 80%;
