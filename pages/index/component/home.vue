@@ -158,7 +158,7 @@
 			getToDoMessageList() {
 				queryMyMessageListApi(this.messageQuery.page, this.messageQuery.size).then(res => {
 					let list = res.pageInfo.pageData
-					console.log(list);
+					
 					this.scrollList[0].count = res.todoCount
 					this.scrollList[1].count = res.resultCount
 					this.messageList = list
@@ -169,7 +169,7 @@
 			getResultMessageList() {
 				queryMyMessageListApi(this.messageQuery.page, this.messageQuery.size, 'RESULT').then(res => {
 					let list = res.pageInfo.pageData
-					console.log(list);
+					
 					this.scrollList[0].count = res.todoCount
 					this.scrollList[1].count = res.resultCount
 					this.resultMessageList = list

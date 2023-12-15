@@ -123,8 +123,6 @@
 				btnLoading: false,
 				showLoginModal: false,
 				showFalseModal: false,
-				showServiceErrorModal: false,
-				message: '',
 				button: [{
 						text: '取消',
 						backgroundColor: 'tn-bg-gray',
@@ -137,7 +135,7 @@
 					}
 				],
 				falseModalButton: [{
-					text: '已知晓',
+					text: '我知道了',
 					backgroundColor: '#3668FC',
 					fontColor: '#FFFFFF',
 				}],
@@ -145,7 +143,9 @@
 					text: '我知道了',
 					backgroundColor: '#3668FC',
 					fontColor: '#FFFFFF',
-				}]
+				}],
+				showServiceErrorModal: false,
+				message: '',
 			}
 		},
 		watch: {
@@ -197,10 +197,7 @@
 					})
 				}).catch(e => {
 					this.btnLoading = false
-					if (e.success === false) {
-						this.message = e.message
-						this.showServiceErrorModal = true
-					}
+					this.handleError(e)
 				})
 			},
 			handleFalseModalClick(e) {
@@ -221,7 +218,6 @@
 					scopes: '',
 					success(res) {
 						let code = res.code
-						console.log(res);
 						wxLogin(code).then(response => {
 							that.$refs.loading.close()
 							let canWxLogin = response.canWxLogin

@@ -8,8 +8,8 @@ const CONFIG = {
     // 生产环境配置
     production: {
         assetsPath: '/static', // 静态资源路径
-        baseUrl: 'https://www.mushanyu.xyz:8500', // 后台接口请求地址
-        hostUrl: 'https://www.mushanyu.xyz:8500', // H5地址(前端运行地址)
+        baseUrl: 'https://101.42.135.147:8500', // 后台接口请求地址
+        hostUrl: 'https://101.42.135.147:8500', // H5地址(前端运行地址)
     }
 };
 export default CONFIG[process.env.NODE_ENV];
