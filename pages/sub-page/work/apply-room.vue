@@ -142,6 +142,7 @@
 				roomList: [],
 				status: 'nomore',
 				loadmore: true
+				
 			}
 		},
 		filters: {
@@ -184,6 +185,19 @@
 					this.status = 'nomore'
 				})
 			}
+		},
+		onPullDownRefresh() {
+			this.query.page = 1
+			this.$refs.loading.open()
+			reservationRoomList(this.query).then(res => {
+				this.roomList = res.pageData
+				this.$refs.loading.close()
+				uni.stopPullDownRefresh()
+			}).catch(e => {
+				console.log(e);
+				this.$refs.loading.close()
+				uni.stopPullDownRefresh()
+			})
 		},
 		methods: {
 			tn(item) {

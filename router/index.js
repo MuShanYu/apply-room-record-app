@@ -12,6 +12,9 @@ const witeList = ['/pages/public/login', '/pages/public/register',
 
 const router = createRouter({
 	platform: process.env.VUE_APP_PLATFORM,
+	applet: {
+		animationDuration: 300 //默认 300ms  v2.0.6+
+	},
 	routes: [...ROUTES]
 });
 //全局路由前置守卫

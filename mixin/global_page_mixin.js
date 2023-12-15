@@ -56,6 +56,12 @@ module.exports = {
       this.$tn.vuex('vuex_status_bar_height', statusBarHeight)
       this.$tn.vuex('vuex_custom_bar_height', customBarHeight)
     },
-		
+		// 错误处理
+		handleError(e) {
+			if (e.success === false) {
+				this.message = e.message
+				this.showServiceErrorModal = true
+			}
+		}
   }
 }

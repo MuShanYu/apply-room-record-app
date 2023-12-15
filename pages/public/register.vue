@@ -113,14 +113,13 @@
 					institute: '',
 					mail: ''
 				},
-				showServiceErrorModal: false,
-				message: '',
 				serviceErrorModalButton: [{
 					text: '我知道了',
 					backgroundColor: '#3668FC',
 					fontColor: '#FFFFFF',
 				}],
-				
+				showServiceErrorModal: false,
+				message: '',
       }
     },
     methods: {
@@ -160,14 +159,12 @@
 							})
 						}).catch(e => {
 							that.$refs.loading.close()
+							this.handleError(e)
 						})
 					}, 1000)
 				}).catch(e => {
 					this.$refs.loading.close()
-					if (e.success ===  false) {
-						this.message = e.message
-						this.showServiceErrorModal = true
-					}
+					this.handleError(e)
 				})
 			},
 			verifyForm() {

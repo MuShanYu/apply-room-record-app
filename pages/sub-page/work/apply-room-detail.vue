@@ -32,8 +32,8 @@
 					:height="150" :autoHeight="true" />
 			</view>
 			<view class="">
-				<tn-button @click="handleSubmitClick" :shadow="true" width="100%" backgroundColor="#3668FC" fontColor="#FFFFFF"
-					margin="10rpx 0">确 认 预 约</tn-button>
+				<tn-button :disabled="!canApply" @click="handleSubmitClick" :shadow="true" width="100%"
+					backgroundColor="#3668FC" fontColor="#FFFFFF" margin="10rpx 0">确 认 预 约</tn-button>
 			</view>
 		</view>
 		<view v-if="!isSubscribed" class="tn-margin-top tn-bg-white tn-padding-sm">
@@ -49,10 +49,12 @@
 			</view>
 		</view>
 		<tn-toast ref="toast"></tn-toast>
-
+		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 		<tn-modal @click="submit" :radius='40' v-model="showModal" :title="'提示'" :content="'您确认要预约该房间吗？'"
 			:button="button"></tn-modal>
-
+		<tn-modal @click="showServiceErrorModal = false" :radius='40' v-model="showServiceErrorModal" :title="'系统提示'"
+			:content="message" :button="serviceErrorModalButton">
+		</tn-modal>
 	</view>
 </template>
 
@@ -93,7 +95,15 @@
 				tmplIds: ['Y12YmCT2wYbtSI38JGcuOqTjlqoyUOuWMaoqc_X4slU', 'baXQdlZqZoYowKZEmVpocG1_4LTZZ1Ar_rRzlD2CJuU',
 					'VmPW-Qbm9nVfGU5mvSunjjW9ekd518mY029zd812xnA'
 				],
-				isSubscribed: true
+				isSubscribed: true,
+				canApply: true,
+				serviceErrorModalButton: [{
+					text: '我知道了',
+					backgroundColor: '#3668FC',
+					fontColor: '#FFFFFF',
+				}],
+				showServiceErrorModal: false,
+				message: '',
 			}
 		},
 		onLoad(param) {
@@ -110,12 +120,10 @@
 				withSubscriptions: true,
 				success(res) {
 					console.log(res);
-					console.log(res.subscriptionsSetting);
-					that.tmplIds.forEach(item => {
-						if (res.subscriptionsSetting.itemSettings[item] !== 'accept') {
-							that.isSubscribed = false
-						}
-					})
+					if (!res.subscriptionsSetting.mainSwitch) {
+						// 消息订阅未打开
+						this.isSubscribed = false
+					}
 				}
 			})
 		},
@@ -130,11 +138,23 @@
 				}
 			},
 			submit(e) {
+				this.showModal = false
 				if (e.index === 1) {
 					// 提交
-					console.log('submit');
+					this.$refs.loading.open()
+					reserveRoom(this.applyRoomDTO).then(res => {
+						this.canApply = false
+						this.$refs.loading.close()
+						this.$refs.toast.show({
+							title: '房间预约成功，已通知管理员进行审核',
+							duration: 2500
+						})
+					}).catch(e => {
+						this.canApply = false
+						this.$refs.loading.close()
+						this.handleError(e)
+					})
 				}
-				this.showModal = false
 			},
 			subscribe() {
 				let that = this
@@ -144,6 +164,10 @@
 						that.tmplIds.forEach(item => {
 							if (res[item] === 'accept') {
 								// 用户同意订阅这一条消息
+								that.$refs.toast.show({
+									title: '订阅成功',
+									duration: 1500
+								})
 							}
 						})
 					}

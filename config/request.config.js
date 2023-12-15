@@ -61,7 +61,7 @@ export default {
 					if (response.data) {
 						let serviceCode = response.data.code
 						if (serviceCode !== 200) {
-							// handleServiceError(serviceCode, response.data.message)
+							handleServiceError(serviceCode, response.data.message)
 							reject(response.data)
 						} else {
 							resolve(response.data.queryData);
@@ -171,30 +171,24 @@ function _reslog(res) {
 function handleServiceError(code, message) {
 	if (code === -2 || code === -3 || code === -4 || code === -5) {
 		uni.showToast({
-			title: '您的登录状态过期或者无效，3秒后跳转至登录页面',
+			title: '您的登录状态过期或者无效，请重新登录',
 			icon: 'none',
 			duration: 3000
 		})
 		setTimeout(() => {
 			store.dispatch('logout').then(() => {
-				// 重定向到登录页面
-				uni.navigateTo({
-					url: '/pages/public/login'
-				})
+				// 跳转在路由钩子中统一控制
 			})
 		}, 3000)
 	} else if (code === -1) {
 		uni.showToast({
-			title: '请您在登录后使用，3s后跳转至登录界面',
+			title: '请您在登录后使用',
 			icon: 'none',
 			duration: 3000
 		})
 		setTimeout(() => {
 			store.dispatch('logout').then(() => {
-				// 重定向到登录页面
-				uni.navigateTo({
-					url: '/pages/public/login'
-				})
+				// 跳转在路由钩子中统一控制
 			})
 		}, 3000)
 	} else if (code === 500) {
