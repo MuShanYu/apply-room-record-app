@@ -136,6 +136,7 @@
 					})
 					return
 				}
+				this.showModal = true
 			},
 			submit(e) {
 				this.showModal = false
