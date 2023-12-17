@@ -147,7 +147,7 @@
 		},
 		filters: {
 			dateFormat(date) {
-				return dateShow(date)
+				return dateShow(date, 'yyyy-MM-dd hh:mm')
 			}
 		},
 		mounted() {
