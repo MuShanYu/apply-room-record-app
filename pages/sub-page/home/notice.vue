@@ -24,8 +24,8 @@
 						{{item.createTime | dateFormat }}
 					</view>
 				</view>
-				
 			</view>
+			<tn-load-more :status='status'></tn-load-more>
 		</view>
 		<tn-modal v-model="showTipModal" custom>
 			<view class="" style="border-radius: 60rpx;">
@@ -37,9 +37,8 @@
 				</view>
 			</view>
 		</tn-modal>
-		<tn-load-more :status='status'></tn-load-more>
 		
-		<view class='tn-tabbar-height'></view>
+		
 		
 	</view>
 </template>

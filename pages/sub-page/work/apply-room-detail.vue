@@ -33,16 +33,16 @@
 			</view>
 			<view class="">
 				<tn-button :disabled="!canApply" @click="handleSubmitClick" :shadow="true" width="100%"
-					backgroundColor="#3668FC" fontColor="#FFFFFF" margin="10rpx 0">确 认 预 约</tn-button>
+					:backgroundColor="!canApply ? '#E6E6E6' : '#3668FC'" fontColor="#FFFFFF" margin="10rpx 0">确 认 预 约</tn-button>
 			</view>
 		</view>
-		<view v-if="!isSubscribed" class="tn-margin-top tn-bg-white tn-padding-sm">
+		<view class="tn-margin-top tn-bg-white tn-padding-sm">
 			<view class="tn-flex tn-flex-col-center tn-flex-row-center">
 				<view class="">
 					<text class="tn-text-sm tn-color-gray">订阅审核提醒、处理结果提醒、撤销提醒。</text>
 				</view>
 				<view class="">
-					<tn-button @click="subscribe" class="tn-margin-left" size="sm" :shadow="true" backgroundColor="#01BEFF"
+					<tn-button @click="subscribe" class="tn-margin-left" size="sm" :shadow="true" backgroundColor="#39b54a"
 						fontColor="#FFFFFF">订
 						阅</tn-button>
 				</view>
@@ -115,17 +115,6 @@
 			this.name = param.name
 			this.startTimeStr = dateShow(Number(param.startTime))
 			this.endTimeStr = dateShow(Number(param.endTime))
-			let that = this
-			wx.getSetting({
-				withSubscriptions: true,
-				success(res) {
-					console.log(res);
-					if (!res.subscriptionsSetting.mainSwitch) {
-						// 消息订阅未打开
-						this.isSubscribed = false
-					}
-				}
-			})
 		},
 		methods: {
 			handleSubmitClick() {
