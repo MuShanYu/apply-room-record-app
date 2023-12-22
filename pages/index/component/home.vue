@@ -72,7 +72,7 @@
 					:translateCenter="false"></tn-badge>
 			</view>
 			<tn-load-more :status='status'></tn-load-more>
-			<!-- <tn-empty v-if="" text="登陆后查看" mode="permission"></tn-empty> -->
+			<!-- <tn-empty v-else text="登陆后查看" mode="permission"></tn-empty> -->
 		</view>
 
 		<tn-modal @click="handleTipModalConfirm" :radius='40' v-model="showTipModal" :title="'消息内容'" :content="message"
@@ -131,7 +131,8 @@
 				}],
 				currentMessage: {},
 				currentMessageIndex: 0,
-				status: 'nomore'
+				status: 'nomore',
+				isLogin: false
 			}
 		},
 		filters: {
@@ -140,6 +141,9 @@
 			}
 		},
 		mounted() {
+			if (uni.getStorageSync("token")) {
+				this.isLogin = true
+			}
 			queryNoticeListApi(1, 3).then(res => {
 				let resList = res.pageData
 				resList.forEach(item => {

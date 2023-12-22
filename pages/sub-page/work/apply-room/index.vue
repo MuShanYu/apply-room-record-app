@@ -203,7 +203,7 @@
 			tn(item) {
 				let that = this
 				this.$Router.push({
-					path: '/pages/sub-page/work/apply-room-detail',
+					path: '/pages/sub-page/work/apply-room/apply-room-detail',
 					query: {
 						id: item.id,
 						name: item.chargePerson,
@@ -217,7 +217,6 @@
 			getRoomReserveList() {
 				this.$refs.loading.open()
 				reservationRoomList(this.query).then(res => {
-					console.log(res);
 					this.roomList = res.pageData
 					this.$refs.loading.close()
 				}).catch(e => {
@@ -238,13 +237,10 @@
 				this.getRoomReserveList()
 			},
 			handleOptionClick(e, index) {
-				console.log(e);
-				console.log(index);
 				let that = this
 				switch (index) {
 					case 0:
 						that.query.school = that.schools[e[0]]
-						console.log(that.query.school)
 						break
 					case 1:
 						that.query.teachBuilding = that.teachBuildings[e[0]]

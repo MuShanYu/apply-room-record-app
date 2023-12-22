@@ -45,6 +45,7 @@ export default {
 			let _config = null
 
 			options.complete = (response) => {
+				console.log(response);
 				let statusCode = response.statusCode
 				response.config = _config
 				if (this.interceptor.response) {

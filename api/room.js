@@ -22,6 +22,11 @@ export function reserveRoom(applyRoomDTO) {
 	return http.post('/roomReservation/apply', applyRoomDTO)
 }
 
+
+export function queryRoomReserveToBeReviewedApi(roomReserveReviewedDTO) {
+	return http.post('/roomReservation/reviewed/userRecord', roomReserveReviewedDTO)
+}
+
 export default {
 	cancelReserveRoom: (roomReservationId) => {
 		return http.get('/roomReservation/cancel', {
