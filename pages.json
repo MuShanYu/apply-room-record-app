@@ -41,7 +41,7 @@
 					}
 				},
 				{
-					"path" : "work/apply-room",
+					"path" : "work/apply-room/index",
 					"style" : 
 					{
 						"navigationBarTitleText" : "",
@@ -50,7 +50,15 @@
 					}
 				},
 				{
-					"path" : "work/apply-room-detail",
+					"path" : "work/apply-room/apply-room-detail",
+					"style" : 
+					{
+						"navigationBarTitleText" : "",
+						"enablePullDownRefresh" : false
+					}
+				},
+				{
+					"path" : "work/approve-room/index",
 					"style" : 
 					{
 						"navigationBarTitleText" : "",

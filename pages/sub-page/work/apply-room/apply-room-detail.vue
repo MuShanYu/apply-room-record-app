@@ -39,15 +39,17 @@
 		<view class="tn-margin-top tn-bg-white tn-padding-sm">
 			<view class="tn-flex tn-flex-col-center tn-flex-row-center">
 				<view class="">
-					<text class="tn-text-sm tn-color-gray">订阅审核提醒、处理结果提醒、撤销提醒。</text>
+					<text class="tn-text-sm tn-color-gray">需要结果提醒?点击订阅审核结果通知</text>
 				</view>
 				<view class="">
 					<tn-button @click="subscribe" class="tn-margin-left" size="sm" :shadow="true" backgroundColor="#39b54a"
-						fontColor="#FFFFFF">订
-						阅</tn-button>
+						fontColor="#FFFFFF">订阅
+					</tn-button>
 				</view>
 			</view>
 		</view>
+
+
 		<tn-toast ref="toast"></tn-toast>
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 		<tn-modal @click="submit" :radius='40' v-model="showModal" :title="'提示'" :content="'您确认要预约该房间吗？'"
@@ -92,8 +94,8 @@
 						fontColor: '#FFFFFF'
 					}
 				],
-				tmplIds: ['Y12YmCT2wYbtSI38JGcuOqTjlqoyUOuWMaoqc_X4slU', 'baXQdlZqZoYowKZEmVpocG1_4LTZZ1Ar_rRzlD2CJuU',
-					'VmPW-Qbm9nVfGU5mvSunjjW9ekd518mY029zd812xnA'
+				tmplIds: ['Y12YmCT2wYbtSI38JGcuOmPQcFysZEfEiMnzYCfuJgI',
+					'1S8cwxpW5OqEb_iUwZfk1F6u3bm38jBhwnK3u_0juH8'
 				],
 				isSubscribed: true,
 				canApply: true,
@@ -155,11 +157,13 @@
 							if (res[item] === 'accept') {
 								// 用户同意订阅这一条消息
 								that.$refs.toast.show({
-									title: '订阅成功',
-									duration: 1500
+									title: '订阅成功'
 								})
 							}
 						})
+					},
+					fail(e) {
+						console.log("error: ", e);
 					}
 				})
 			}
