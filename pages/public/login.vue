@@ -188,7 +188,7 @@
 					this.btnLoading = false
 					this.$store.dispatch('login', res).then(() => {
 						this.$refs.toast.show({
-							title: '登录成功,正在跳转',
+							title: '登录成功，正在跳转',
 							duration: 1500
 						})
 						setTimeout(() => {
@@ -227,7 +227,7 @@
 								// 登录
 								that.$store.dispatch('login', response).then(() => {
 									that.$refs.toast.show({
-										title: '登录成功,正在跳转',
+										title: '登录成功，正在跳转',
 										duration: 1500
 									})
 									setTimeout(() => {

@@ -6,7 +6,7 @@
 		  display: currentTabbarIndex === 0 ? '' : 'none'
 		}">
 			<scroll-view class="custom-tabbar-page" scroll-y :scroll-top="scrollTop" @scroll="scroll"
-				 :refresher-threshold="10" enable-back-to-top @scrolltolower="tabbarPageScrollLower">
+				:refresher-threshold="10" enable-back-to-top @scrolltolower="tabbarPageScrollLower">
 				<home ref="home"></home>
 			</scroll-view>
 		</view>
@@ -89,7 +89,9 @@
 						<view class="nav-index-button__meteor__wrapper">
 							<view v-for="(item,index) in 6" :key="index" class="nav-index-button__meteor__item"
 								:style="{transform: `rotateX(${-60 + (30 * index)}deg) rotateZ(${-60 + (30 * index)}deg)`}">
-								<view class="nav-index-button__meteor__item--pic"></view>
+								<view
+									style="background: background: url(https://mushanyu-app-arr.oss-cn-beijing.aliyuncs.com/static/background/arc3.png) no-repeat center center;;"
+									class="nav-index-button__meteor__item--pic"></view>
 							</view>
 						</view>
 					</view>
@@ -195,7 +197,7 @@
 						this.scrollTop = 0
 						this.$refs.home.refresh()
 					});
-					
+
 				}
 			},
 
@@ -478,7 +480,6 @@
 								display: block;
 								width: 100%;
 								height: 100%;
-								background: url(https://resource.tuniaokj.com/images/cool_bg_image/arc3.png) no-repeat center center;
 								background-size: 100% 100%;
 								animation: arc 4s linear infinite;
 							}

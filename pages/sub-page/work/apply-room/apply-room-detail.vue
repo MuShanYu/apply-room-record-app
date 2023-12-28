@@ -94,8 +94,8 @@
 						fontColor: '#FFFFFF'
 					}
 				],
-				tmplIds: ['Y12YmCT2wYbtSI38JGcuOmPQcFysZEfEiMnzYCfuJgI',
-					'1S8cwxpW5OqEb_iUwZfk1F6u3bm38jBhwnK3u_0juH8'
+				tmplIds: ['48xKmWfwx9x13ErSEcaN-Q74tBtmO8QOSSXKZTzdSI0',
+					'1S8cwxpW5OqEb_iUwZfk1NpO8rxcWJgFirAQWdYd-Ro'
 				],
 				isSubscribed: true,
 				canApply: true,
