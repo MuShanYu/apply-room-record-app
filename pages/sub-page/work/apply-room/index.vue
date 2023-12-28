@@ -89,13 +89,14 @@
 			@confirm="handleOptionClick($event, 1)" :range="teachBuildings"></tn-picker>
 		<tn-picker title="选择房间类别" mode="selector" v-model="showCategories" :defaultSelector="[0]"
 			@confirm="handleOptionClick($event, 2)" :range="categories"></tn-picker>
-		<tn-picker title="选择预约起始时间" mode="time" v-model="showStartTime" :params="params" :showTimeTag="true"
-			@confirm="handleOptionClick($event, 3)"></tn-picker>
-		<tn-picker title="选择预约结束时间" mode="time" v-model="showEndTime" :params="params" :showTimeTag="true"
-			@confirm="handleOptionClick($event, 4)"></tn-picker>
+		<tn-picker title="选择预约起始时间" mode="time" :defaultTime="defaultStartTime" v-model="showStartTime" :params="params"
+			:showTimeTag="true" @confirm="handleOptionClick($event, 3)"></tn-picker>
+		<tn-picker title="选择预约结束时间" mode="time" :defaultTime="defaultEndTime" v-model="showEndTime" :params="params"
+			:showTimeTag="true" @confirm="handleOptionClick($event, 4)"></tn-picker>
 
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 
+		<tn-toast ref="toast"></tn-toast>
 
 	</view>
 </template>
@@ -133,8 +134,8 @@
 				query: {
 					page: 1,
 					size: 10,
-					startTime: Number(new Date()),
-					endTime: Number(new Date()) + 3600000,
+					startTime: 0,
+					endTime: 0,
 					school: '',
 					category: '',
 					teachBuilding: ''
@@ -142,7 +143,15 @@
 				roomList: [],
 				status: 'nomore',
 				loadmore: true
-				
+
+			}
+		},
+		computed: {
+			defaultStartTime() {
+				return dateShow(this.query.startTime, 'yyyy-MM-dd hh:mm')
+			},
+			defaultEndTime() {
+				return dateShow(this.query.endTime, 'yyyy-MM-dd hh:mm')
 			}
 		},
 		filters: {
@@ -151,6 +160,8 @@
 			}
 		},
 		mounted() {
+			this.query.startTime = Number(new Date())
+			this.query.endTime = Number(new Date()) + 3600000
 			this.$nextTick(() => {
 				const query = uni.createSelectorQuery().in(this)
 				query.select('.tabs-fixed').boundingClientRect(data => {
@@ -201,6 +212,31 @@
 		},
 		methods: {
 			tn(item) {
+				// 基础校验
+				let hour_12 = 43200000;
+				let thirty_min = 1800000;
+				let subTime = this.query.endTime - this.query.startTime
+				if (subTime <= 0) {
+					this.$refs.toast.show({
+						title: '预约起始时间不能大于等于结束时间',
+						duration: 1500
+					})
+					return
+				}
+				if (subTime >= hour_12) {
+					this.$refs.toast.show({
+						title: '单次房间的预约时间不能大于12小时',
+						duration: 1500
+					})
+					return
+				}
+				if (subTime < thirty_min) {
+					this.$refs.toast.show({
+						title: '单次房间的预约时间不能小于30分钟',
+						duration: 1500
+					})
+					return
+				}
 				let that = this
 				this.$Router.push({
 					path: '/pages/sub-page/work/apply-room/apply-room-detail',
@@ -225,12 +261,24 @@
 				})
 			},
 			refreshData() {
+				let hour_12 = 43200000;
+				let thirty_min = 1800000;
+				let subTime = this.query.endTime - this.query.startTime
+				if (subTime <= 0) {
+					return
+				}
+				if (subTime >= hour_12) {
+					return
+				}
+				if (subTime < thirty_min) {
+					return
+				}
 				this.query.page = 1;
 				this.loadmore = true
 				// 返回顶部
 				uni.pageScrollTo({
 					scrollTop: 0,
-					duration: 0
+					duration: 300
 				})
 				// 查询
 				// 开始加载新数据

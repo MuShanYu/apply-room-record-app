@@ -150,7 +150,7 @@
 						login(loginDTO).then(res => {
 							that.$store.dispatch('login', res).then(() => {
 								that.$refs.toast.show({
-									title: '登录成功,正在跳转',
+									title: '登录成功，正在跳转',
 									duration: 1500
 								})
 								setTimeout(() => {

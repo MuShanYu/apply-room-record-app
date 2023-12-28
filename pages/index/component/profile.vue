@@ -4,7 +4,9 @@
 		<tn-nav-bar :isBack='false'>首页</tn-nav-bar>
 		<!-- 页面内容 -->
 		<view :style="{paddingTop: vuex_custom_bar_height + 'px'}">
-			
+			<tn-button @click="test" class="tn-margin-left" :shadow="true" backgroundColor="#39b54a"
+				fontColor="#FFFFFF">清除本地缓存
+			</tn-button>
 		</view>
 		
 		<view class='tn-tabbar-height'></view>
@@ -20,7 +22,9 @@
 			}
 		},
 		methods: {
-			
+			test() {
+				uni.clearStorageSync()
+			}
 		}
 	}
 </script>

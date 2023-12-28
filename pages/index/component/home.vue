@@ -29,7 +29,7 @@
 		<view class="tabs-fixed tn-bg-white">
 			<view class="tn-flex tn-flex-col-between tn-flex-col-center tn-padding-top-sm"
 				:style="{marginTop: vuex_custom_bar_height + 'px'}">
-				<view class="justify-content-item" style="width: 87vw;overflow: hidden;">
+				<view style="width: 100vw;overflow: hidden;">
 					<tn-tabs :list="scrollList" :current="current" :isScroll="false" activeColor="#3668FC" :bold="true"
 						:fontSize="32" :badgeOffset="[20, 80]" @change="tabChange" backgroundColor="#FFFFFF" :height="70"></tn-tabs>
 				</view>

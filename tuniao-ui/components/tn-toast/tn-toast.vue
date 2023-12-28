@@ -144,9 +144,9 @@
   
   .tn-toast {
     height: auto;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.6);
     border-radius: 10rpx;
-    opacity: 0;
+    opacity: 0.1;
     position: fixed;
     left: 50%;
     top: 48%;
@@ -180,7 +180,7 @@
     
     &__text {
       font-size: 28rpx;
-      line-height: 28rpx;
+      line-height: 1.5;
       color: #ffffff;
       text-align: center;
     }
