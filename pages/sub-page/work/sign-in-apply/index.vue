@@ -16,7 +16,7 @@
 		<view class="tn-padding"
 			:style="{marginTop: noticeShow ? (noticeHeight + vuex_custom_bar_height) + 'px' : vuex_custom_bar_height + 'px'}">
 			<view class="">
-				<view class="tn-bg-white box-shadow tn-padding tn-margin-bottom" v-for="(item, index) in accessReocrdList"
+				<view @click="tn(item)" class="tn-bg-white box-shadow tn-padding tn-margin-bottom" v-for="(item, index) in accessReocrdList"
 					:key="item.id">
 					<view class="tn-flex tn-flex-row-between">
 						<view class="tn-text-bold tn-text-lg">
@@ -167,6 +167,14 @@
 				}).catch(e => {
 					console.log(e);
 					this.$refs.close()
+				})
+			},
+			tn(item) {
+				this.$Router.push({
+					path: '/pages/sub-page/work/sign-in-apply/sign-in-apply-detail',
+					query: {
+						accessRecordId: item.id
+					}
 				})
 			},
 			handleClearQuery() {

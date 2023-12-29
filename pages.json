@@ -82,6 +82,14 @@
 						"enablePullDownRefresh" : true,
 						"onReachBottomDistance": 10
 					}
+				},
+				{
+					"path" : "work/sign-in-apply/sign-in-apply-detail",
+					"style" : 
+					{
+						"navigationBarTitleText" : "",
+						"enablePullDownRefresh" : false
+					}
 				}
 			]
 		}
