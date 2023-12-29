@@ -82,6 +82,14 @@
 			</view>
 			<tn-load-more :status='status'></tn-load-more>
 		</view>
+		
+		<!-- 悬浮按钮-->
+		<view class="">
+			<view @click="handleClick"
+				class="icon15__item--icon tn-flex tn-flex-row-center tn-flex-col-center tn-shadow-blur button-1">
+				<view class="tn-icon-ghost tn-color-white"></view>
+			</view>
+		</view>
 
 		<tn-picker title="选择校区" mode="selector" v-model="showSchools" :defaultSelector="[0]" :range="schools"
 			@confirm="handleOptionClick($event, 0)"></tn-picker>
@@ -178,6 +186,10 @@
 				this.categories.push(...res.categories)
 			})
 			this.getRoomReserveList()
+			uni.$on('applyRoom', (data) => {
+				let index = this.roomList.findIndex(item => item.id === data.roomId)
+				this.roomList.splice(index, 1)
+			})
 		},
 		onReachBottom() {
 			if (this.loadmore) {
@@ -185,7 +197,7 @@
 				this.status = 'loading'
 				reservationRoomList(this.query).then(res => {
 					let list = res.pageData
-					if (list.length !== 0) {
+					if (list.length > 0) {
 						this.roomList.push(...list)
 					} else {
 						this.loadmore = false
@@ -199,14 +211,12 @@
 		},
 		onPullDownRefresh() {
 			this.query.page = 1
-			this.$refs.loading.open()
+			this.loadmore = true
 			reservationRoomList(this.query).then(res => {
 				this.roomList = res.pageData
-				this.$refs.loading.close()
 				uni.stopPullDownRefresh()
 			}).catch(e => {
 				console.log(e);
-				this.$refs.loading.close()
 				uni.stopPullDownRefresh()
 			})
 		},
@@ -307,6 +317,12 @@
 						break
 				}
 				this.refreshData()
+			},
+			handleClick() {
+				uni.pageScrollTo({
+					scrollTop: 0,
+					duration: 300
+				})
 			}
 		}
 	}
@@ -338,7 +354,7 @@
 		justify-content: space-evenly;
 		align-items: center;
 		box-sizing: border-box;
-		background-color: rgba(0, 0, 0, 0.15);
+		background-color: rgba(0, 0, 0, 0.2);
 		border-radius: 1000rpx;
 		border: 1rpx solid rgba(255, 255, 255, 0.5);
 		color: #FFFFFF;
@@ -353,8 +369,9 @@
 
 	}
 
-	.button-2 {
-		background-color: rgba(0, 0, 0, 0.15);
+	/* 按钮 */
+	.button-1 {
+		background-color: rgba(0, 0, 0, 0.3);
 		position: fixed;
 		/* bottom:200rpx;
 	    right: 20rpx; */
@@ -363,19 +380,19 @@
 		z-index: 1001;
 		border-radius: 100px;
 	}
-
+	
 	/* 图标容器15 start */
 	.icon15 {
 		&__item {
 			width: 30%;
-
+	
 			border-radius: 10rpx;
 			padding: 30rpx;
 			margin: 20rpx 10rpx;
 			transform: scale(1);
 			transition: transform 0.3s linear;
 			transform-origin: center center;
-
+	
 			&--icon {
 				width: 100rpx;
 				height: 100rpx;
@@ -383,7 +400,7 @@
 				border-radius: 50%;
 				margin-bottom: 18rpx;
 				z-index: 1;
-
+	
 				&::after {
 					content: " ";
 					position: absolute;
@@ -396,8 +413,8 @@
 					opacity: 1;
 					transform: scale(1, 1);
 					background-size: 100% 100%;
-
-
+	
+	
 				}
 			}
 		}

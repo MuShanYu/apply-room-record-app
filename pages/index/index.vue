@@ -535,7 +535,7 @@
 	}
 
 	.button-2 {
-		background-color: rgba(0, 0, 0, 0.15);
+		background-color: rgba(0, 0, 0, 0.3);
 		position: fixed;
 		/* bottom:200rpx;
       right: 20rpx; */

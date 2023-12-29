@@ -40,7 +40,7 @@
 					<view class="">
 						<text class="tn-icon-identity tn-text-xl" style="padding-right: 8rpx;"></text> {{item.stuNum}}
 					</view>
-					<view class=""> 
+					<view class="">
 						<text class="tn-icon-my tn-text-xl" style="padding-right: 8rpx;"></text> {{item.name}}
 					</view>
 					<view class="">
@@ -62,23 +62,56 @@
 					</view>
 				</view>
 				<view v-if="item.state !== 0" class="tn-margin-top-sm tn-color-gray tn-text-df">
+					<view class="tn-margin-bottom-sm">
+						审批操作时间：{{item.updateTime | dateFormat}}
+					</view>
 					<view class="">
 						备注：{{item.remark}}
 					</view>
 				</view>
 			</view>
+			<tn-load-more :status='status'></tn-load-more>
+		</view>
 
+		<!-- 悬浮按钮-->
+		<view class="">
+			<view @click="handleMoreClick"
+				class="icon15__item--icon tn-flex tn-flex-row-center tn-flex-col-center tn-shadow-blur button-1">
+				<view class="tn-icon-more-horizontal tn-color-white"></view>
+			</view>
 		</view>
 
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 		<tn-toast @closed="" ref="toast"></tn-toast>
-		
-		<tn-modal @click="handleConfirm" :radius='40' v-model="showConfirmModal" :title="'提示'"
-			:content="'您确认要通过该房间预约申请吗'" :button="button"></tn-modal>
-		
+
+		<tn-modal @click="handleConfirm" :radius='40' v-model="showConfirmModal" :title="'提示'" :content="'您确认要通过该房间预约申请吗'"
+			:button="button"></tn-modal>
+
 		<tn-modal @click="showServiceErrorModal = false" :radius='40' v-model="showServiceErrorModal" :title="'系统提示'"
 			:content="message" :button="serviceErrorModalButton">
 		</tn-modal>
+
+		<tn-popup mode="top" :marginTop="vuex_custom_bar_height" v-model="showPopup">
+			<view class="tn-padding">
+				<tn-form :model="query" ref="form" :borderBottom="false" :labelWidth="160">
+					<tn-form-item label="学号/工号" prop="stuNum" :borderBottom="false">
+						<tn-input placeholder="请输入要搜索的学号/工号" v-model="query.stuNum" />
+					</tn-form-item>
+					<tn-form-item label="预约时间" :borderBottom="false">
+						<tn-radio-group shape="square" activeColor="#3668FC" v-model="timeOption">
+							<tn-radio name="none">任意</tn-radio>
+							<tn-radio name="today">今天</tn-radio>
+							<tn-radio name="tomorrow">明天</tn-radio>
+							<tn-radio name="afterTomorrow">后天</tn-radio>
+						</tn-radio-group>
+					</tn-form-item>
+				</tn-form>
+				<view class="tn-flex tn-flex-row-between tn-margin-top">
+					<tn-button @click="handleClearQuery" backgroundColor="tn-bg-gray" fontColor="#FFFFFF">重 置</tn-button>
+					<tn-button @click="handleQueryFilterConfirm" backgroundColor="#3668FC" fontColor="#FFFFFF">确 认</tn-button>
+				</view>
+			</view>
+		</tn-popup>
 
 	</view>
 </template>
@@ -124,9 +157,12 @@
 				optionHeight: 0,
 				query: {
 					page: 1,
-					size: 20,
+					size: 10,
 					stuNum: '',
-					state: 0
+					state: 0,
+					stuNum: '',
+					startTime: null,
+					endTime: null
 				},
 				reservationList: [],
 				showConfirmModal: false,
@@ -144,7 +180,12 @@
 				currentItem: {},
 				currentIndex: 0,
 				showServiceErrorModal: false,
-				message: ''
+				message: '',
+				loadmore: true,
+				status: 'nomore',
+				showPopup: false,
+				timeOption: 'none'
+
 			}
 		},
 		filters: {
@@ -155,7 +196,7 @@
 				return dateShow(date, 'hh:mm')
 			}
 		},
-		mounted() { 
+		mounted() {
 			this.$nextTick(() => {
 				const query = uni.createSelectorQuery().in(this)
 				query.select('.tabs-fixed').boundingClientRect(data => {
@@ -164,6 +205,41 @@
 				query.exec()
 			})
 			this.getDataList()
+		},
+		onLoad() {
+			// 监听驳回事件
+			uni.$on('reserveRejected', (data) => {
+				let index = this.reservationList.findIndex(item => item.id === data.reserveId)
+				this.reservationList.splice(index, 1)
+			})
+		},
+		async onPullDownRefresh() {
+			this.resetQuery()
+			queryRoomReserveToBeReviewedApi(this.query).then(res => {
+				this.reservationList = res.pageData
+				// console.log(res);
+				uni.stopPullDownRefresh()
+			}).catch(e => {
+				console.log(e);
+				uni.stopPullDownRefresh()
+			})
+		},
+		onReachBottom() {
+			if (this.loadmore) {
+				this.query.page += 1
+				this.status = 'loading'
+				queryRoomReserveToBeReviewedApi(this.query).then(res => {
+					if (res.pageData.length > 0) {
+						this.reservationList.push(...res.pageData)
+					} else {
+						this.loadmore = false
+					}
+					this.status = 'nomore'
+				}).catch(e => {
+					console.log(e);
+					this.status = 'nomore'
+				})
+			}
 		},
 		methods: {
 			async tabChange(index) {
@@ -212,7 +288,7 @@
 					this.$refs.loading.open()
 					passOrRejectReserveApi(this.currentItem.id, true, '').then(res => {
 						this.$refs.loading.close()
-						this.reservationList.splice(this.currentIndex , 1)
+						this.reservationList.splice(this.currentIndex, 1)
 						this.$refs.toast.show({
 							title: '操作成功',
 							duration: 1500
@@ -221,6 +297,66 @@
 						this.$refs.loading.close()
 						this.handleError(e)
 					})
+				}
+			},
+			handleMoreClick() {
+				this.showPopup = true
+			},
+			handleClearQuery() {
+				this.timeOption = 'none'
+				this.resetQuery()
+				this.showPopup = false
+				uni.pageScrollTo({
+					scrollTop: 0,
+					duration: 300
+				})
+				this.getDataList()
+			},
+			handleQueryFilterConfirm() {
+				let dateTimestamp = this.getTime(this.timeOption)
+				this.query.startTime = dateTimestamp[0]
+				this.query.endTime = dateTimestamp[1]
+				this.showPopup = false
+				this.query.page = 1
+				this.getDataList()
+			},
+			resetQuery() {
+				this.query.page = 1
+				this.query.stuNum = ''
+				this.query.startTime = null
+				this.query.endTime = null
+				this.loadmore = true
+			},
+			getTime(dateOption) {
+				let today = new Date()
+				// 设置时间为 00:00:00
+				today.setHours(0, 0, 0, 0);
+				switch (dateOption) {
+					case 'today':
+						// 获取今天 00:00:00 的时间戳
+						let todayStartTimestamp = today.getTime();
+						// 获取今天 23:59:59 的时间戳
+						let todayEndTimestamp = todayStartTimestamp + 24 * 60 * 60 * 1000 - 1;
+						return [todayStartTimestamp, todayEndTimestamp]
+					case 'tomorrow':
+						let tomorrow = new Date(today);
+						tomorrow.setDate(today.getDate() + 1);
+						// 获取明天 00:00:00 的时间戳
+						let tomorrowStartTimestamp = tomorrow.getTime();
+						// 获取明天 23:59:59 的时间戳
+						let tomorrowEndTimestamp = tomorrowStartTimestamp + 24 * 60 * 60 * 1000 - 1;
+						return [tomorrowStartTimestamp, tomorrowEndTimestamp]
+					case 'afterTomorrow':
+						// 获取后天的日期对象
+						let dayAfterTomorrow = new Date(today);
+						dayAfterTomorrow.setDate(today.getDate() + 2);
+						// 获取后天 00:00:00 的时间戳
+						let dayAfterTomorrowStartTimestamp = dayAfterTomorrow.getTime();
+						// 获取后天 23:59:59 的时间戳
+						let dayAfterTomorrowEndTimestamp = dayAfterTomorrowStartTimestamp + 24 * 60 * 60 * 1000 - 1;
+						return [dayAfterTomorrowStartTimestamp, dayAfterTomorrowEndTimestamp]
+					default:
+						return [null, null]
 				}
 			}
 		}
@@ -237,7 +373,7 @@
 		justify-content: space-evenly;
 		align-items: center;
 		box-sizing: border-box;
-		background-color: rgba(0, 0, 0, 0.15);
+		background-color: rgba(0, 0, 0, 0.2);
 		border-radius: 1000rpx;
 		border: 1rpx solid rgba(255, 255, 255, 0.5);
 		color: #FFFFFF;
@@ -264,5 +400,56 @@
 		border-radius: 15rpx;
 		box-shadow: 0rpx 0rpx 50rpx 0rpx rgba(0, 0, 0, 0.07);
 		// position: relative;
+	}
+
+	/* 按钮 */
+	.button-1 {
+		background-color: rgba(0, 0, 0, 0.3);
+		position: fixed;
+		/* bottom:200rpx;
+	    right: 20rpx; */
+		bottom: 15%;
+		right: 30rpx;
+		z-index: 1001;
+		border-radius: 100px;
+	}
+
+	/* 图标容器15 start */
+	.icon15 {
+		&__item {
+			width: 30%;
+
+			border-radius: 10rpx;
+			padding: 30rpx;
+			margin: 20rpx 10rpx;
+			transform: scale(1);
+			transition: transform 0.3s linear;
+			transform-origin: center center;
+
+			&--icon {
+				width: 100rpx;
+				height: 100rpx;
+				font-size: 50rpx;
+				border-radius: 50%;
+				margin-bottom: 18rpx;
+				z-index: 1;
+
+				&::after {
+					content: " ";
+					position: absolute;
+					z-index: -1;
+					width: 100%;
+					height: 100%;
+					left: 0;
+					bottom: 0;
+					border-radius: inherit;
+					opacity: 1;
+					transform: scale(1, 1);
+					background-size: 100% 100%;
+
+
+				}
+			}
+		}
 	}
 </style>
