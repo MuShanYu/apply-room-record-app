@@ -139,8 +139,9 @@
 						this.$refs.loading.close()
 						this.$refs.toast.show({
 							title: '房间预约成功，已通知管理员进行审核',
-							duration: 2500
+							duration: 2000
 						})
+						uni.$emit('applyRoom', {roomId: this.applyRoomDTO.roomId})
 					}).catch(e => {
 						this.canApply = false
 						this.$refs.loading.close()
@@ -181,7 +182,7 @@
 		justify-content: space-evenly;
 		align-items: center;
 		box-sizing: border-box;
-		background-color: rgba(0, 0, 0, 0.15);
+		background-color: rgba(0, 0, 0, 0.2);
 		border-radius: 1000rpx;
 		border: 1rpx solid rgba(255, 255, 255, 0.5);
 		color: #FFFFFF;

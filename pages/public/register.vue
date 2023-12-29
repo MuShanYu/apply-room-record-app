@@ -212,7 +212,7 @@
     justify-content: space-evenly;
     align-items: center;
     box-sizing: border-box;
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, 0.2);
     border-radius: 1000rpx;
     border: 1rpx solid rgba(255, 255, 255, 0.5);
     color: #FFFFFF;
