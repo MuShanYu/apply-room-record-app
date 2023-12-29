@@ -27,6 +27,7 @@ export function queryRoomReserveToBeReviewedApi(roomReserveReviewedDTO) {
 	return http.post('/roomReservation/reviewed/userRecord', roomReserveReviewedDTO)
 }
 
+
 export function passOrRejectReserveApi(reserveId, passed, rejectReason) {
 	return http.get('/roomReservation/approval', {
 		reserveId,

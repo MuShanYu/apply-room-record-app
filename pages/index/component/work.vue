@@ -24,7 +24,8 @@
 				</view>
 			</view>
 
-			<view class="nav-list-item tn-shadow-blur tn-cool-bg-image home-shadow">
+			<view @click="tn('/pages/sub-page/work/sign-in-apply/index')"
+				class="nav-list-item tn-shadow-blur tn-cool-bg-image home-shadow">
 				<view class="nav-link">
 					<view class='title tn-text-bold' style="color: #080808;">补卡申请</view>
 					<view class='join'></view>
