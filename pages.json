@@ -90,6 +90,15 @@
 						"navigationBarTitleText" : "",
 						"enablePullDownRefresh" : false
 					}
+				},
+				{
+					"path" : "work/sign-in-approve/index",
+					"style" : 
+					{
+						"navigationBarTitleText" : "",
+						"enablePullDownRefresh" : true,
+						"onReachBottomDistance": 10
+					}
 				}
 			]
 		}

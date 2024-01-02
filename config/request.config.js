@@ -171,31 +171,27 @@ function _reslog(res) {
 
 function handleServiceError(code, message) {
 	if (code === -2 || code === -3 || code === -4 || code === -5) {
-		uni.showToast({
-			title: '您的登录状态过期或者无效，请重新登录',
-			icon: 'none',
-			duration: 3000
-		})
-		setTimeout(() => {
-			store.dispatch('logout').then(() => {
-				// 跳转在路由钩子中统一控制
+		store.dispatch('logout').then(() => {
+			// 跳转在路由钩子中统一控制
+			uni.showToast({
+				title: '您的登录状态过期或者无效，请重新登录',
+				icon: 'none',
+				duration: 3000
 			})
-		}, 3000)
+		})
 	} else if (code === -1) {
-		uni.showToast({
-			title: '请您在登录后使用',
-			icon: 'none',
-			duration: 3000
-		})
-		setTimeout(() => {
-			store.dispatch('logout').then(() => {
-				// 跳转在路由钩子中统一控制
+		store.dispatch('logout').then(() => {
+			// 跳转在路由钩子中统一控制
+			uni.showToast({
+				title: '请您在登录后使用',
+				icon: 'none',
+				duration: 3000
 			})
-		}, 3000)
+		})
 	} else if (code === 500) {
 		uni.showModal({
 			title: '提示',
-			content: '服务器错误，请联系管理员',
+			content: '服务器错误，系统异常，请稍后重试',
 			showCancel: false,
 			confirmText: 'Error',
 			success(res) {

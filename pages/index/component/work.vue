@@ -60,7 +60,8 @@
 				</view>
 			</view>
 
-			<view class="nav-list-item tn-shadow-blur tn-cool-bg-image home-shadow">
+			<view class="nav-list-item tn-shadow-blur tn-cool-bg-image home-shadow"
+				@click="tn('/pages/sub-page/work/sign-in-approve/index')">
 				<view class="nav-link">
 					<view class='title tn-text-bold' style="color: #080808;">补卡审批</view>
 					<view class='join'></view>
@@ -83,7 +84,8 @@
 		data() {
 			return {
 				adminPage: [
-					'/pages/sub-page/work/approve-room/index'
+					'/pages/sub-page/work/approve-room/index',
+					'/pages/sub-page/work/sign-in-approve/index'
 				]
 			}
 		},

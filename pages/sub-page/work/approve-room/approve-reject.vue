@@ -17,7 +17,7 @@
 
 			<view class="tn-margin-top tn-text-right">
 				<tn-button @click="handleSubmitClick" :disabled="disabled" :backgroundColor="disabled ? '#E6E6E6' : '#39b54a'"
-					with="164rpx" class="" :shadow="false" fontColor="#FFFFFF"> 确 认
+					class="" :shadow="false" fontColor="#FFFFFF"> 确 认
 				</tn-button>
 			</view>
 
@@ -47,6 +47,11 @@
 				rejectReason: '',
 				showServiceErrorModal: false,
 				message: '',
+				serviceErrorModalButton: [{
+					text: '我知道了',
+					backgroundColor: '#3668FC',
+					fontColor: '#FFFFFF',
+				}],
 				showConfirmModal: false,
 				button: [{
 						text: '取消',
@@ -88,7 +93,9 @@
 							duration: 1500
 						})
 						this.disabled = true
-						uni.$emit('reserveRejected', {reserveId: this.reserveId})
+						uni.$emit('reserveRejected', {
+							reserveId: this.reserveId
+						})
 					}).catch(e => {
 						this.$refs.loading.close()
 						this.handleError(e)
