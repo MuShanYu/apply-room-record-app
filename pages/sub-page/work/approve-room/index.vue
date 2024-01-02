@@ -63,7 +63,7 @@
 				</view>
 				<view v-if="item.state !== 0" class="tn-margin-top-sm tn-color-gray tn-text-df">
 					<view class="tn-margin-bottom-sm">
-						审批操作时间：{{item.updateTime | dateFormat}}
+						操作时间：{{item.updateTime | dateFormat}}
 					</view>
 					<view class="">
 						备注：{{item.remark}}
@@ -181,6 +181,11 @@
 				currentIndex: 0,
 				showServiceErrorModal: false,
 				message: '',
+				serviceErrorModalButton: [{
+					text: '我知道了',
+					backgroundColor: '#3668FC',
+					fontColor: '#FFFFFF',
+				}],
 				loadmore: true,
 				status: 'nomore',
 				showPopup: false,
@@ -213,7 +218,7 @@
 				this.reservationList.splice(index, 1)
 			})
 		},
-		async onPullDownRefresh() {
+		onPullDownRefresh() {
 			this.resetQuery()
 			queryRoomReserveToBeReviewedApi(this.query).then(res => {
 				this.reservationList = res.pageData
@@ -249,6 +254,8 @@
 					scrollTop: 0,
 					duration: 300
 				});
+				this.query.page = 1
+				this.loadmore = true
 				await this.getDataList()
 			},
 			async getDataList() {

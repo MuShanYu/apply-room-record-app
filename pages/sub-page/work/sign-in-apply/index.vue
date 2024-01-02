@@ -16,14 +16,14 @@
 		<view class="tn-padding"
 			:style="{marginTop: noticeShow ? (noticeHeight + vuex_custom_bar_height) + 'px' : vuex_custom_bar_height + 'px'}">
 			<view class="">
-				<view @click="tn(item)" class="tn-bg-white box-shadow tn-padding tn-margin-bottom" v-for="(item, index) in accessReocrdList"
-					:key="item.id">
+				<view @click="tn(item)" class="tn-bg-white box-shadow tn-padding tn-margin-bottom"
+					v-for="(item, index) in accessReocrdList" :key="item.id">
 					<view class="tn-flex tn-flex-row-between">
-						<view class="tn-text-bold tn-text-lg">
-							{{item.roomName}}
+						<view class="tn-text-bold tn-text-lg tn-text-ellipsis">
+							{{item.entryTime | dateFormat2}}-{{item.roomName}}
 						</view>
 						<view class="">
-							<tn-tag backgroundColor="#39b54a" shape="circle" fontColor="#FFFFFF">可申请</tn-tag>
+							<tn-tag backgroundColor="#0081ff" shape="circle" fontColor="#FFFFFF">待处理</tn-tag>
 						</view>
 					</view>
 					<view class="tn-margin-top-sm tn-color-gray">
@@ -104,6 +104,11 @@
 				loadmore: true,
 				showServiceErrorModal: false,
 				message: '',
+				serviceErrorModalButton: [{
+					text: '我知道了',
+					backgroundColor: '#3668FC',
+					fontColor: '#FFFFFF',
+				}],
 				status: 'nomore',
 				showPopup: false
 			}
@@ -111,6 +116,33 @@
 		filters: {
 			dateFormat(date) {
 				return dateShow(date, 'yyyy年MM月dd日 hh:mm')
+			},
+			dateFormat2(date) {
+				return dateShow(date, 'MM月dd日hh:mm')
+			},
+			tagBgFilter(state) {
+				switch (state) {
+					case 0:
+						return '#1cbbb4'
+					case 1:
+						return '#39b54a'
+					case 2:
+						return '#e54d42'
+					default:
+						return '#1cbbb4'
+				}
+			},
+			tagTextFilter(state) {
+				switch(state) {
+					case 0:
+						return '待申请'
+					case 1:
+						return '处理成功'
+					case 2:
+						return '驳回'
+					default:
+						return '待申请'
+				}
 			}
 		},
 		onLoad() {
@@ -120,6 +152,13 @@
 				this.list.push(content)
 			})
 			this.getDataList()
+
+			// 监听申请事件
+			uni.$on('signInApply', (data) => {
+				let index = this.accessReocrdList.findIndex(item => item.id === data.accessRecordId)
+				this.accessReocrdList.splice(index, 1)
+				console.log(index);
+			})
 		},
 		onPullDownRefresh() {
 			this.query.page = 1
@@ -164,6 +203,7 @@
 				queryCanApplyAccessRecordListApi(this.query).then(res => {
 					this.accessReocrdList = res.pageData
 					this.$refs.loading.close()
+					// console.log(this.accessReocrdList);
 				}).catch(e => {
 					console.log(e);
 					this.$refs.close()
@@ -173,7 +213,10 @@
 				this.$Router.push({
 					path: '/pages/sub-page/work/sign-in-apply/sign-in-apply-detail',
 					query: {
-						accessRecordId: item.id
+						accessRecordId: item.id,
+						entryTime: item.entryTime,
+						roomName: item.roomName,
+						chargePersonId: item.chargePersonId
 					}
 				})
 			},
@@ -191,7 +234,7 @@
 				this.query.page = 1
 				this.showPopup = false
 				uni.pageScrollTo({
-					scrollTop: 0, 
+					scrollTop: 0,
 					duration: 300
 				})
 				this.getDataList()
