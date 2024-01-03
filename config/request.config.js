@@ -117,8 +117,10 @@ export default {
 		options.url = url
 		options.data = data
 		options.method = 'PUT'
-		options.header = {
-			'Content-Type': 'application/json;charset=UTF-8',
+		if (!options.header) {
+			options.header = {
+				'Content-Type': 'application/json;charset=UTF-8',
+			}
 		}
 		return this.request(options)
 	},

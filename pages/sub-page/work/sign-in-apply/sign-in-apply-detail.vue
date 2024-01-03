@@ -109,6 +109,7 @@
 			}
 		},
 		onLoad(params) {
+			console.log(params);
 			this.accessRecordId = params.accessRecordId
 			this.application.matterRecordId = params.accessRecordId
 			this.entryTime = Number(params.entryTime)

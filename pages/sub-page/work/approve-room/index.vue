@@ -30,10 +30,10 @@
 						{{item.createTime | dateFormat}}
 					</view>
 				</view>
-				<view class="tn-margin-top-sm tn-color-gray">
+				<view class="tn-margin-top-sm">
 					申请理由：{{item.roomUsage}}
 				</view>
-				<view class="tn-margin-top-sm tn-color-gray">
+				<view class="tn-margin-top-sm tn-text-bold">
 					预约时间：{{item.reserveStartTime | dateFormat}}~{{item.reserveEndTime | dateHourFormat}}
 				</view>
 				<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-df tn-margin-top-sm">
@@ -48,16 +48,16 @@
 					</view>
 				</view>
 				<view class="tn-margin-top-sm tn-flex tn-flex-row-between">
-					<view class="">
+					<view class="tn-flex-basic-xs">
 						<tn-button @click="handleConfirmClick(item, index, false)" :disabled="item.state !== 0"
-							:backgroundColor="item.state !== 0 ? '#E6E6E6' : '#e54d42'" height='64rpx' width="144rpx" class=""
-							:shadow="false" fontColor="#FFFFFF">驳回
+							:backgroundColor="item.state !== 0 ? '#E6E6E6' : '#e54d42'" class="" :shadow="false"
+							fontColor="#FFFFFF">驳回
 						</tn-button>
 					</view>
-					<view class="">
+					<view class="tn-flex-basic-xs">
 						<tn-button @click="handleConfirmClick(item, index, true)" :disabled="item.state !== 0"
-							:backgroundColor="item.state !== 0 ? '#E6E6E6' : '#39b54a'" height='64rpx' width="144rpx" class=""
-							:shadow="false" fontColor="#FFFFFF">通过
+							:backgroundColor="item.state !== 0 ? '#E6E6E6' : '#39b54a'" class="" :shadow="false"
+							fontColor="#FFFFFF">通过
 						</tn-button>
 					</view>
 				</view>
