@@ -160,25 +160,29 @@
 				this.$Router.push(page)
 			},
 			getToDoMessageList() {
+				this.$refs.loading.open()
 				queryMyMessageListApi(this.messageQuery.page, this.messageQuery.size).then(res => {
 					let list = res.pageInfo.pageData
-					
 					this.scrollList[0].count = res.todoCount
 					this.scrollList[1].count = res.resultCount
 					this.messageList = list
+					this.$refs.loading.close()
 				}).catch(e => {
 					// console.log(e);
+					this.$refs.loading.close()
 				})
 			},
 			getResultMessageList() {
+				this.$refs.loading.open()
 				queryMyMessageListApi(this.messageQuery.page, this.messageQuery.size, 'RESULT').then(res => {
 					let list = res.pageInfo.pageData
-					
 					this.scrollList[0].count = res.todoCount
 					this.scrollList[1].count = res.resultCount
 					this.resultMessageList = list
+					this.$refs.loading.close()
 				}).catch(e => {
 					// console.log(e);
+					this.$refs.loading.close()
 				})
 			},
 			tabChange(index) {

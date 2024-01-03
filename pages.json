@@ -99,6 +99,14 @@
 						"enablePullDownRefresh" : true,
 						"onReachBottomDistance": 10
 					}
+				},
+				{
+					"path" : "work/sign-in-approve/sign-in-approve-detail",
+					"style" : 
+					{
+						"navigationBarTitleText" : "",
+						"enablePullDownRefresh" : false
+					}
 				}
 			]
 		}

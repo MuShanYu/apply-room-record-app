@@ -12,12 +12,10 @@ export function queryMyApplicationListApi(applicationListQuery) {
 	return http.post('/application/query/list/my', applicationListQuery)
 }
 
-export function updateApplicationStateApi(applicationId, isPass) {
-	return http.post('/application', {
-		params: {
-			applicationId,
-			isPass
+export function updateApplicationStateApi(applicationId, isPass, remark) {
+	return http.put('/application', {applicationId, isPass, remark}, {
+		header: {
+			'Content-Type': 'application/x-www-form-urlencoded'
 		}
 	})
 }
-

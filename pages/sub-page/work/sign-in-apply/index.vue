@@ -119,30 +119,6 @@
 			},
 			dateFormat2(date) {
 				return dateShow(date, 'MM月dd日hh:mm')
-			},
-			tagBgFilter(state) {
-				switch (state) {
-					case 0:
-						return '#1cbbb4'
-					case 1:
-						return '#39b54a'
-					case 2:
-						return '#e54d42'
-					default:
-						return '#1cbbb4'
-				}
-			},
-			tagTextFilter(state) {
-				switch(state) {
-					case 0:
-						return '待申请'
-					case 1:
-						return '处理成功'
-					case 2:
-						return '驳回'
-					default:
-						return '待申请'
-				}
 			}
 		},
 		onLoad() {
@@ -157,7 +133,6 @@
 			uni.$on('signInApply', (data) => {
 				let index = this.accessReocrdList.findIndex(item => item.id === data.accessRecordId)
 				this.accessReocrdList.splice(index, 1)
-				console.log(index);
 			})
 		},
 		onPullDownRefresh() {

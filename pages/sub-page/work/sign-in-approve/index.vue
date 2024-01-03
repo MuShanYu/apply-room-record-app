@@ -21,14 +21,16 @@
 
 		<view class="" :style="{marginTop: optionHeight + 'px'}">
 			<view class="tn-padding">
-				<view class="tn-bg-white box-shadow tn-padding tn-margin-bottom" v-for="(item, index) in applicationList"
-					:key="item.id">
+				<view @click="tn(item)" class="tn-bg-white box-shadow tn-padding tn-margin-bottom"
+					v-for="(item, index) in applicationList" :key="item.id">
 					<view class="tn-flex tn-flex-row-between">
 						<view class="tn-text-bold tn-text-lg tn-text-ellipsis">
 							{{item.title}}
 						</view>
 						<view class="">
-							<tn-tag backgroundColor="#0081ff" shape="circle" fontColor="#FFFFFF">待处理</tn-tag>
+							<tn-tag :backgroundColor="item.state | tagBgFilter" shape="circle" fontColor="#FFFFFF">
+								{{item.state | tagTextFilter}}
+							</tn-tag>
 						</view>
 					</view>
 					<view class="tn-margin-top-xs tn-color-gray">
@@ -46,6 +48,7 @@
 				</view>
 				<tn-load-more :status='status'></tn-load-more>
 			</view>
+
 		</view>
 
 		<!-- 悬浮按钮-->
@@ -65,23 +68,15 @@
 					<tn-form-item label="学号/工号" prop="stuNum" :borderBottom="false">
 						<tn-input placeholder="请输入要搜索的学号/工号" v-model="query.stuNum" />
 					</tn-form-item>
-					<tn-form-item label="起始时间" :borderBottom="false">
-						<tn-input :selectOpen="showStartTime" placeholder='请选择申请时间段的起始时间' v-model="query.startDateStr" type="select"
-							:border="false" @click="showStartTime = true" />
-					</tn-form-item>
-					<tn-form-item label="结束时间" :borderBottom="false">
-						<tn-input :selectOpen="showEndTime" placeholder='请选择申请时间段的结束时间' v-model="query.endDateStr" type="select"
-							:border="false" @click="showEndTime = true" />
-					</tn-form-item>
 					<tn-form-item label="快捷选项" :borderBottom="false">
-							<tn-radio-group @change="handleTimeOptionChange" shape="square" activeColor="#3668FC" v-model="timeOption">
-								<tn-radio name="none">任意</tn-radio>
-								<tn-radio name="today">今天</tn-radio>
-								<tn-radio name="tomorrow">明天</tn-radio>
-								<tn-radio name="afterTomorrow">后天</tn-radio>
-							</tn-radio-group>
-						</tn-form-item>
-					</tn-form>
+						<tn-radio-group shape="square" activeColor="#3668FC" v-model="timeOption">
+							<tn-radio name="none">任意</tn-radio>
+							<tn-radio name="today">今天</tn-radio>
+							<tn-radio name="tomorrow">明天</tn-radio>
+							<tn-radio name="afterTomorrow">后天</tn-radio>
+						</tn-radio-group>
+					</tn-form-item>
+				</tn-form>
 				</tn-form>
 				<view class="tn-flex tn-flex-row-between tn-margin-top">
 					<tn-button @click="handleClearQuery" backgroundColor="tn-bg-gray" fontColor="#FFFFFF">重 置</tn-button>
@@ -89,11 +84,6 @@
 				</view>
 			</view>
 		</tn-popup>
-
-		<tn-picker title="选择起始时间" mode="time" :defaultTime="defaultStartTime" v-model="showStartTime" :params="params"
-			:showTimeTag="true" @confirm="handleTimeOptionClick($event, 0)"></tn-picker>
-		<tn-picker title="选择结束时间" mode="time" :defaultTime="defaultEndTime" v-model="showEndTime" :params="params"
-			:showTimeTag="true" @confirm="handleTimeOptionClick($event, 1)"></tn-picker>
 
 	</view>
 </template>
@@ -131,23 +121,14 @@
 					page: 1,
 					size: 5,
 					stuNum: '',
-					startDateStr: '',
-					endDateStr: '',
+					startDateStr: null,
+					endDateStr: null,
 					applicationState: 0
 				},
 				applicationList: [],
 				loadmore: true,
 				status: 'nomore',
 				showPopup: false,
-				showStartTime: false,
-				showEndTime: false,
-				params: {
-					year: true,
-					month: true,
-					day: true,
-					hour: true,
-					minute: true
-				},
 				timeOption: 'none'
 			}
 		},
@@ -164,6 +145,30 @@
 			dateFormat(date) {
 				return dateShow(date, 'yyyy年MM月dd日 hh:mm')
 			},
+			tagBgFilter(state) {
+				switch (state) {
+					case 0:
+						return '#0081ff'
+					case 1:
+						return '#39b54a'
+					case 2:
+						return '#e54d42'
+					default:
+						return '#0081ff'
+				}
+			},
+			tagTextFilter(state) {
+				switch (state) {
+					case 0:
+						return '待审批'
+					case 1:
+						return '已审批'
+					case 2:
+						return '驳回'
+					default:
+						return '待审批'
+				}
+			}
 		},
 		computed: {
 			defaultStartTime() {
@@ -175,6 +180,11 @@
 		},
 		onLoad() {
 			this.getDataList()
+			// 监听申请事件
+			uni.$on('signInApprove', (data) => {
+				let index = this.applicationList.findIndex(item => item.id === data.id)
+				this.applicationList.splice(index, 1)
+			})
 		},
 		onReachBottom() {
 			if (this.loadmore) {
@@ -221,32 +231,88 @@
 				this.$refs.loading.open()
 				queryApplicationListApi(this.query).then(res => {
 					this.applicationList = res.pageData
-					console.log(this.applicationList);
+					// console.log(this.applicationList);
 					this.$refs.loading.close()
 				}).catch(e => {
 					console.log(e);
 					this.$refs.loading.close()
 				})
 			},
+			tn(item) {
+				this.$Router.push({
+					path: '/pages/sub-page/work/sign-in-approve/sign-in-approve-detail',
+					query:{
+						matterRecordId: item.matterRecordId,
+						reason: item.reason,
+						stuNum: item.stuNum,
+						title: item.title,
+						name: item.name,
+						id: item.id,
+						createTime: item.createTime
+					}
+				})
+			},
 			handleMoreClick() {
 				this.showPopup = true
 			},
 			handleClearQuery() {
-
+				this.timeOption = 'none'
+				this.resetQuery()
+				this.showPopup = false
+				uni.pageScrollTo({
+					scrollTop: 0,
+					duration: 300
+				})
+				this.getDataList()
 			},
 			handleQueryFilterConfirm() {
-
+				let dateTimestamp = this.getTime(this.timeOption)
+				this.query.startDateStr = dateTimestamp[0]
+				this.query.endDateStr = dateTimestamp[1]
+				this.showPopup = false
+				this.query.page = 1
+				this.getDataList()
 			},
-			handleTimeOptionClick(e, index) {
-				let that = this
-				switch(index) {
-					case 0: 
-						// that.query.startDateStr = 
-					case 1:
+			resetQuery() {
+				this.query.page = 1
+				this.query.stuNum = ''
+				this.startDateStr = null
+				this.endDateStr = null
+				this.loadmore = true
+			},
+			getTime(dateOption) {
+				let today = new Date()
+				// 设置时间为 00:00:00
+				today.setHours(0, 0, 0, 0);
+				switch (dateOption) {
+					case 'today':
+						// 获取今天 00:00:00 的时间戳
+						let todayStartTimestamp = today.getTime();
+						// 获取今天 23:59:59 的时间戳
+						let todayEndTimestamp = todayStartTimestamp + 24 * 60 * 60 * 1000 - 1;
+						return [dateShow(todayStartTimestamp, 'yyyy-MM-dd hh:mm'), dateShow(todayEndTimestamp, 'yyyy-MM-dd hh:mm')]
+					case 'tomorrow':
+						let tomorrow = new Date(today);
+						tomorrow.setDate(today.getDate() + 1);
+						// 获取明天 00:00:00 的时间戳
+						let tomorrowStartTimestamp = tomorrow.getTime();
+						// 获取明天 23:59:59 的时间戳
+						let tomorrowEndTimestamp = tomorrowStartTimestamp + 24 * 60 * 60 * 1000 - 1;
+						return [dateShow(tomorrowStartTimestamp, 'yyyy-MM-dd hh:mm'), dateShow(tomorrowEndTimestamp,
+							'yyyy-MM-dd hh:mm')]
+					case 'afterTomorrow':
+						// 获取后天的日期对象
+						let dayAfterTomorrow = new Date(today);
+						dayAfterTomorrow.setDate(today.getDate() + 2);
+						// 获取后天 00:00:00 的时间戳
+						let dayAfterTomorrowStartTimestamp = dayAfterTomorrow.getTime();
+						// 获取后天 23:59:59 的时间戳
+						let dayAfterTomorrowEndTimestamp = dayAfterTomorrowStartTimestamp + 24 * 60 * 60 * 1000 - 1;
+						return [dateShow(dayAfterTomorrowStartTimestamp, 'yyyy-MM-dd hh:mm'), dateShow(
+							dayAfterTomorrowStartTimestamp, 'yyyy-MM-dd hh:mm')]
+					default:
+						return [null, null]
 				}
-			},
-			handleTimeOptionChange(e) {
-				console.log(e);
 			}
 		}
 	}
