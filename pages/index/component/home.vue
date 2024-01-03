@@ -37,7 +37,7 @@
 		</view>
 
 		<!-- 页面内容 -->
-		<view :style="{paddingTop: (vuex_custom_bar_height * 2) + 'px'}" class="tn-padding">
+		<view class="tn-padding" :style="{marginTop: optionHeight + 'px'}">
 			<view v-show="current === 0" style="position: relative;" @click="handleMessageClick(item, index)"
 				class="article-shadow tn-bg-white tn-padding tn-margin-bottom" v-for="(item, index) in messageList" :key="item.id">
 				<view class="tn-text-bold tn-text-ellipsis-2 tn-text-lg">	
@@ -132,7 +132,8 @@
 				currentMessage: {},
 				currentMessageIndex: 0,
 				status: 'nomore',
-				isLogin: false
+				isLogin: false,
+				optionHeight: 0
 			}
 		},
 		filters: {
@@ -154,6 +155,13 @@
 			})
 			this.getToDoMessageList()
 			this.getResultMessageList()
+			this.$nextTick(() => {
+				const query = uni.createSelectorQuery().in(this)
+				query.select('.tabs-fixed').boundingClientRect(data => {
+					this.optionHeight = Math.ceil(data.height)
+				})
+				query.exec()
+			})
 		},
 		methods: {
 			tn(page) {
