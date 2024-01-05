@@ -186,7 +186,7 @@
 			},
 			tn(item) {
 				this.$Router.push({
-					path: '/pages/sub-page/work/sign-in-apply/sign-in-apply-detail',
+					path: '/sub-page-work/work/sign-in-apply/sign-in-apply-detail',
 					query: {
 						accessRecordId: item.id,
 						entryTime: item.entryTime,

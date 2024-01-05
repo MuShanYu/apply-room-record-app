@@ -79,9 +79,9 @@ const store = new Vuex.Store({
 		},
 		LOGOUT(state) {
 			uni.removeStorageSync('token');
-			uni.removeStorageSync('userInfo');
-			uni.removeStorageSync('isBindWx');
-			uni.removeStorageSync('roles');
+			// uni.removeStorageSync('userInfo');
+			// uni.removeStorageSync('isBindWx');
+			// uni.removeStorageSync('roles');
 		},
 		REFRESH_TOKEN(state, token) {
 			uni.setStorageSync('token', token);

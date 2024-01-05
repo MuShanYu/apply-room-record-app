@@ -183,6 +183,13 @@
 				if (selectPageFlag === false) {
 					this.tabberPageLoadFlag[index] = true
 				}
+				// onShow
+				this.$nextTick(() => {
+					if (index === 2) {
+						// 个人界面，onshow
+						console.log('on show');
+					}
+				})
 			},
 			scroll(e) {
 				//记录scroll  位置

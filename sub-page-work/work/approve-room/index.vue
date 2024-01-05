@@ -13,42 +13,64 @@
 			<view class="tn-flex tn-flex-col-between tn-flex-col-center tn-padding-top-sm"
 				:style="{marginTop: vuex_custom_bar_height + 'px'}">
 				<view style="width: 100vw;overflow: hidden;">
-					<tn-tabs :list="scrollList" :current="current" :isScroll="false" activeColor="#3668FC" :bold="true"
+					<tn-tabs :list="scrollList" :current="current" :isScroll="true" activeColor="#3668FC" :bold="true"
 						:fontSize="32" @change="tabChange" backgroundColor="#FFFFFF" :height="70"></tn-tabs>
 				</view>
 			</view>
 		</view>
 
-		<view class="" :style="{marginTop: optionHeight + 'px'}">
-			<view class="tn-padding">
-				<view @click="tn(item)" class="tn-bg-white box-shadow tn-padding tn-margin-bottom"
-					v-for="(item, index) in applicationList" :key="item.id">
-					<view class="tn-flex tn-flex-row-between">
-						<view class="tn-text-bold tn-text-lg tn-text-ellipsis">
-							{{item.title}}
-						</view>
-						<view class="">
-							<tn-tag :backgroundColor="item.state | tagBgFilter" shape="circle" fontColor="#FFFFFF">
-								{{item.state | tagTextFilter}}
-							</tn-tag>
-						</view>
+		<view class="tn-padding" :style="{marginTop: optionHeight + 'px'}">
+			<view class="tn-bg-white box-shadow tn-padding tn-margin-bottom" v-for="(item, index) in reservationList"
+				:key="item.id">
+				<view class="tn-flex tn-flex-row-between tn-flex-col-center">
+					<view class="tn-text-lg tn-text-bold">
+						{{item.roomName}}
 					</view>
-					<view class="tn-margin-top-xs tn-color-gray">
-						申请理由：{{JSON.parse(item.reason).reason}}
-					</view>
-					<view class="tn-margin-top tn-flex tn-flex-row-between tn-color-gray">
-						<view class="">
-							<text class="tn-icon-identity tn-text-xl" style="padding-right: 8rpx;"></text> {{item.stuNum}}
-						</view>
-						<view class="">
-							<text class="tn-icon-time tn-text-xl" style="padding-right: 8rpx;"></text>
-							{{item.createTime | dateFormat}}
-						</view>
+					<view class="tn-color-gray">
+						{{item.createTime | dateFormat}}
 					</view>
 				</view>
-				<tn-load-more :status='status'></tn-load-more>
+				<view class="tn-margin-top-sm">
+					申请理由：{{item.roomUsage}}
+				</view>
+				<view class="tn-margin-top-sm tn-text-bold">
+					预约时间：{{item.reserveStartTime | dateFormat}}~{{item.reserveEndTime | dateHourFormat}}
+				</view>
+				<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-df tn-margin-top-sm">
+					<view class="">
+						<text class="tn-icon-identity tn-text-xl" style="padding-right: 8rpx;"></text> {{item.stuNum}}
+					</view>
+					<view class="">
+						<text class="tn-icon-my tn-text-xl" style="padding-right: 8rpx;"></text> {{item.name}}
+					</view>
+					<view class="">
+						<text class="tn-icon-menu tn-text-xl" style="padding-right: 8rpx;"></text> {{item.category}}
+					</view>
+				</view>
+				<view class="tn-margin-top-sm tn-flex tn-flex-row-between">
+					<view class="tn-flex-basic-xs">
+						<tn-button @click="handleConfirmClick(item, index, false)" :disabled="item.state !== 0"
+							:backgroundColor="item.state !== 0 ? '#E6E6E6' : '#e54d42'" class="" :shadow="false"
+							fontColor="#FFFFFF">驳回
+						</tn-button>
+					</view>
+					<view class="tn-flex-basic-xs">
+						<tn-button @click="handleConfirmClick(item, index, true)" :disabled="item.state !== 0"
+							:backgroundColor="item.state !== 0 ? '#E6E6E6' : '#39b54a'" class="" :shadow="false"
+							fontColor="#FFFFFF">通过
+						</tn-button>
+					</view>
+				</view>
+				<view v-if="item.state !== 0" class="tn-margin-top-sm tn-color-gray tn-text-df">
+					<view class="tn-margin-bottom-sm">
+						操作时间：{{item.updateTime | dateFormat}}
+					</view>
+					<view class="">
+						备注：{{item.remark}}
+					</view>
+				</view>
 			</view>
-
+			<tn-load-more :status='status'></tn-load-more>
 		</view>
 
 		<!-- 悬浮按钮-->
@@ -62,13 +84,20 @@
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 		<tn-toast @closed="" ref="toast"></tn-toast>
 
+		<tn-modal @click="handleConfirm" :radius='40' v-model="showConfirmModal" :title="'提示'" :content="'您确认要通过该房间预约申请吗'"
+			:button="button"></tn-modal>
+
+		<tn-modal @click="showServiceErrorModal = false" :radius='40' v-model="showServiceErrorModal" :title="'系统提示'"
+			:content="message" :button="serviceErrorModalButton">
+		</tn-modal>
+
 		<tn-popup mode="top" :marginTop="vuex_custom_bar_height" v-model="showPopup">
 			<view class="tn-padding">
 				<tn-form :model="query" ref="form" :borderBottom="false" :labelWidth="160">
 					<tn-form-item label="学号/工号" prop="stuNum" :borderBottom="false">
 						<tn-input placeholder="请输入要搜索的学号/工号" v-model="query.stuNum" />
 					</tn-form-item>
-					<tn-form-item label="快捷选项" :borderBottom="false">
+					<tn-form-item label="预约时间" :borderBottom="false">
 						<tn-radio-group shape="square" activeColor="#3668FC" v-model="timeOption">
 							<tn-radio name="none">任意</tn-radio>
 							<tn-radio name="today">今天</tn-radio>
@@ -76,7 +105,6 @@
 							<tn-radio name="afterTomorrow">后天</tn-radio>
 						</tn-radio-group>
 					</tn-form-item>
-				</tn-form>
 				</tn-form>
 				<view class="tn-flex tn-flex-row-between tn-margin-top">
 					<tn-button @click="handleClearQuery" backgroundColor="tn-bg-gray" fontColor="#FFFFFF">重 置</tn-button>
@@ -90,12 +118,12 @@
 
 <script>
 	import {
-		queryApplicationListApi
-	} from '@/api/application.js'
+		queryRoomReserveToBeReviewedApi,
+		passOrRejectReserveApi
+	} from '@/api/room.js'
 	import {
 		dateShow
 	} from '@/utils/index.js'
-
 	export default {
 		data() {
 			return {
@@ -113,23 +141,64 @@
 					{
 						name: '已驳回',
 						count: 0,
+						state: 3
+					},
+					{
+						name: '用户已取消',
+						count: 0,
 						state: 2
+					},
+					{
+						name: '超时未处理',
+						count: 0,
+						state: 4
 					}
 				],
 				optionHeight: 0,
 				query: {
 					page: 1,
-					size: 5,
+					size: 10,
 					stuNum: '',
-					startDateStr: null,
-					endDateStr: null,
-					applicationState: 0
+					state: 0,
+					stuNum: '',
+					startTime: null,
+					endTime: null
 				},
-				applicationList: [],
+				reservationList: [],
+				showConfirmModal: false,
+				button: [{
+						text: '取消',
+						backgroundColor: 'tn-bg-gray',
+						fontColor: '#FFFFFF',
+					},
+					{
+						text: '确认',
+						backgroundColor: '#3668FC',
+						fontColor: '#FFFFFF'
+					}
+				],
+				currentItem: {},
+				currentIndex: 0,
+				showServiceErrorModal: false,
+				message: '',
+				serviceErrorModalButton: [{
+					text: '我知道了',
+					backgroundColor: '#3668FC',
+					fontColor: '#FFFFFF',
+				}],
 				loadmore: true,
 				status: 'nomore',
 				showPopup: false,
 				timeOption: 'none'
+
+			}
+		},
+		filters: {
+			dateFormat(date) {
+				return dateShow(date, 'yyyy年MM月dd日 hh:mm')
+			},
+			dateHourFormat(date) {
+				return dateShow(date, 'hh:mm')
 			}
 		},
 		mounted() {
@@ -140,59 +209,33 @@
 				})
 				query.exec()
 			})
-		},
-		filters: {
-			dateFormat(date) {
-				return dateShow(date, 'yyyy年MM月dd日 hh:mm')
-			},
-			tagBgFilter(state) {
-				switch (state) {
-					case 0:
-						return '#0081ff'
-					case 1:
-						return '#39b54a'
-					case 2:
-						return '#e54d42'
-					default:
-						return '#0081ff'
-				}
-			},
-			tagTextFilter(state) {
-				switch (state) {
-					case 0:
-						return '待审批'
-					case 1:
-						return '已审批'
-					case 2:
-						return '驳回'
-					default:
-						return '待审批'
-				}
-			}
-		},
-		computed: {
-			defaultStartTime() {
-				return dateShow(Number(new Date()), 'yyyy-MM-dd hh:mm')
-			},
-			defaultEndTime() {
-				return dateShow(Number(new Date()) + 3600000, 'yyyy-MM-dd hh:mm')
-			}
+			this.getDataList()
 		},
 		onLoad() {
-			this.getDataList()
-			// 监听申请事件
-			uni.$on('signInApprove', (data) => {
-				let index = this.applicationList.findIndex(item => item.id === data.id)
-				this.applicationList.splice(index, 1)
+			// 监听驳回事件
+			uni.$on('reserveRejected', (data) => {
+				let index = this.reservationList.findIndex(item => item.id === data.reserveId)
+				this.reservationList.splice(index, 1)
+			})
+		},
+		onPullDownRefresh() {
+			this.resetQuery()
+			queryRoomReserveToBeReviewedApi(this.query).then(res => {
+				this.reservationList = res.pageData
+				// console.log(res);
+				uni.stopPullDownRefresh()
+			}).catch(e => {
+				console.log(e);
+				uni.stopPullDownRefresh()
 			})
 		},
 		onReachBottom() {
 			if (this.loadmore) {
 				this.query.page += 1
 				this.status = 'loading'
-				queryApplicationListApi(this.query).then(res => {
+				queryRoomReserveToBeReviewedApi(this.query).then(res => {
 					if (res.pageData.length > 0) {
-						this.applicationList.push(...res.pageData)
+						this.reservationList.push(...res.pageData)
 					} else {
 						this.loadmore = false
 					}
@@ -203,54 +246,65 @@
 				})
 			}
 		},
-		onPullDownRefresh() {
-			this.query.page = 1
-			this.loadmore = true
-			queryApplicationListApi(this.query).then(res => {
-				this.applicationList = res.pageData
-				// console.log(res);
-				uni.stopPullDownRefresh()
-			}).catch(e => {
-				console.log(e);
-				uni.stopPullDownRefresh()
-			})
-		},
 		methods: {
-			tabChange(index) {
+			async tabChange(index) {
 				this.current = index
+				this.query.state = this.scrollList[index].state
 				uni.pageScrollTo({
 					scrollTop: 0,
 					duration: 300
 				});
-				this.query.applicationState = this.scrollList[index].state
 				this.query.page = 1
 				this.loadmore = true
-				this.getDataList()
+				await this.getDataList()
 			},
-			getDataList() {
-				this.$refs.loading.open()
-				queryApplicationListApi(this.query).then(res => {
-					this.applicationList = res.pageData
-					// console.log(this.applicationList);
-					this.$refs.loading.close()
-				}).catch(e => {
-					console.log(e);
-					this.$refs.loading.close()
+			async getDataList() {
+				return new Promise((resolve, reject) => {
+					this.$refs.loading.open()
+					queryRoomReserveToBeReviewedApi(this.query).then(res => {
+						this.reservationList = res.pageData
+						// console.log(res);
+						this.$refs.loading.close()
+						resolve()
+					}).catch(e => {
+						console.log(e);
+						this.$refs.loading.close()
+						resolve()
+					})
 				})
 			},
-			tn(item) {
-				this.$Router.push({
-					path: '/pages/sub-page/work/sign-in-approve/sign-in-approve-detail',
-					query:{
-						matterRecordId: item.matterRecordId,
-						reason: item.reason,
-						stuNum: item.stuNum,
-						title: item.title,
-						name: item.name,
-						id: item.id,
-						createTime: item.createTime
-					}
-				})
+			handleConfirmClick(item, index, pass) {
+				if (!pass) {
+					this.$Router.push({
+						path: '/sub-page-work/work/approve-room/approve-reject',
+						query: {
+							reserveId: item.id
+						}
+					})
+				} else {
+					this.currentItem = Object.assign({}, item)
+					this.currentIndex = index
+					this.showConfirmModal = true
+				}
+			},
+			handleConfirm(e) {
+				let that = this
+				this.showConfirmModal = false
+				if (e.index === 1) {
+					// confirm
+					this.$refs.loading.open()
+					passOrRejectReserveApi(this.currentItem.id, true, '').then(res => {
+						this.$refs.loading.close()
+						this.reservationList.splice(this.currentIndex, 1)
+						this.$refs.toast.show({
+							title: '操作成功',
+							duration: 1500
+						})
+					}).catch(e => {
+						this.$refs.loading.close()
+						this.handleError(e)
+					})
+				}
 			},
 			handleMoreClick() {
 				this.showPopup = true
@@ -267,8 +321,8 @@
 			},
 			handleQueryFilterConfirm() {
 				let dateTimestamp = this.getTime(this.timeOption)
-				this.query.startDateStr = dateTimestamp[0]
-				this.query.endDateStr = dateTimestamp[1]
+				this.query.startTime = dateTimestamp[0]
+				this.query.endTime = dateTimestamp[1]
 				this.showPopup = false
 				this.query.page = 1
 				this.getDataList()
@@ -276,8 +330,8 @@
 			resetQuery() {
 				this.query.page = 1
 				this.query.stuNum = ''
-				this.startDateStr = null
-				this.endDateStr = null
+				this.query.startTime = null
+				this.query.endTime = null
 				this.loadmore = true
 			},
 			getTime(dateOption) {
@@ -290,7 +344,7 @@
 						let todayStartTimestamp = today.getTime();
 						// 获取今天 23:59:59 的时间戳
 						let todayEndTimestamp = todayStartTimestamp + 24 * 60 * 60 * 1000 - 1;
-						return [dateShow(todayStartTimestamp, 'yyyy-MM-dd hh:mm'), dateShow(todayEndTimestamp, 'yyyy-MM-dd hh:mm')]
+						return [todayStartTimestamp, todayEndTimestamp]
 					case 'tomorrow':
 						let tomorrow = new Date(today);
 						tomorrow.setDate(today.getDate() + 1);
@@ -298,8 +352,7 @@
 						let tomorrowStartTimestamp = tomorrow.getTime();
 						// 获取明天 23:59:59 的时间戳
 						let tomorrowEndTimestamp = tomorrowStartTimestamp + 24 * 60 * 60 * 1000 - 1;
-						return [dateShow(tomorrowStartTimestamp, 'yyyy-MM-dd hh:mm'), dateShow(tomorrowEndTimestamp,
-							'yyyy-MM-dd hh:mm')]
+						return [tomorrowStartTimestamp, tomorrowEndTimestamp]
 					case 'afterTomorrow':
 						// 获取后天的日期对象
 						let dayAfterTomorrow = new Date(today);
@@ -308,8 +361,7 @@
 						let dayAfterTomorrowStartTimestamp = dayAfterTomorrow.getTime();
 						// 获取后天 23:59:59 的时间戳
 						let dayAfterTomorrowEndTimestamp = dayAfterTomorrowStartTimestamp + 24 * 60 * 60 * 1000 - 1;
-						return [dateShow(dayAfterTomorrowStartTimestamp, 'yyyy-MM-dd hh:mm'), dateShow(
-							dayAfterTomorrowStartTimestamp, 'yyyy-MM-dd hh:mm')]
+						return [dayAfterTomorrowStartTimestamp, dayAfterTomorrowEndTimestamp]
 					default:
 						return [null, null]
 				}

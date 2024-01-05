@@ -38,9 +38,10 @@
 
 		<!-- 页面内容 -->
 		<view class="tn-padding" :style="{marginTop: optionHeight + 'px'}">
-			<view v-show="current === 0" style="position: relative;" @click="handleMessageClick(item, index)"
-				class="article-shadow tn-bg-white tn-padding tn-margin-bottom" v-for="(item, index) in messageList" :key="item.id">
-				<view class="tn-text-bold tn-text-ellipsis-2 tn-text-lg">	
+			<view v-show="current === 0 && isLogin" style="position: relative;" @click="handleMessageClick(item, index)"
+				class="article-shadow tn-bg-white tn-padding tn-margin-bottom" v-for="(item, index) in messageList"
+				:key="item.id">
+				<view class="tn-text-bold tn-text-ellipsis-2 tn-text-lg">
 					{{item.content}}
 				</view>
 				<view class="tn-flex tn-flex-row-between tn-color-gray tn-margin-top">
@@ -54,10 +55,11 @@
 				<tn-badge v-if="item.readState === 0" backgroundColor="#E83A30" :dot="true" :radius="15" :absolute="true"
 					:translateCenter="false"></tn-badge>
 			</view>
-			
-			<view v-show="current === 1" style="position: relative;" @click="handleMessageClick(item, index)"
-				class="article-shadow tn-bg-white tn-padding tn-margin-bottom" v-for="(item, index) in resultMessageList" :key="item.id">
-				<view class="tn-text-bold tn-text-ellipsis-2 tn-text-lg">	
+
+			<view v-show="current === 1 && isLogin" style="position: relative;" @click="handleMessageClick(item, index)"
+				class="article-shadow tn-bg-white tn-padding tn-margin-bottom" v-for="(item, index) in resultMessageList"
+				:key="item.id">
+				<view class="tn-text-bold tn-text-ellipsis-2 tn-text-lg">
 					{{item.content}}
 				</view>
 				<view class="tn-flex tn-flex-row-between tn-color-gray tn-margin-top">
@@ -71,8 +73,9 @@
 				<tn-badge v-if="item.readState === 0" backgroundColor="#E83A30" :dot="true" :radius="15" :absolute="true"
 					:translateCenter="false"></tn-badge>
 			</view>
-			<tn-load-more :status='status'></tn-load-more>
-			<!-- <tn-empty v-else text="登陆后查看" mode="permission"></tn-empty> -->
+			<tn-load-more v-if="isLogin" :status='status'></tn-load-more>
+			<tn-empty v-else icon="https://resource.tuniaokj.com/images/empty/alien/2.png" text="请先登录" :imgWidth="200"
+				:imgHeight="200"></tn-empty>
 		</view>
 
 		<tn-modal @click="handleTipModalConfirm" :radius='40' v-model="showTipModal" :title="'消息内容'" :content="message"
@@ -93,14 +96,16 @@
 		queryMyMessageListApi,
 		setMessageToReadApi
 	} from '@/api/message.js'
-	
-	import {dateShow} from '@/utils/index.js'
+
+	import {
+		dateShow
+	} from '@/utils/index.js'
 	export default {
 		data() {
 			return {
 				show: true,
 				current: 0,
-				list:[],
+				list: ['请先登录'],
 				scrollList: [{
 						name: '待办通知',
 						count: 0
@@ -147,6 +152,7 @@
 			}
 			queryNoticeListApi(1, 3).then(res => {
 				let resList = res.pageData
+				this.list.splice(0, 1)
 				resList.forEach(item => {
 					this.list.push(item.title)
 				})
@@ -162,6 +168,7 @@
 				})
 				query.exec()
 			})
+
 		},
 		methods: {
 			tn(page) {
@@ -175,9 +182,22 @@
 					this.scrollList[1].count = res.resultCount
 					this.messageList = list
 					this.$refs.loading.close()
+					this.isLogin = true
 				}).catch(e => {
 					// console.log(e);
 					this.$refs.loading.close()
+					if (uni.getStorageSync("token")) {
+						this.isLogin = true
+					} else {
+						this.isLogin = false
+						this.scrollList = [{
+							name: '待办通知',
+							count: 0
+						}, {
+							name: '结果通知',
+							count: 0
+						}]
+					}
 				})
 			},
 			getResultMessageList() {
@@ -188,9 +208,22 @@
 					this.scrollList[1].count = res.resultCount
 					this.resultMessageList = list
 					this.$refs.loading.close()
+					this.isLogin = true
 				}).catch(e => {
 					// console.log(e);
 					this.$refs.loading.close()
+					if (uni.getStorageSync("token")) {
+						this.isLogin = true
+					} else {
+						this.isLogin = false
+						this.scrollList = [{
+							name: '待办通知',
+							count: 0
+						}, {
+							name: '结果通知',
+							count: 0
+						}]
+					}
 				})
 			},
 			tabChange(index) {
