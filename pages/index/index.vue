@@ -187,7 +187,9 @@
 				this.$nextTick(() => {
 					if (index === 2) {
 						// 个人界面，onshow
-						console.log('on show');
+						if (this.$refs.profile) {
+							this.$refs.profile.onShowMethod()
+						}
 					}
 				})
 			},

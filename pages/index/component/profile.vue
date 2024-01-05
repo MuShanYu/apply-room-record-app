@@ -7,25 +7,30 @@
 
 
 		<!-- 图标logo/头像 -->
-		<view class="tn-padding-left tn-padding-right tn-padding-bottom tn-bg-white"
+		<view v-if="isLogin" class="tn-padding-left tn-padding-right tn-padding-bottom tn-bg-white"
 			:style="{paddingTop: vuex_custom_bar_height + 'px'}">
-			<view class="tn-flex tn-flex-row-between tn-flex-col-center tn-margin-bottom" @click="tn('/pageA/set/set')">
+			<view class="tn-flex tn-flex-row-between tn-flex-col-center tn-margin-bottom" @click="tn('/sub-page-profile/profile/profile-detail/index')">
 				<view class="justify-content-item">
 					<view class="tn-flex tn-flex-col-center tn-flex-row-left">
 						<view class="logo-pic tn-shadow">
 							<view class="logo-image">
-								<view class="tn-shadow-blur"
-									style="background-image:url('https://mushanyu-app-arr.oss-cn-beijing.aliyuncs.com/static/headers/header2.gif');width: 110rpx;height: 110rpx;background-size: cover;overflow: hidden;">
+								<view class="tn-shadow-blur" :style="{backgroundImage: 'url(' + randomHeader + ');'}"
+									style="width: 110rpx;height: 110rpx;background-size: cover;overflow: hidden;">
 								</view>
 							</view>
 						</view>
 						<view class="tn-padding-right">
-							<view class="tn-padding-right tn-padding-left-sm">
-								<text class="tn-color-wallpaper tn-text-xl tn-text-bold">抓住那只猪吖</text>
+							<view class="tn-padding-right tn-padding-left-sm tn-flex tn-flex-col-center">
+								<view class="tn-color-wallpaper tn-text-xl tn-text-bold">{{userInfo.name}}</view>
+								<view class="tn-round tn-text-xs tn-color-white"
+									:style="{backgroundColor: isBindWx ? '#39b54a' : '#aaaaaa'}"
+									style="padding: 10rpx;margin-left: 21rpx;">
+									{{isBindWx ? '微信已绑定' : '微信未绑定'}}
+								</view>
 							</view>
 							<view class="tn-padding-right tn-padding-top-sm tn-padding-left-sm tn-text-ellipsis">
-								<text class="tn-color-gray">高级UI设计</text>
-								<text class="tn-color-gray tn-padding-left-sm tn-text-sm">139****1193</text>
+								<text class="tn-color-gray">{{role}}</text>
+								<text class="tn-color-gray tn-padding-left-sm tn-text-sm">{{mail}}</text>
 							</view>
 						</view>
 
@@ -37,18 +42,19 @@
 				</view>
 			</view>
 		</view>
-
+		
 		<!-- 未登录 -->
-		<!-- <view class="tn-flex tn-flex-row-between" @click="tn('/minePages/login')">
-			  <view class="tn-flex-1 justify-content-item tn-margin-xs tn-text-center">
-			    <tn-button shape="round" backgroundColor="#3668FC" fontColor="#ffffff" padding="20rpx 0" width="40%" shadow>
-			      <text class="tn-icon-wechat tn-padding-right-xs tn-text-xl"></text>
-			      <text class="">授权登录</text>
-			    </tn-button>
-			  </view>
-			</view> -->
+		<view v-if="!isLogin" class="tn-flex tn-flex-row-between" @click="tn('/pages/public/login')"
+			:style="{paddingTop: vuex_custom_bar_height + 'px'}">
+			<view class="tn-flex-1 justify-content-item tn-margin-xs tn-text-center">
+				<tn-button shape="round" backgroundColor="#3668FC" fontColor="#ffffff" padding="20rpx 0" width="40%" shadow>
+					<text class="tn-icon-wechat-fill tn-padding-right-xs tn-text-xl"></text>
+					<text class="">授权登录</text>
+				</tn-button>
+			</view>
+		</view>
 
-		<view class="tn-flex tn-flex-row-between tn-padding tn-bg-white" style="margin-top: 20rpx;">
+		<view v-if="isLogin" class="tn-flex tn-flex-row-between tn-padding tn-bg-white" style="margin-top: 20rpx;">
 			<view class="">
 				<view class="tn-flex tn-flex-row-center tn-flex-col-center icon">
 					<view class="tn-icon-book"></view>
@@ -83,11 +89,12 @@
 			</view>
 		</view>
 
-		<view class="tn-padding tn-bg-white" style="margin-top: 20rpx;">
+		<view v-if="isLogin" class="tn-padding tn-bg-white" style="margin-top: 20rpx;">
 			<view class="">
 				<button class="tn-flex tn-flex-row-between tn-button--clear-style" open-type="contact">
 					<view class="tn-flex">
-						<view style="color: #4B98FE;" class="tn-icon-team-fill tn-margin-right tn-text-lg cell menu-icon_cell"></view>
+						<view style="color: #4B98FE;" class="tn-icon-team-fill tn-margin-right tn-text-lg cell menu-icon_cell">
+						</view>
 						<view class="cell tn-text-lg">
 							<text class="menu-text_cell">联系开发者</text>
 						</view>
@@ -99,7 +106,8 @@
 			</view>
 			<view class="tn-flex tn-flex-row-between menu-item">
 				<view class="tn-flex">
-					<view style="color: #FFAC00;" class="tn-icon-bookmark-fill tn-margin-right tn-text-lg cell menu-icon_cell"></view>
+					<view style="color: #FFAC00;" class="tn-icon-bookmark-fill tn-margin-right tn-text-lg cell menu-icon_cell">
+					</view>
 					<view class="cell tn-text-lg">
 						<text class="menu-text_cell">关于我们</text>
 					</view>
@@ -109,12 +117,13 @@
 				</view>
 			</view>
 		</view>
-		
-		<view class="tn-margin-top tn-bg-white tn-padding" style="margin-top: 20rpx;">
+
+		<view v-if="isLogin" class="tn-margin-top tn-bg-white tn-padding" style="margin-top: 20rpx;">
 			<view class="">
 				<button class="tn-flex tn-flex-row-between tn-button--clear-style" open-type="feedback">
 					<view class="tn-flex">
-						<view style="color: #FE871B;" class="tn-icon-tip-fill tn-margin-right tn-text-lg cell menu-icon_cell"></view>
+						<view style="color: #FE871B;" class="tn-icon-tip-fill tn-margin-right tn-text-lg cell menu-icon_cell">
+						</view>
 						<view class="cell tn-text-lg">
 							<text class="menu-text_cell">问题反馈</text>
 						</view>
@@ -159,15 +168,54 @@
 </template>
 
 <script>
+	import STATIC_CONFIG from '@/config/static.config.js'
 	export default {
 		data() {
 			return {
-				isLogin: false
+				isLogin: false,
+				userInfo: '',
+				isBindWx: false,
+				role: '',
+				mail: '',
+				randomHeader: ''
 			}
 		},
+		mounted() {
+			this.onShowMethod()
+		},
 		methods: {
-			onShow() {
-
+			onShowMethod() {
+				this.isLogin = uni.getStorageSync('token') ? true : false
+				this.userInfo = uni.getStorageSync('userInfo') || null
+				this.isBindWx = uni.getStorageSync('isBindWx') || false
+				if (uni.getStorageSync('roles')) {
+					let roles = uni.getStorageSync('roles')
+					if (roles.includes('super-admin')) {
+						this.role = '超级管理员'
+					} else if (roles.includes('admin')) {
+						this.role = '管理员'
+					} else {
+						this.role = '普通用户'
+					}
+				}
+				if (this.userInfo !== null) {
+					this.mail = this.userInfo.mail.replace(/(.{0,3}).*@(.*)/, "$1***@$2")
+				}
+				let index = Math.floor(Math.random() * 6)
+				this.randomHeader = STATIC_CONFIG.headerImage[index]
+			},
+			tn(page) {
+				let that = this
+				if (page === '/sub-page-profile/profile/profile-detail/index') {
+					this.$Router.push({
+						path: page,
+						query: {
+							headerImage: that.randomHeader
+						}
+					})
+				} else {
+					this.$Router.push(page)
+				}
 			}
 		}
 	}
@@ -213,15 +261,15 @@
 	}
 
 	.menu-text {
-		font-size: 21rpx;
+		font-size: 23rpx;
 	}
-	
+
 	.menu-text_cell {
-		font-size: 25rpx;
+		font-size: 28rpx;
 	}
-	
+
 	.menu-icon_cell {
-		font-size: 35rpx;
+		font-size: 38rpx;
 	}
 
 
