@@ -13,7 +13,7 @@
 
 		<view class='nav-list tn-margin-bottom tn-margin-top'>
 
-			<view @click="tn('/pages/sub-page/work/apply-room/index')"
+			<view @click="tn('/sub-page-work/work/apply-room/index')"
 				class="nav-list-item tn-shadow-blur tn-cool-bg-image home-shadow">
 				<view class="nav-link">
 					<view class='title tn-text-bold' style="color: #080808;">房间预约</view>
@@ -24,7 +24,7 @@
 				</view>
 			</view>
 
-			<view @click="tn('/pages/sub-page/work/sign-in-apply/index')"
+			<view @click="tn('/sub-page-work/work/sign-in-apply/index')"
 				class="nav-list-item tn-shadow-blur tn-cool-bg-image home-shadow">
 				<view class="nav-link">
 					<view class='title tn-text-bold' style="color: #080808;">补卡申请</view>
@@ -49,7 +49,7 @@
 
 		<view class='nav-list tn-margin-bottom tn-margin-top'>
 
-			<view @click="tn('/pages/sub-page/work/approve-room/index')"
+			<view @click="tn('/sub-page-work/work/approve-room/index')"
 				class="nav-list-item tn-shadow-blur tn-cool-bg-image home-shadow">
 				<view class="nav-link">
 					<view class='title tn-text-bold' style="color: #080808;">预约审批</view>
@@ -61,7 +61,7 @@
 			</view>
 
 			<view class="nav-list-item tn-shadow-blur tn-cool-bg-image home-shadow"
-				@click="tn('/pages/sub-page/work/sign-in-approve/index')">
+				@click="tn('/sub-page-work/work/sign-in-approve/index')">
 				<view class="nav-link">
 					<view class='title tn-text-bold' style="color: #080808;">补卡审批</view>
 					<view class='join'></view>
@@ -84,8 +84,8 @@
 		data() {
 			return {
 				adminPage: [
-					'/pages/sub-page/work/approve-room/index',
-					'/pages/sub-page/work/sign-in-approve/index'
+					'/sub-page-work/work/approve-room/index',
+					'/sub-page-work/work/sign-in-approve/index'
 				]
 			}
 		},

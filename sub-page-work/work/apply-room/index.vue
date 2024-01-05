@@ -249,7 +249,7 @@
 				}
 				let that = this
 				this.$Router.push({
-					path: '/pages/sub-page/work/apply-room/apply-room-detail',
+					path: '/sub-page-work/work/apply-room/apply-room-detail',
 					query: {
 						id: item.id,
 						name: item.chargePerson,

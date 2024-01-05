@@ -26,20 +26,20 @@
 			"style": {
 				"navigationBarTitleText": "注册"
 			}
+		},
+		{
+			"path": "pages/sub-page/home/notice",
+			"style": {
+				"navigationBarTitleText": "通知",
+				"onReachBottomDistance": 10,
+				"enablePullDownRefresh": true
+			}
 		}
 	],
 	"subPackages": [
 		{
-			"root": "pages/sub-page",
+			"root": "sub-page-work",
 			"pages": [
-				{
-					"path": "home/notice",
-					"style": {
-						"navigationBarTitleText": "通知",
-						"onReachBottomDistance": 10,
-						"enablePullDownRefresh": true
-					}
-				},
 				{
 					"path" : "work/apply-room/index",
 					"style" : 
@@ -120,7 +120,7 @@
 	},
 	"preloadRule": {
 	  "pages/index/index": {
-	    "packages": ["pages/sub-page"],
+	    "packages": ["sub-page-work"],
 	    "network": "all"
 	  }
 	},

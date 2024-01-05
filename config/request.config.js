@@ -176,7 +176,7 @@ function handleServiceError(code, message) {
 		store.dispatch('logout').then(() => {
 			// 跳转在路由钩子中统一控制
 			uni.showToast({
-				title: '您的登录状态过期或者无效，请重新登录',
+				title: '您的登录状态过期或者无效',
 				icon: 'none',
 				duration: 3000
 			})
