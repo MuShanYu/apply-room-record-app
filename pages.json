@@ -109,6 +109,19 @@
 					}
 				}
 			]
+		},
+		{
+			"root": "sub-page-profile",
+			"pages": [
+				{
+					"path" : "profile/profile-detail/index",
+					"style" : 
+					{
+						"navigationBarTitleText" : "",
+						"enablePullDownRefresh" : false
+					}
+				}
+			]
 		}
 	],
 	"globalStyle": {
