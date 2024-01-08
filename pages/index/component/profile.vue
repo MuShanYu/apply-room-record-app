@@ -9,7 +9,8 @@
 		<!-- 图标logo/头像 -->
 		<view v-if="isLogin" class="tn-padding-left tn-padding-right tn-padding-bottom tn-bg-white"
 			:style="{paddingTop: vuex_custom_bar_height + 'px'}">
-			<view class="tn-flex tn-flex-row-between tn-flex-col-center tn-margin-bottom" @click="tn('/sub-page-profile/profile/profile-detail/index')">
+			<view class="tn-flex tn-flex-row-between tn-flex-col-center tn-margin-bottom"
+				@click="tn('/sub-page-profile/profile/profile-detail/index')">
 				<view class="justify-content-item">
 					<view class="tn-flex tn-flex-col-center tn-flex-row-left">
 						<view class="logo-pic tn-shadow">
@@ -22,10 +23,9 @@
 						<view class="tn-padding-right">
 							<view class="tn-padding-right tn-padding-left-sm tn-flex tn-flex-col-center">
 								<view class="tn-color-wallpaper tn-text-xl tn-text-bold">{{userInfo.name}}</view>
-								<view class="tn-round tn-text-xs tn-color-white"
-									:style="{backgroundColor: isBindWx ? '#39b54a' : '#aaaaaa'}"
-									style="padding: 10rpx;margin-left: 21rpx;">
-									{{isBindWx ? '微信已绑定' : '微信未绑定'}}
+								<view class="tn-text-xs tn-color-white" :style="{backgroundColor: isBindWx ? '#39b54a' : '#aaaaaa'}"
+									style="padding: 6rpx;margin-left: 15rpx;border-radius: 16rpx;">
+									<text>{{isBindWx ? '微信已绑定' : '微信未绑定'}}</text>
 								</view>
 							</view>
 							<view class="tn-padding-right tn-padding-top-sm tn-padding-left-sm tn-text-ellipsis">
@@ -42,7 +42,7 @@
 				</view>
 			</view>
 		</view>
-		
+
 		<!-- 未登录 -->
 		<view v-if="!isLogin" class="tn-flex tn-flex-row-between" @click="tn('/pages/public/login')"
 			:style="{paddingTop: vuex_custom_bar_height + 'px'}">
@@ -96,7 +96,7 @@
 						<view style="color: #4B98FE;" class="tn-icon-team-fill tn-margin-right tn-text-lg cell menu-icon_cell">
 						</view>
 						<view class="cell tn-text-lg">
-							<text class="menu-text_cell">联系开发者</text>
+							<text class="menu-text_cell">在线客服</text>
 						</view>
 					</view>
 					<view class="tn-color-gray cell">
@@ -182,6 +182,10 @@
 		},
 		mounted() {
 			this.onShowMethod()
+			uni.$on('infoUpdate', () => {
+				this.onShowMethod()
+				console.log(this.isLogin);
+			})
 		},
 		methods: {
 			onShowMethod() {

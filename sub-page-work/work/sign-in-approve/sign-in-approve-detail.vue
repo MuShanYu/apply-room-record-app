@@ -72,14 +72,14 @@
 		<tn-select title="选择快捷键入语" confirmColor="#3668FC" v-model="showSelect" mode="single" :list="phrases"
 			@confirm="handleSelectConfirm" :searchShow="false"></tn-select>
 
-		<tn-modal @click="handleSubmitConfirm" :radius='40' v-model="showConfirmModal" :title="'提示'"
+		<tn-modal :showCloseBtn="true" @click="handleSubmitConfirm" v-model="showConfirmModal" :title="'提示'"
 			:content="'您确认要通过该补卡申请吗'" :button="button"></tn-modal>
 
-		<tn-modal @click="handleRejctConfirm" :radius='40' v-model="showRejectModal" :title="'提示'" :content="'您确认要驳回该补卡申请吗'"
-			:button="button"></tn-modal>
+		<tn-modal :showCloseBtn="true" @click="handleRejctConfirm" v-model="showRejectModal" :title="'提示'"
+			:content="'您确认要驳回该补卡申请吗'" :button="button"></tn-modal>
 
-		<tn-modal @click="showServiceErrorModal = false" :radius='40' v-model="showServiceErrorModal" :title="'系统提示'"
-			:content="message" :button="serviceErrorModalButton">
+		<tn-modal :showCloseBtn="true" @click="showServiceErrorModal = false" v-model="showServiceErrorModal"
+			:title="'系统提示'" :content="message" :button="serviceErrorModalButton">
 		</tn-modal>
 
 	</view>

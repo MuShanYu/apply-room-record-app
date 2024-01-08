@@ -105,7 +105,7 @@
 		<!-- 验证码倒计时 -->
 		<tn-verification-code :keepRunning='true' uniqueKey='forgetPwdCode' countDownText='s秒' ref="code" :seconds="60" @change="codeChange"></tn-verification-code>
 		
-		<tn-modal @click="showFalseModal = false" :radius='40' v-model="showFalseModal" :title="'系统提示'"
+		<tn-modal :showCloseBtn="true" @click="showFalseModal = false" v-model="showFalseModal" :title="'系统提示'"
 			:content="message" :button="falseModalButton">
 		</tn-modal>
 		<tn-toast ref="toast"></tn-toast>

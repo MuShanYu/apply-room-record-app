@@ -89,15 +89,17 @@
 			</view>
 		</view>
 		<tn-toast ref="toast"></tn-toast>
-		<tn-modal @click="handleClickModal" :radius='40' v-model="showLoginModal" :title="'提示'"
+		<tn-modal @click="handleClickModal" v-model="showLoginModal" :title="'提示'" :showCloseBtn="true"
 			:content="'授权系统获取您的用户标识ID，方便您使用微信快捷登录App。'" :button="button"></tn-modal>
-		<tn-modal @click="handleFalseModalClick" :radius='40' v-model="showFalseModal" :title="'抱歉，无法使用微信登录'"
+
+		<tn-modal @click="handleFalseModalClick" v-model="showFalseModal" :title="'抱歉，无法使用微信登录'" :showCloseBtn="true"
 			content="1.登陆后未绑定微信，请使用账号密码登陆后在账号中心绑定微信。2.您未注册并使用过本App，请注册后绑定微信。" :button="falseModalButton">
 		</tn-modal>
-		
-		<tn-modal @click="showServiceErrorModal = false" :radius='40' v-model="showServiceErrorModal" :title="'系统提示'"
-			:content="message" :button="serviceErrorModalButton">
+
+		<tn-modal @click="showServiceErrorModal = false" v-model="showServiceErrorModal" :title="'系统提示'"
+			:showCloseBtn="true" :content="message" :button="serviceErrorModalButton">
 		</tn-modal>
+		
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 	</view>
 </template>
@@ -243,7 +245,7 @@
 					}
 				})
 			},
-			
+
 		}
 	}
 </script>

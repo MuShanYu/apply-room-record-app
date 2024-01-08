@@ -41,10 +41,10 @@
 			<view v-show="current === 0 && isLogin" style="position: relative;" @click="handleMessageClick(item, index)"
 				class="article-shadow tn-bg-white tn-padding tn-margin-bottom" v-for="(item, index) in messageList"
 				:key="item.id">
-				<view class="tn-text-bold tn-text-ellipsis-2 tn-text-lg">
+				<view class="tn-text-bold tn-text-ellipsis-2 tn-text-df">
 					{{item.content}}
 				</view>
-				<view class="tn-flex tn-flex-row-between tn-color-gray tn-margin-top">
+				<view style="font-size: 25rpx;" class="tn-flex tn-flex-row-between tn-color-gray tn-margin-top">
 					<view class="">
 						申请时间：{{item.createTime | dateFormat}}
 					</view>
@@ -59,10 +59,10 @@
 			<view v-show="current === 1 && isLogin" style="position: relative;" @click="handleMessageClick(item, index)"
 				class="article-shadow tn-bg-white tn-padding tn-margin-bottom" v-for="(item, index) in resultMessageList"
 				:key="item.id">
-				<view class="tn-text-bold tn-text-ellipsis-2 tn-text-lg">
+				<view class="tn-text-bold tn-text-ellipsis-2 tn-text-df">
 					{{item.content}}
 				</view>
-				<view class="tn-flex tn-flex-row-between tn-color-gray tn-margin-top">
+				<view style="font-size: 25rpx;" class="tn-flex tn-flex-row-between tn-color-gray tn-margin-top">
 					<view class="">
 						申请时间：{{item.createTime | dateFormat}}
 					</view>
@@ -78,7 +78,7 @@
 				:imgHeight="200"></tn-empty>
 		</view>
 
-		<tn-modal @click="handleTipModalConfirm" :radius='40' v-model="showTipModal" :title="'消息内容'" :content="message"
+		<tn-modal :showCloseBtn="true" @click="handleTipModalConfirm" v-model="showTipModal" :title="'消息内容'" :content="message"
 			:button="tipModalBtn">
 		</tn-modal>
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>

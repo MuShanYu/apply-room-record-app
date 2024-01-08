@@ -23,25 +23,27 @@
 			<view class="tn-padding">
 				<view @click="tn(item)" class="tn-bg-white box-shadow tn-padding tn-margin-bottom"
 					v-for="(item, index) in applicationList" :key="item.id">
-					<view class="tn-flex tn-flex-row-between">
-						<view class="tn-text-bold tn-text-lg tn-text-ellipsis">
+					<view class="tn-flex">
+						<text class="tn-text-bold tn-text-ellipsis tn-text-md">
 							{{item.title}}
-						</view>
-						<view class="">
-							<tn-tag :backgroundColor="item.state | tagBgFilter" shape="circle" fontColor="#FFFFFF">
-								{{item.state | tagTextFilter}}
-							</tn-tag>
+						</text>
+					</view>
+					<!-- tag -->
+					<view class="" style="position: absolute;top: 0;right: 0;">
+						<view class="" style="border-top-right-radius: 15rpx;padding: 4rpx;font-size: 18rpx;"
+							:style="{backgroundColor: item.bgColor, color: item.color}">
+							{{item.state | tagTextFilter}}
 						</view>
 					</view>
-					<view class="tn-margin-top-xs tn-color-gray">
+					<view class="tn-margin-top-xs tn-color-gray" style="font-size: 27rpx;">
 						申请理由：{{JSON.parse(item.reason).reason}}
 					</view>
-					<view class="tn-margin-top tn-flex tn-flex-row-between tn-color-gray">
+					<view class="tn-margin-top tn-flex tn-flex-row-between tn-color-gray tn-text-sm">
 						<view class="">
-							<text class="tn-icon-identity tn-text-xl" style="padding-right: 8rpx;"></text> {{item.stuNum}}
+							<text class="tn-icon-identity tn-text-sm" style="padding-right: 8rpx;"></text> {{item.stuNum}}
 						</view>
 						<view class="">
-							<text class="tn-icon-time tn-text-xl" style="padding-right: 8rpx;"></text>
+							<text class="tn-icon-time tn-text-sm" style="padding-right: 8rpx;"></text>
 							{{item.createTime | dateFormat}}
 						</view>
 					</view>
@@ -145,18 +147,6 @@
 			dateFormat(date) {
 				return dateShow(date, 'yyyy年MM月dd日 hh:mm')
 			},
-			tagBgFilter(state) {
-				switch (state) {
-					case 0:
-						return '#0081ff'
-					case 1:
-						return '#39b54a'
-					case 2:
-						return '#e54d42'
-					default:
-						return '#0081ff'
-				}
-			},
 			tagTextFilter(state) {
 				switch (state) {
 					case 0:
@@ -164,7 +154,7 @@
 					case 1:
 						return '已审批'
 					case 2:
-						return '驳回'
+						return '已驳回'
 					default:
 						return '待审批'
 				}
@@ -192,6 +182,7 @@
 				this.status = 'loading'
 				queryApplicationListApi(this.query).then(res => {
 					if (res.pageData.length > 0) {
+						this.setTagBgAndColor(res.pageData)
 						this.applicationList.push(...res.pageData)
 					} else {
 						this.loadmore = false
@@ -207,6 +198,7 @@
 			this.query.page = 1
 			this.loadmore = true
 			queryApplicationListApi(this.query).then(res => {
+				this.setTagBgAndColor(res.pageData)
 				this.applicationList = res.pageData
 				// console.log(res);
 				uni.stopPullDownRefresh()
@@ -230,6 +222,7 @@
 			getDataList() {
 				this.$refs.loading.open()
 				queryApplicationListApi(this.query).then(res => {
+					this.setTagBgAndColor(res.pageData)
 					this.applicationList = res.pageData
 					// console.log(this.applicationList);
 					this.$refs.loading.close()
@@ -241,7 +234,7 @@
 			tn(item) {
 				this.$Router.push({
 					path: '/sub-page-work/work/sign-in-approve/sign-in-approve-detail',
-					query:{
+					query: {
 						matterRecordId: item.matterRecordId,
 						reason: item.reason,
 						stuNum: item.stuNum,
@@ -279,6 +272,37 @@
 				this.startDateStr = null
 				this.endDateStr = null
 				this.loadmore = true
+			},
+			setTagBgAndColor(applicationItems) {
+				applicationItems.forEach(item => {
+					let color = this.getTagBgAndColor(item.state)
+					this.$set(item, "bgColor", color.backgroundColor)
+					this.$set(item, "color", color.color)
+				})
+			},
+			getTagBgAndColor(state) {
+				switch (state) {
+					case 0:
+						return {
+							backgroundColor: '#D8E5FF',
+								color: '#4B98FE'
+						}
+					case 1:
+						return {
+							backgroundColor: '#D6FADB',
+								color: '#00D05E'
+						}
+					case 2:
+						return {
+							backgroundColor: '#FFE2D9',
+								color: '#FB6A67'
+						}
+					default:
+						return {
+							backgroundColor: '#D8E5FF',
+								color: '#4B98FE'
+						}
+				}
 			},
 			getTime(dateOption) {
 				let today = new Date()
@@ -354,7 +378,7 @@
 	.box-shadow {
 		border-radius: 15rpx;
 		box-shadow: 0rpx 0rpx 50rpx 0rpx rgba(0, 0, 0, 0.07);
-		// position: relative;
+		position: relative;
 	}
 
 	/* 按钮 */
