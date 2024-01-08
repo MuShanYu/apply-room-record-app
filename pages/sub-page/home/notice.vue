@@ -27,8 +27,8 @@
 			</view>
 			<tn-load-more :status='status'></tn-load-more>
 		</view>
-		<tn-modal v-model="showTipModal" custom>
-			<view class="" style="border-radius: 60rpx;">
+		<tn-modal v-model="showTipModal" custom :showCloseBtn="true">
+			<view class="" style="border-radius: 30rpx;">
 				<view class="tn-text-bold tn-text-center tn-margin-bottom">
 					公告内容
 				</view>

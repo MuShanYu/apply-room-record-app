@@ -52,9 +52,10 @@
 
 		<tn-toast ref="toast"></tn-toast>
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
-		<tn-modal @click="submit" :radius='40' v-model="showModal" :title="'提示'" :content="'您确认要预约该房间吗？'"
+		<tn-modal :showCloseBtn="true" @click="submit" v-model="showModal" :title="'提示'" :content="'您确认要预约该房间吗？'"
 			:button="button"></tn-modal>
-		<tn-modal @click="showServiceErrorModal = false" :radius='40' v-model="showServiceErrorModal" :title="'系统提示'"
+			
+		<tn-modal :showCloseBtn="true" @click="showServiceErrorModal = false" v-model="showServiceErrorModal" :title="'系统提示'"
 			:content="message" :button="serviceErrorModalButton">
 		</tn-modal>
 	</view>

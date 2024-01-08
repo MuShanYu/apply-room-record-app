@@ -29,8 +29,8 @@
 						:border="true" :height="150" />
 				</view>
 				<view class="tn-margin-top tn-text-right">
-					<tn-button :disabled="disabled" @click="handleSubmitClick" :backgroundColor="disabled ? '#E6E6E6' : '#39b54a'" :shadow="false"
-						fontColor="#FFFFFF"> 确 认
+					<tn-button :disabled="disabled" @click="handleSubmitClick" :backgroundColor="disabled ? '#E6E6E6' : '#39b54a'"
+						:shadow="false" fontColor="#FFFFFF"> 确 认
 					</tn-button>
 				</view>
 			</view>
@@ -42,11 +42,11 @@
 		<tn-picker title="请选择签退时间" mode="time" :cancelText="'清除'" :defaultTime="defaultStartTime" v-model="showTimePicker"
 			:params="params" :showTimeTag="true" @cancel="handleCancel" @confirm="handleTimeConfrim"></tn-picker>
 
-		<tn-modal @click="handleConfirm" :radius='40' v-model="showConfirmModal" :title="'提示'" :content="'确认要提交该申请吗?'"
-			:button="button"></tn-modal>
+		<tn-modal :showCloseBtn="true" @click="handleConfirm" v-model="showConfirmModal" :title="'提示'"
+			:content="'确认要提交该申请吗?'" :button="button"></tn-modal>
 
-		<tn-modal @click="showServiceErrorModal = false" :radius='40' v-model="showServiceErrorModal" :title="'系统提示'"
-			:content="message" :button="serviceErrorModalButton">
+		<tn-modal :showCloseBtn="true" @click="showServiceErrorModal = false" v-model="showServiceErrorModal"
+			:title="'系统提示'" :content="message" :button="serviceErrorModalButton">
 		</tn-modal>
 	</view>
 </template>
@@ -165,7 +165,7 @@
 						return
 					}
 					// 构建保存对象
-					this.application.title = uni.getStorageSync('userInfo').name + '的'+ this.roomName +'补卡申请'
+					this.application.title = uni.getStorageSync('userInfo').name + '的' + this.roomName + '补卡申请'
 					let obj = {
 						reason: this.application.reason,
 						outTime: this.timestamp

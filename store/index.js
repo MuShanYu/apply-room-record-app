@@ -83,6 +83,9 @@ const store = new Vuex.Store({
 			// uni.removeStorageSync('isBindWx');
 			// uni.removeStorageSync('roles');
 		},
+		CLEAR() {
+			uni.clearStorage()
+		},
 		REFRESH_TOKEN(state, token) {
 			uni.setStorageSync('token', token);
 		}
@@ -96,7 +99,10 @@ const store = new Vuex.Store({
 		},
 		refreshToken({commit}, token) {
 			commit('REFRESH_TOKEN', token)
-		}
+		},
+		clear({commit}) {
+			commit('CLEAR')
+		},
 	}
 })
 

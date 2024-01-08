@@ -84,11 +84,11 @@
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 		<tn-toast @closed="" ref="toast"></tn-toast>
 
-		<tn-modal @click="handleConfirm" :radius='40' v-model="showConfirmModal" :title="'提示'" :content="'您确认要通过该房间预约申请吗'"
-			:button="button"></tn-modal>
+		<tn-modal :showCloseBtn="true" @click="handleConfirm" v-model="showConfirmModal" :title="'提示'"
+			:content="'您确认要通过该房间预约申请吗'" :button="button"></tn-modal>
 
-		<tn-modal @click="showServiceErrorModal = false" :radius='40' v-model="showServiceErrorModal" :title="'系统提示'"
-			:content="message" :button="serviceErrorModalButton">
+		<tn-modal :showCloseBtn="true" @click="showServiceErrorModal = false" v-model="showServiceErrorModal"
+			:title="'系统提示'" :content="message" :button="serviceErrorModalButton">
 		</tn-modal>
 
 		<tn-popup mode="top" :marginTop="vuex_custom_bar_height" v-model="showPopup">

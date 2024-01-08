@@ -8,12 +8,22 @@ export function wxLogin(code) {
 	return http.post('/user/wx/login/' + code)
 }
 
+export function wxBindApi(code) {
+	return http.put('/user/wx/bind/' + code)
+}
+
+export function wxUnBindApi(code) {
+	return http.put('/user/wx/unBind/' + code)
+}
+
 export function register(userRegisterDTO) {
 	return http.post('/user/register', userRegisterDTO)
 }
 
 export function getVerifyCode(stuNum) {
-	return http.get('/user/get/verifyCode', {stuNum})
+	return http.get('/user/get/verifyCode', {
+		stuNum
+	})
 }
 
 export function updatePwd(userUpdatePwdDTO) {
@@ -21,16 +31,12 @@ export function updatePwd(userUpdatePwdDTO) {
 }
 
 export function refreshTokenApi(userId, token) {
-	return http.get('/user/refresh/token', {userId, token})
+	return http.get('/user/refresh/token', {
+		userId,
+		token
+	})
 }
 
-
-export default {
-	updateInfo: (userUpdateDTO) => {
-		return http.post('/user/update/userInfo', userUpdateDTO)
-	},
-
-	updateUserNickname: (userUpdateNicknameDTO) => {
-		return http.post('/user/update/nickname', userUpdateNicknameDTO)
-	},
+export function updateUserInfoApi(userUpdateDTO) {
+	return http.post('/user/update/userInfo', userUpdateDTO)
 }
