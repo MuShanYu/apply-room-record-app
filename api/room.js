@@ -36,25 +36,13 @@ export function passOrRejectReserveApi(reserveId, passed, rejectReason) {
 	})
 }
 
-export default {
-	cancelReserveRoom: (roomReservationId) => {
-		return http.get('/roomReservation/cancel', {
-			params: {
-				roomReservationId: roomReservationId
-			}
-		})
-	},
-	myReservation: (myApplyQueryDTO) => {
-		let obj = Object.assign({}, myApplyQueryDTO)
-		if (obj.school === '任意') {
-			obj.school = ''
-		}
-		if (obj.category === '任意') {
-			obj.category = ''
-		}
-		if (obj.teachBuilding === '任意') {
-			obj.teachBuilding = ''
-		}
-		return http.post('/roomReservation/queryMyApply', obj)
-	},
+export function myReservationApi(myApplyQueryDTO) {
+	return http.post('/roomReservation/queryMyApply', myApplyQueryDTO)
+}
+
+export function cancelReserveRoomApi(roomReservationId, reason) {
+	return http.get('/roomReservation/cancel', {
+		roomReservationId,
+		reason
+	})
 }

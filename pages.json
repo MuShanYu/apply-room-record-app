@@ -120,6 +120,23 @@
 						"navigationBarTitleText" : "",
 						"enablePullDownRefresh" : false
 					}
+				},
+				{
+					"path" : "profile/apply-room-process/index",
+					"style" : 
+					{
+						"navigationBarTitleText" : "",
+						"enablePullDownRefresh" : true,
+						"onReachBottomDistance": 10
+					}
+				},
+				{
+					"path" : "profile/apply-room-process/cancel-room-apply",
+					"style" : 
+					{
+						"navigationBarTitleText" : "",
+						"enablePullDownRefresh" : false
+					}
 				}
 			]
 		}

@@ -55,7 +55,7 @@
 		</view>
 
 		<view v-if="isLogin" class="tn-flex tn-flex-row-between tn-padding tn-bg-white" style="margin-top: 20rpx;">
-			<view class="">
+			<view @click="tn('/sub-page-profile/profile/apply-room-process/index')" class="">
 				<view class="tn-flex tn-flex-row-center tn-flex-col-center icon">
 					<view class="tn-icon-book"></view>
 				</view>
@@ -184,7 +184,6 @@
 			this.onShowMethod()
 			uni.$on('infoUpdate', () => {
 				this.onShowMethod()
-				console.log(this.isLogin);
 			})
 		},
 		methods: {
