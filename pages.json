@@ -137,6 +137,15 @@
 						"navigationBarTitleText" : "",
 						"enablePullDownRefresh" : false
 					}
+				},
+				{
+					"path" : "profile/sign-in-process/index",
+					"style" : 
+					{
+						"navigationBarTitleText" : "",
+						"enablePullDownRefresh" : true,
+						"onReachBottomDistance": 10
+					}
 				}
 			]
 		}

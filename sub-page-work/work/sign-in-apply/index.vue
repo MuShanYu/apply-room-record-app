@@ -10,7 +10,7 @@
 		</tn-nav-bar>
 
 		<view class="tn-bg-white notice tabs-fixed" :style="{marginTop: vuex_custom_bar_height + 'px'}">
-			<tn-notice-bar :show="noticeShow" :list="list" :closeBtn="true" @close="noticeShow = false"></tn-notice-bar>
+			<tn-notice-bar :show="noticeShow" :list="list" :closeBtn="true" @close="handleNoticeClose"></tn-notice-bar>
 		</view>
 
 		<view class="tn-padding"
@@ -134,6 +134,7 @@
 				let index = this.accessReocrdList.findIndex(item => item.id === data.accessRecordId)
 				this.accessReocrdList.splice(index, 1)
 			})
+			this.noticeShow = uni.getStorageSync('signInApplyTip') === '' ? true : false
 		},
 		onPullDownRefresh() {
 			this.query.page = 1
@@ -194,6 +195,14 @@
 						chargePersonId: item.chargePersonId
 					}
 				})
+			},
+			handleNoticeClose() {
+				this.noticeShow = false
+				this.$refs.toast.show({
+					title: '下次登录前不再展示该提醒',
+					duration: 2500
+				})
+				uni.setStorageSync('signInApplyTip', false)
 			},
 			handleClearQuery() {
 				this.query.page = 1

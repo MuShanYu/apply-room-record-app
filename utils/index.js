@@ -1,4 +1,7 @@
 export function dateShow(dateTime, format = 'yyyy-MM-dd hh:mm:ss') {
+	if (dateTime === null) {
+		return null
+	}
 	let threshold = [0, 0] // 阈值
 	// let threshold = [60000, 6000000] // 阈值
 	const text = {
@@ -174,6 +177,39 @@ export function getTime(dateOption) {
 			// 获取后天的日期对象
 			let dayAfterTomorrow = new Date(today);
 			dayAfterTomorrow.setDate(today.getDate() + 2);
+			// 获取后天 00:00:00 的时间戳
+			let dayAfterTomorrowStartTimestamp = dayAfterTomorrow.getTime();
+			// 获取后天 23:59:59 的时间戳
+			let dayAfterTomorrowEndTimestamp = dayAfterTomorrowStartTimestamp + 24 * 60 * 60 * 1000 - 1;
+			return [dayAfterTomorrowStartTimestamp, dayAfterTomorrowEndTimestamp]
+		default:
+			return [null, null]
+	}
+}
+
+export function getBeforeTime(dateOption) {
+	let today = new Date()
+	// 设置时间为 00:00:00
+	today.setHours(0, 0, 0, 0);
+	switch (dateOption) {
+		case 'today':
+			// 获取今天 00:00:00 的时间戳
+			let todayStartTimestamp = today.getTime();
+			// 获取今天 23:59:59 的时间戳
+			let todayEndTimestamp = todayStartTimestamp + 24 * 60 * 60 * 1000 - 1;
+			return [todayStartTimestamp, todayEndTimestamp]
+		case 'yesterday':
+			let tomorrow = new Date(today);
+			tomorrow.setDate(today.getDate() - 1);
+			// 获取明天 00:00:00 的时间戳
+			let tomorrowStartTimestamp = tomorrow.getTime();
+			// 获取明天 23:59:59 的时间戳
+			let tomorrowEndTimestamp = tomorrowStartTimestamp + 24 * 60 * 60 * 1000 - 1;
+			return [tomorrowStartTimestamp, tomorrowEndTimestamp]
+		case 'beforeYesterday':
+			// 获取后天的日期对象
+			let dayAfterTomorrow = new Date(today);
+			dayAfterTomorrow.setDate(today.getDate() - 2);
 			// 获取后天 00:00:00 的时间戳
 			let dayAfterTomorrowStartTimestamp = dayAfterTomorrow.getTime();
 			// 获取后天 23:59:59 的时间戳
