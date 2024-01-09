@@ -63,7 +63,7 @@
 					<text class="tn-text-ellipsis menu-text">预约进程</text>
 				</view>
 			</view>
-			<view class="">
+			<view  @click="tn('/sub-page-profile/profile/sign-in-process/index')" class="">
 				<view class="tn-flex tn-flex-row-center tn-flex-col-center icon">
 					<view class="tn-icon-task-fill"></view>
 				</view>

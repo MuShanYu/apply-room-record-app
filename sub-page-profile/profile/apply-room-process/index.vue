@@ -14,13 +14,13 @@
 				:style="{marginTop: vuex_custom_bar_height + 'px'}">
 				<view style="width: 100vw;overflow: hidden;">
 					<tn-tabs :list="scrollList" :current="current" :isScroll="true" activeColor="#3668FC" :bold="true"
-						:fontSize="32" @change="tabChange" backgroundColor="#FFFFFF" :height="70"></tn-tabs>
+						:fontSize="26" @change="tabChange" backgroundColor="#FFFFFF" :height="60"></tn-tabs>
 				</view>
 			</view>
 		</view>
 
 		<view class="tn-bg-white notice tabs-fixed" :style="{marginTop: optionHeight + 'px'}">
-			<tn-notice-bar leftIconName="tip" :show="noticeShow" :list="noticeList" :closeBtn="true"
+			<tn-notice-bar leftIconName="tip" :show="noticeShow" :list="noticeList" :closeBtn="true" :fontSize="24"
 				@close="noticeShow = false"></tn-notice-bar>
 		</view>
 
@@ -254,6 +254,10 @@
 				this.query.endTime = dateTimestamp[1]
 				this.showPopup = false
 				this.query.page = 1
+				uni.pageScrollTo({
+					scrollTop: 0,
+					duration: 300
+				})
 				this.getDataList()
 			},
 			resetQuery() {

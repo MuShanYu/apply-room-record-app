@@ -5,71 +5,84 @@
 				<text class='icon tn-icon-left'></text>
 			</view>
 			<view slot="default" class="">
-				预约审批
+				申请进程
 			</view>
 		</tn-nav-bar>
 
-		<view class="tabs-fixed tn-bg-white">
-			<view class="tn-flex tn-flex-col-between tn-flex-col-center tn-padding-top-sm"
-				:style="{marginTop: vuex_custom_bar_height + 'px'}">
-				<view style="width: 100vw;overflow: hidden;">
-					<tn-tabs :list="scrollList" :current="current" :isScroll="false" activeColor="#3668FC" :bold="true"
-						:fontSize="32" @change="tabChange" backgroundColor="#FFFFFF" :height="70"></tn-tabs>
+		<view class="tabs-fixed tabs" :style="{marginTop: vuex_custom_bar_height + 'px'}">
+			<view class="tn-bg-white">
+				<view class="tn-flex tn-flex-col-between tn-flex-col-center">
+					<view style="width: 100vw;overflow: hidden;">
+						<tn-tabs :height="60" :list="applicationTypeScrollList" :current="topTabCurrent" :isScroll="true"
+							activeColor="#3668FC" :bold="true" :showBar="false" :fontSize="26" @change="topTabChange"
+							backgroundColor="#FFFFFF"></tn-tabs>
+					</view>
+				</view>
+			</view>
+			<view class="" style="padding: 3rpx;background-color: #F4F4F4;">
+
+			</view>
+			<view class="tn-bg-white">
+				<view class="tn-flex tn-flex-col-between tn-flex-col-center">
+					<view style="width: 100vw;overflow: hidden;">
+						<tn-tabs :height="60" :list="scrollList" :current="current" :isScroll="true" activeColor="#3668FC"
+							:fontSize="24" @change="tabChange" backgroundColor="#FFFFFF"></tn-tabs>
+					</view>
 				</view>
 			</view>
 		</view>
 
-		<view class="" :style="{marginTop: optionHeight + 'px'}">
-			<view class="tn-padding">
-				<view @click="tn(item)" class="tn-bg-white box-shadow tn-padding tn-margin-bottom"
-					v-for="(item, index) in applicationList" :key="item.id">
-					<view class="tn-flex">
-						<text class="tn-text-bold tn-text-ellipsis tn-text-md">
-							{{item.title}}
-						</text>
-					</view>
-					<!-- tag -->
-					<view class="" style="position: absolute;top: 0;right: 0;">
-						<view class="" style="border-top-right-radius: 15rpx;padding: 4rpx;font-size: 18rpx;"
-							:style="{backgroundColor: item.bgColor, color: item.color}">
-							{{item.state | tagTextFilter}}
-						</view>
-					</view>
-					<view class="tn-margin-top-xs tn-color-gray" style="font-size: 27rpx;">
-						申请理由：{{JSON.parse(item.reason).reason}}
-					</view>
-					<view class="tn-margin-top tn-flex tn-flex-row-between tn-color-gray tn-text-sm">
-						<view class="">
-							<text class="tn-icon-identity tn-text-sm" style="padding-right: 8rpx;"></text> {{item.stuNum}}
-						</view>
-						<view class="">
-							<text class="tn-icon-time tn-text-sm" style="padding-right: 8rpx;"></text>
-							{{item.createTime | dateFormat}}
-						</view>
+		<view class="tn-bg-white notice tabs-fixed" :style="{marginTop: (optionHeight + vuex_custom_bar_height) + 'px'}">
+			<tn-notice-bar leftIconName="tip" :show="noticeShow" :list="noticeList" :closeBtn="true" :fontSize="24"
+				@close="handleNoticeClose"></tn-notice-bar>
+		</view>
+
+		<view class="tn-padding"
+			:style="{marginTop: noticeShow ? (optionHeight + noticeHeight + vuex_custom_bar_height) + 'px' : (optionHeight + vuex_custom_bar_height) + 'px'}">
+			<view class="tn-bg-white box-shadow tn-padding tn-margin-bottom" v-for="(item,index) in applicationList"
+				:key="item.id">
+				<view class="tn-text-md">
+					<view class="tn-text-bold tn-text-ellipsis-2 ">
+						{{item.title}}
 					</view>
 				</view>
-				<tn-load-more :status='status'></tn-load-more>
+				<!-- tag -->
+				<view class="" style="position: absolute;top: 0;right: 0;">
+					<view class="" style="border-top-right-radius: 15rpx;padding: 4rpx;font-size: 18rpx;"
+						:style="{backgroundColor: item.bgColor, color: item.color}">
+						{{item.state | tagTextFilter}}
+					</view>
+				</view>
+				<view class="tn-color-gray tn-margin-top-sm" style="font-size: 27rpx;">
+					申请补卡时间：{{item.reason.outTime | dateFormat}}
+				</view>
+				<view class="tn-color-gray tn-margin-top-sm" style="font-size: 27rpx;">
+					申请理由：{{item.reason.reason}}
+				</view>
+				<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-sm tn-margin-top-sm">
+					<view class="">
+						<text class="tn-icon-my" style="padding-right: 6rpx;"></text> {{item.name}}(处理人)
+					</view>
+					<view class="">
+						<text class="tn-icon-history" style="padding-right: 6rpx;"></text> {{item.createTime | dateFormat}}
+					</view>
+				</view>
 			</view>
 
+			<tn-load-more :status='status'></tn-load-more>
 		</view>
 
 		<!-- 悬浮按钮-->
 		<view class="">
-			<view @click="handleMoreClick"
+			<view @click="showPopup = true"
 				class="icon15__item--icon tn-flex tn-flex-row-center tn-flex-col-center tn-shadow-blur button-1">
 				<view class="tn-icon-more-horizontal tn-color-white"></view>
 			</view>
 		</view>
 
-		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
-		<tn-toast @closed="" ref="toast"></tn-toast>
-
 		<tn-popup mode="top" :marginTop="vuex_custom_bar_height" v-model="showPopup">
 			<view class="tn-padding">
 				<tn-form :model="query" ref="form" :borderBottom="false" :labelWidth="160">
-					<tn-form-item label="学号/工号" prop="stuNum" :borderBottom="false">
-						<tn-input placeholder="请输入要搜索的学号/工号" v-model="query.stuNum" />
-					</tn-form-item>
 					<tn-form-item label="申请时间" :borderBottom="false">
 						<tn-radio-group shape="square" activeColor="#3668FC" v-model="timeOption">
 							<tn-radio name="none">任意</tn-radio>
@@ -79,7 +92,6 @@
 						</tn-radio-group>
 					</tn-form-item>
 				</tn-form>
-				</tn-form>
 				<view class="tn-flex tn-flex-row-between tn-margin-top">
 					<tn-button @click="handleClearQuery" backgroundColor="tn-bg-gray" fontColor="#FFFFFF">重 置</tn-button>
 					<tn-button @click="handleQueryFilterConfirm" backgroundColor="#3668FC" fontColor="#FFFFFF">确 认</tn-button>
@@ -87,62 +99,63 @@
 			</view>
 		</tn-popup>
 
+		<tn-toast @closed="" ref="toast"></tn-toast>
+		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
+
 	</view>
 </template>
 
 <script>
 	import {
-		queryApplicationListApi
+		queryMyApplicationListApi
 	} from '@/api/application.js'
+	import {
+		querySysConfigByKeyApi
+	} from '@/api/config.js'
 	import {
 		dateShow,
 		getBeforeTime
 	} from '@/utils/index.js'
-
 	export default {
 		data() {
 			return {
 				current: 0,
+				topTabCurrent: 0,
+				applicationTypeScrollList: [{
+					name: '默认',
+					type: 0
+				}],
 				scrollList: [{
-						name: '待审批',
-						count: 0,
+						name: '审批中',
 						state: 0
 					},
 					{
-						name: '已审批',
-						count: 0,
+						name: '已通过',
 						state: 1
 					},
 					{
 						name: '已驳回',
-						count: 0,
 						state: 2
 					}
 				],
 				optionHeight: 0,
+				noticeHeight: 0,
 				query: {
 					page: 1,
 					size: 5,
-					stuNum: '',
 					startDateStr: null,
 					endDateStr: null,
-					applicationState: 0
+					applicationState: 0,
+					type: 0
 				},
 				applicationList: [],
 				loadmore: true,
 				status: 'nomore',
 				showPopup: false,
-				timeOption: 'none'
+				timeOption: 'none',
+				noticeShow: true,
+				noticeList: ['需要撤销申请？点击申请项，取消正在审批中的房间预约。']
 			}
-		},
-		mounted() {
-			this.$nextTick(() => {
-				const query = uni.createSelectorQuery().in(this)
-				query.select('.tabs-fixed').boundingClientRect(data => {
-					this.optionHeight = Math.ceil(data.height)
-				})
-				query.exec()
-			})
 		},
 		filters: {
 			dateFormat(date) {
@@ -151,40 +164,47 @@
 			tagTextFilter(state) {
 				switch (state) {
 					case 0:
-						return '待审批'
+						return '审批中'
 					case 1:
-						return '已审批'
+						return '已通过'
 					case 2:
 						return '已驳回'
 					default:
-						return '待审批'
+						return '审批中'
 				}
 			}
 		},
-		computed: {
-			defaultStartTime() {
-				return dateShow(Number(new Date()), 'yyyy-MM-dd hh:mm')
-			},
-			defaultEndTime() {
-				return dateShow(Number(new Date()) + 3600000, 'yyyy-MM-dd hh:mm')
-			}
+		mounted() {
+			this.$nextTick(() => {
+				const query = uni.createSelectorQuery().in(this)
+				query.select('.tabs').boundingClientRect(data => {
+					this.optionHeight = Math.ceil(data.height)
+				})
+				query.select('.notice').boundingClientRect(data => {
+					this.noticeHeight = Math.ceil(data.height)
+				})
+				query.exec()
+			})
 		},
 		onLoad() {
-			this.getDataList()
-			// 监听申请事件
-			uni.$on('signInApprove', (data) => {
-				let index = this.applicationList.findIndex(item => item.id === data.id)
-				this.applicationList.splice(index, 1)
+			querySysConfigByKeyApi('applicationType').then(res => {
+				this.applicationTypeScrollList = JSON.parse(res.configValue).types
 			})
+			this.getDataList()
+			this.noticeShow = uni.getStorageSync('signInProcessTip') === '' ? true : false
 		},
 		onReachBottom() {
 			if (this.loadmore) {
 				this.query.page += 1
 				this.status = 'loading'
-				queryApplicationListApi(this.query).then(res => {
-					if (res.pageData.length > 0) {
-						this.setTagBgAndColor(res.pageData)
-						this.applicationList.push(...res.pageData)
+				queryMyApplicationListApi(this.query).then(res => {
+					res.pageData.forEach(item => {
+						item.reason = JSON.parse(item.reason)
+					})
+					this.setTagBgAndColor(res.pageData)
+					let list = res.pageData
+					if (list.length > 0) {
+						this.applicationList.push(...list)
 					} else {
 						this.loadmore = false
 					}
@@ -198,10 +218,12 @@
 		onPullDownRefresh() {
 			this.query.page = 1
 			this.loadmore = true
-			queryApplicationListApi(this.query).then(res => {
+			queryMyApplicationListApi(this.query).then(res => {
+				res.pageData.forEach(item => {
+					item.reason = JSON.parse(item.reason)
+				})
 				this.setTagBgAndColor(res.pageData)
 				this.applicationList = res.pageData
-				// console.log(res);
 				uni.stopPullDownRefresh()
 			}).catch(e => {
 				console.log(e);
@@ -209,6 +231,17 @@
 			})
 		},
 		methods: {
+			topTabChange(index) {
+				this.topTabCurrent = index
+				uni.pageScrollTo({
+					scrollTop: 0,
+					duration: 300
+				});
+				this.query.type = this.applicationTypeScrollList[index].type
+				this.query.page = 1
+				this.loadmore = true
+				this.getDataList()
+			},
 			tabChange(index) {
 				this.current = index
 				uni.pageScrollTo({
@@ -222,32 +255,25 @@
 			},
 			getDataList() {
 				this.$refs.loading.open()
-				queryApplicationListApi(this.query).then(res => {
+				queryMyApplicationListApi(this.query).then(res => {
+					res.pageData.forEach(item => {
+						item.reason = JSON.parse(item.reason)
+					})
 					this.setTagBgAndColor(res.pageData)
 					this.applicationList = res.pageData
-					// console.log(this.applicationList);
+					console.log(this.applicationList);
 					this.$refs.loading.close()
 				}).catch(e => {
-					console.log(e);
 					this.$refs.loading.close()
 				})
 			},
-			tn(item) {
-				this.$Router.push({
-					path: '/sub-page-work/work/sign-in-approve/sign-in-approve-detail',
-					query: {
-						matterRecordId: item.matterRecordId,
-						reason: item.reason,
-						stuNum: item.stuNum,
-						title: item.title,
-						name: item.name,
-						id: item.id,
-						createTime: item.createTime
-					}
+			handleNoticeClose() {
+				this.noticeShow = false
+				this.$refs.toast.show({
+					title: '下次登录前不再展示该提醒',
+					duration: 2500
 				})
-			},
-			handleMoreClick() {
-				this.showPopup = true
+				uni.setStorageSync('signInProcessTip', false)
 			},
 			handleClearQuery() {
 				this.timeOption = 'none'
@@ -278,8 +304,8 @@
 				this.endDateStr = null
 				this.loadmore = true
 			},
-			setTagBgAndColor(applicationItems) {
-				applicationItems.forEach(item => {
+			setTagBgAndColor(items) {
+				items.forEach(item => {
 					let color = this.getTagBgAndColor(item.state)
 					this.$set(item, "bgColor", color.backgroundColor)
 					this.$set(item, "color", color.color)

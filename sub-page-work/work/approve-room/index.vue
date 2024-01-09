@@ -326,6 +326,10 @@
 				this.query.endTime = dateTimestamp[1]
 				this.showPopup = false
 				this.query.page = 1
+				uni.pageScrollTo({
+					scrollTop: 0,
+					duration: 300
+				})
 				this.getDataList()
 			},
 			resetQuery() {
