@@ -31,22 +31,7 @@
 				</view>
 			</view>
 
-			<view class="tn-flex tn-flex-row-between tn-padding tn-margin-top-sm tn-bg-white"
-				@click="showAuthorizationModal = true">
-				<view class="justify-content-item">
-					<view class="tn-text-bold tn-text-lg">
-						{{isBindWx ? '解除微信绑定' : '绑定微信'}}
-					</view>
-					<view class="tn-color-gray tn-padding-top-xs">
-						{{isBindWx ? '微信已绑定' : '微信未绑定'}}
-					</view>
-				</view>
-				<view class="justify-content-item tn-text-lg tn-color-grey">
-					<view class="tn-icon-right tn-padding-top"></view>
-				</view>
-			</view>
-
-			<view class="tn-flex tn-flex-row-between tn-padding tn-bg-white" @click="showPicker = true">
+			<view class="tn-flex tn-flex-row-between tn-padding tn-margin-top-sm tn-bg-white" @click="showPicker = true">
 				<view class="justify-content-item">
 					<view class="tn-text-bold tn-text-lg">
 						学院
@@ -112,10 +97,6 @@
 
 		<tn-toast ref="toast"></tn-toast>
 
-		<tn-modal @click="handleAuthorization" v-model="showAuthorizationModal" :title="'提示'" :showCloseBtn="true"
-			:content="isBindWx ? '确定要解除微信绑定吗?届时您将无法通过微信进行快捷登录。' : '授权系统获取您的用户标识ID，绑定微信后方便您使用微信快捷登录App。'"
-			:button="button"></tn-modal>
-
 		<tn-picker @confirm='pickerConfirm' mode="selector" v-model="showPicker" :defaultSelector="defaultSelector"
 			:range="institutes"></tn-picker>
 
@@ -159,8 +140,6 @@
 		querySysConfigByKeyApi
 	} from '@/api/config.js'
 	import {
-		wxBindApi,
-		wxUnBindApi,
 		updateUserInfoApi
 	} from '@/api/user.js'
 	export default {
@@ -175,7 +154,6 @@
 				},
 				encodeMail: '',
 				role: '',
-				isBindWx: false,
 				showAuthorizationModal: false,
 				button: [{
 						text: '取消',
@@ -222,7 +200,6 @@
 					this.role = '普通用户'
 				}
 			}
-			this.isBindWx = uni.getStorageSync('isBindWx') || false
 			this.encodeMail = this.userInfo.mail.replace(/(.{0,3}).*@(.*)/, "$1***@$2")
 			querySysConfigByKeyApi('institutes').then(res => {
 				let configValue = JSON.parse(res.configValue)
@@ -230,17 +207,6 @@
 			})
 		},
 		methods: {
-			handleAuthorization(e) {
-				this.showAuthorizationModal = false
-				if (e.index === 1) {
-					// 授权
-					if (this.isBindWx) {
-						this.handleUnBindWx()
-					} else {
-						this.handleBindWx()
-					}
-				}
-			},
 			pickerConfirm(e) {
 				let index = e[0]
 				if (this.userInfo.institute !== this.institutes[index]) {
@@ -317,62 +283,6 @@
 					this.$refs.loading.close()
 					this.showUpdateModal = false
 					this.handleError(e)
-				})
-			},
-			handleUnBindWx() {
-				this.$refs.loading.open();
-				let that = this
-				uni.login({
-					provider: 'weixin',
-					scopes: '',
-					success(res) {
-						let code = res.code
-						wxUnBindApi(code).then(() => {
-							that.isBindWx = false
-							uni.setStorageSync('isBindWx', false)
-							that.$refs.loading.close()
-							that.$refs.toast.show({
-								title: '解除绑定成功',
-								duration: 1500
-							})
-							uni.$emit('infoUpdate')
-						}).catch(e => {
-							that.$refs.loading.close()
-							that.handleError(e)
-						})
-					},
-					fail(e) {
-						console.log(e);
-						that.$refs.loading.close()
-					}
-				})
-			},
-			handleBindWx() {
-				this.$refs.loading.open();
-				let that = this
-				uni.login({
-					provider: 'weixin',
-					scopes: '',
-					success(res) {
-						let code = res.code
-						wxBindApi(code).then(() => {
-							that.isBindWx = true
-							uni.setStorageSync('isBindWx', true)
-							that.$refs.loading.close()
-							that.$refs.toast.show({
-								title: '绑定成功',
-								duration: 1500
-							})
-							uni.$emit('infoUpdate')
-						}).catch(e => {
-							that.$refs.loading.close()
-							that.handleError(e)
-						})
-					},
-					fail(e) {
-						console.log(e);
-						that.$refs.loading.close()
-					}
 				})
 			},
 			handleExit(e) {
