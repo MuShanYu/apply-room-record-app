@@ -5,12 +5,12 @@
 				<text class='icon tn-icon-left'></text>
 			</view>
 			<view slot="default" class="tn-text-ellipsis">
-				{{roomName}}
+				取消申请
 			</view>
 		</tn-nav-bar>
 		<view class="tn-padding tn-bg-white" :style="{marginTop: vuex_custom_bar_height + 'px'}">
 			<view class="">
-				<tn-input v-model="reason" type='textarea' placeholder='请输入取消预约原因' :maxLength="128" :border="true"
+				<tn-input v-model="reason" type='textarea' placeholder='请输入取消申请的原因' :maxLength="128" :border="true"
 					:height="150" />
 			</view>
 
@@ -24,8 +24,8 @@
 
 		</view>
 
-		<tn-modal :showCloseBtn="true" @click="handleCancel" v-model="showCancelModal" :title="'系统提示'"
-			content="确认要取消该房间预约申请吗?" :button="button">
+		<tn-modal :showCloseBtn="true" @click="handleCancel" v-model="showCancelModal" :title="'系统提示'" content="确认要取消该申请吗?"
+			:button="button">
 		</tn-modal>
 
 		<tn-modal :showCloseBtn="true" @click="showServiceErrorModal = false" v-model="showServiceErrorModal"
@@ -39,13 +39,12 @@
 
 <script>
 	import {
-		cancelReserveRoomApi
-	} from '@/api/room.js'
+		cancelApplicationApi
+	} from '@/api/application.js'
 	export default {
 		data() {
 			return {
-				reservationId: '',
-				roomName: '',
+				applicationId: '',
 				button: [{
 						text: '取消',
 						backgroundColor: 'tn-bg-gray',
@@ -70,14 +69,13 @@
 			}
 		},
 		onLoad(params) {
-			this.reservationId = params.reservationId
-			this.roomName = params.roomName
+			this.applicationId = params.applicationId
 		},
 		methods: {
 			handleCancelClick() {
 				if (this.reason === '') {
 					this.$refs.toast.show({
-						title: '请输入预约取消原因',
+						title: '请输入申请取消原因',
 						duration: 2000
 					})
 					return
@@ -88,15 +86,15 @@
 				this.showCancelModal = false
 				if (e.index === 1) {
 					this.$refs.loading.open()
-					cancelReserveRoomApi(this.reservationId, this.reason).then(() => {
+					cancelApplicationApi(this.applicationId, this.reason).then(() => {
 						this.$refs.loading.close()
 						this.disabled = true
 						this.$refs.toast.show({
 							title: '操作成功',
 							duration: 1500
 						})
-						uni.$emit('roomCancel', {
-							reservationId: this.reservationId
+						uni.$emit('applicationCancel', {
+							applicationId: this.applicationId
 						})
 					}).catch(e => {
 						this.$refs.loading.close()

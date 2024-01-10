@@ -13,7 +13,21 @@ export function queryMyApplicationListApi(applicationListQuery) {
 }
 
 export function updateApplicationStateApi(applicationId, isPass, remark) {
-	return http.put('/application', {applicationId, isPass, remark}, {
+	return http.put('/application', {
+		applicationId,
+		isPass,
+		remark
+	}, {
+		header: {
+			'Content-Type': 'application/x-www-form-urlencoded'
+		}
+	})
+}
+
+export function cancelApplicationApi(applicationId, remark) {
+	return http.put('/application/cancel/' + applicationId, {
+		remark
+	}, {
 		header: {
 			'Content-Type': 'application/x-www-form-urlencoded'
 		}

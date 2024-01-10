@@ -39,8 +39,8 @@
 
 		<view class="tn-padding"
 			:style="{marginTop: noticeShow ? (optionHeight + noticeHeight + vuex_custom_bar_height) + 'px' : (optionHeight + vuex_custom_bar_height) + 'px'}">
-			<view class="tn-bg-white box-shadow tn-padding tn-margin-bottom" v-for="(item,index) in applicationList"
-				:key="item.id">
+			<view @click="tn(index)" class="tn-bg-white box-shadow tn-padding tn-margin-bottom"
+				v-for="(item,index) in applicationList" :key="item.id">
 				<view class="tn-text-md">
 					<view class="tn-text-bold tn-text-ellipsis-2 ">
 						{{item.title}}
@@ -81,7 +81,7 @@
 		</view>
 
 		<tn-popup mode="top" :marginTop="vuex_custom_bar_height" v-model="showPopup">
-			<view class="tn-padding">
+			<view class="tn-padding ">
 				<tn-form :model="query" ref="form" :borderBottom="false" :labelWidth="160">
 					<tn-form-item label="申请时间" :borderBottom="false">
 						<tn-radio-group shape="square" activeColor="#3668FC" v-model="timeOption">
@@ -136,6 +136,10 @@
 					{
 						name: '已驳回',
 						state: 2
+					},
+					{
+						name: '已取消',
+						state: 3
 					}
 				],
 				optionHeight: 0,
@@ -170,7 +174,7 @@
 					case 2:
 						return '已驳回'
 					default:
-						return '审批中'
+						return '已取消'
 				}
 			}
 		},
@@ -192,6 +196,11 @@
 			})
 			this.getDataList()
 			this.noticeShow = uni.getStorageSync('signInProcessTip') === '' ? true : false
+			// 监听取消事件
+			uni.$on('applicationCancel', (data) => {
+				let index = this.applicationList.findIndex(item => item.id === data.applicationId)
+				this.applicationList.splice(index, 1)
+			})
 		},
 		onReachBottom() {
 			if (this.loadmore) {
@@ -285,6 +294,22 @@
 				})
 				this.getDataList()
 			},
+			tn(index) {
+				if (this.applicationList[index].state !== 0) {
+					this.$refs.toast.show({
+						title: '只允许取消正在审批中的申请',
+						duration: 2000
+					})
+					return
+				}
+				let item = this.applicationList[index]
+				this.$Router.push({
+					path: '/sub-page-profile/profile/application-process/cancel-application',
+					query: {
+						applicationId: item.id
+					}
+				})
+			},
 			handleQueryFilterConfirm() {
 				let dateTimestamp = getBeforeTime(this.timeOption)
 				this.query.startDateStr = dateShow(dateTimestamp[0], 'yyyy-MM-dd hh:mm')
@@ -330,8 +355,8 @@
 						}
 					default:
 						return {
-							backgroundColor: '#D8E5FF',
-								color: '#4B98FE'
+							backgroundColor: '#aaaaaa',
+								color: '#fff'
 						}
 				}
 			},
