@@ -146,6 +146,13 @@
 						"enablePullDownRefresh": true,
 						"onReachBottomDistance": 10
 					}
+				},
+				{
+					"path": "profile/account-secure/index",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
 				}
 			]
 		}

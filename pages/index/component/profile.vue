@@ -79,7 +79,7 @@
 					<text class="tn-text-ellipsis menu-text">签到详情</text>
 				</view>
 			</view>
-			<view class="">
+			<view @click="tn('/sub-page-profile/profile/account-secure/index')" class="">
 				<view class="tn-flex tn-flex-row-center tn-flex-col-center icon">
 					<view class="tn-icon-safe-fill"></view>
 				</view>

@@ -220,7 +220,7 @@
 					this.$refs.loading.open()
 					queryAttendanceCountDetailList(this.query).then(res => {
 						this.attendanceList = res.pageData
-						console.log(this.attendanceList);
+						// console.log(this.attendanceList);
 						this.$refs.loading.close()
 					}).catch(e => {
 						this.$refs.loading.close()
