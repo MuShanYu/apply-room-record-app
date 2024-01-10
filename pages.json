@@ -139,12 +139,20 @@
 					}
 				},
 				{
-					"path" : "profile/sign-in-process/index",
+					"path" : "profile/application-process/index",
 					"style" : 
 					{
 						"navigationBarTitleText" : "",
 						"enablePullDownRefresh" : true,
 						"onReachBottomDistance": 10
+					}
+				},
+				{
+					"path" : "profile/application-process/cancel-application",
+					"style" : 
+					{
+						"navigationBarTitleText" : "",
+						"enablePullDownRefresh" : false
 					}
 				}
 			]
