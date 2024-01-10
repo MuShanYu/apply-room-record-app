@@ -36,140 +36,131 @@
 			}
 		}
 	],
-	"subPackages": [
-		{
+	"subPackages": [{
 			"root": "sub-page-work",
-			"pages": [
-				{
-					"path" : "work/apply-room/index",
-					"style" : 
-					{
-						"navigationBarTitleText" : "",
-						"enablePullDownRefresh" : true,
+			"pages": [{
+					"path": "work/apply-room/index",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": true,
 						"onReachBottomDistance": 10
 					}
 				},
 				{
-					"path" : "work/apply-room/apply-room-detail",
-					"style" : 
-					{
-						"navigationBarTitleText" : "",
-						"enablePullDownRefresh" : false
+					"path": "work/apply-room/apply-room-detail",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
 					}
 				},
 				{
-					"path" : "work/approve-room/index",
-					"style" : 
-					{
-						"navigationBarTitleText" : "",
-						"enablePullDownRefresh" : true,
+					"path": "work/approve-room/index",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": true,
 						"onReachBottomDistance": 10
 					}
 				},
 				{
-					"path" : "work/approve-room/approve-reject",
-					"style" : 
-					{
-						"navigationBarTitleText" : "",
-						"enablePullDownRefresh" : false
+					"path": "work/approve-room/approve-reject",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
 					}
 				},
 				{
-					"path" : "work/sign-in-apply/index",
-					"style" : 
-					{
-						"navigationBarTitleText" : "",
-						"enablePullDownRefresh" : true,
+					"path": "work/sign-in-apply/index",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": true,
 						"onReachBottomDistance": 10
 					}
 				},
 				{
-					"path" : "work/sign-in-apply/sign-in-apply-detail",
-					"style" : 
-					{
-						"navigationBarTitleText" : "",
-						"enablePullDownRefresh" : false
+					"path": "work/sign-in-apply/sign-in-apply-detail",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
 					}
 				},
 				{
-					"path" : "work/sign-in-approve/index",
-					"style" : 
-					{
-						"navigationBarTitleText" : "",
-						"enablePullDownRefresh" : true,
+					"path": "work/sign-in-approve/index",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": true,
 						"onReachBottomDistance": 10
 					}
 				},
 				{
-					"path" : "work/sign-in-approve/sign-in-approve-detail",
-					"style" : 
-					{
-						"navigationBarTitleText" : "",
-						"enablePullDownRefresh" : false
+					"path": "work/sign-in-approve/sign-in-approve-detail",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
 					}
 				}
 			]
 		},
 		{
 			"root": "sub-page-profile",
-			"pages": [
-				{
-					"path" : "profile/profile-detail/index",
-					"style" : 
-					{
-						"navigationBarTitleText" : "",
-						"enablePullDownRefresh" : false
+			"pages": [{
+					"path": "profile/profile-detail/index",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
 					}
 				},
 				{
-					"path" : "profile/apply-room-process/index",
-					"style" : 
-					{
-						"navigationBarTitleText" : "",
-						"enablePullDownRefresh" : true,
+					"path": "profile/apply-room-process/index",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": true,
 						"onReachBottomDistance": 10
 					}
 				},
 				{
-					"path" : "profile/apply-room-process/cancel-room-apply",
-					"style" : 
-					{
-						"navigationBarTitleText" : "",
-						"enablePullDownRefresh" : false
+					"path": "profile/apply-room-process/cancel-room-apply",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
 					}
 				},
 				{
-					"path" : "profile/application-process/index",
-					"style" : 
-					{
-						"navigationBarTitleText" : "",
-						"enablePullDownRefresh" : true,
+					"path": "profile/application-process/index",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": true,
 						"onReachBottomDistance": 10
 					}
 				},
 				{
-					"path" : "profile/application-process/cancel-application",
-					"style" : 
-					{
-						"navigationBarTitleText" : "",
-						"enablePullDownRefresh" : false
+					"path": "profile/application-process/cancel-application",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "profile/attendance/index",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
 					}
 				}
 			]
 		}
 	],
 	"globalStyle": {
-	  "navigationStyle": "custom",
+		"navigationStyle": "custom",
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "房间预约与流动统计",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
 	"preloadRule": {
-	  "pages/index/index": {
-	    "packages": ["sub-page-work"],
-	    "network": "all"
-	  }
+		"pages/index/index": {
+			"packages": ["sub-page-work"],
+			"network": "all"
+		}
 	},
 	"uniIdRouter": {}
 }

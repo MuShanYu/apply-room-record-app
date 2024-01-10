@@ -31,7 +31,8 @@
 				:style="{marginTop: vuex_custom_bar_height + 'px'}">
 				<view style="width: 100vw;overflow: hidden;">
 					<tn-tabs :list="scrollList" :current="current" :isScroll="false" activeColor="#3668FC" :bold="true"
-						:fontSize="32" :badgeOffset="[20, 80]" @change="tabChange" backgroundColor="#FFFFFF" :height="70"></tn-tabs>
+						:fontSize="26" :badgeOffset="[20, 120]" @change="tabChange" backgroundColor="#FFFFFF"
+						:height="60"></tn-tabs>
 				</view>
 			</view>
 		</view>
@@ -41,15 +42,15 @@
 			<view v-show="current === 0 && isLogin" style="position: relative;" @click="handleMessageClick(item, index)"
 				class="article-shadow tn-bg-white tn-padding tn-margin-bottom" v-for="(item, index) in messageList"
 				:key="item.id">
-				<view class="tn-text-bold tn-text-ellipsis-2 tn-text-df">
+				<view class="tn-text-ellipsis tn-text-bold" style="color: #080808;font-size: 26rpx;">
 					{{item.content}}
 				</view>
-				<view style="font-size: 25rpx;" class="tn-flex tn-flex-row-between tn-color-gray tn-margin-top">
+				<view style="margin-top: 23rpx;" class="tn-flex tn-flex-row-between tn-color-gray tn-text-sm">
 					<view class="">
-						申请时间：{{item.createTime | dateFormat}}
+						<text class="tn-icon-history" style="padding-right: 6rpx;"></text> {{item.createTime | dateFormat}}
 					</view>
 					<view class="">
-						申请人：{{item.senderUserName}}
+						<text class="tn-icon-my" style="padding-right: 6rpx;"></text> {{item.senderUserName}}
 					</view>
 				</view>
 				<tn-badge v-if="item.readState === 0" backgroundColor="#E83A30" :dot="true" :radius="15" :absolute="true"
@@ -59,15 +60,15 @@
 			<view v-show="current === 1 && isLogin" style="position: relative;" @click="handleMessageClick(item, index)"
 				class="article-shadow tn-bg-white tn-padding tn-margin-bottom" v-for="(item, index) in resultMessageList"
 				:key="item.id">
-				<view class="tn-text-bold tn-text-ellipsis-2 tn-text-df">
+				<view class="tn-text-ellipsis tn-text-bold" style="color: #080808;font-size: 26rpx;">
 					{{item.content}}
 				</view>
-				<view style="font-size: 25rpx;" class="tn-flex tn-flex-row-between tn-color-gray tn-margin-top">
+				<view style="margin-top: 23rpx;" class="tn-flex tn-flex-row-between tn-color-gray tn-text-sm">
 					<view class="">
-						申请时间：{{item.createTime | dateFormat}}
+						<text class="tn-icon-history" style="padding-right: 6rpx;"></text> {{item.createTime | dateFormat}}
 					</view>
 					<view class="">
-						申请人：{{item.senderUserName}}
+						<text class="tn-icon-my" style="padding-right: 6rpx;"></text> {{item.senderUserName}}
 					</view>
 				</view>
 				<tn-badge v-if="item.readState === 0" backgroundColor="#E83A30" :dot="true" :radius="15" :absolute="true"
@@ -78,9 +79,18 @@
 				:imgHeight="200"></tn-empty>
 		</view>
 
-		<tn-modal :showCloseBtn="true" @click="handleTipModalConfirm" v-model="showTipModal" :title="'消息内容'" :content="message"
-			:button="tipModalBtn">
+		<tn-modal :showCloseBtn="true" @click="handleTipModalConfirm" v-model="showTipModal" :custom="true"
+			@cancel="handleModalCancel">
+			<view class="">
+				<view class="tn-text-lg tn-text-center tn-text-bold">
+					<text>消息内容</text>
+				</view>
+				<view class="" style="line-height: 1.5;margin-top: 25rpx;font-size: 24rpx;">
+					{{message}}
+				</view>
+			</view>
 		</tn-modal>
+
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 		<tn-toast ref="toast"></tn-toast>
 		<view class='tn-tabbar-height'></view>
@@ -280,8 +290,7 @@
 				this.message = item.content
 				this.showTipModal = true
 			},
-			handleTipModalConfirm() {
-				this.showTipModal = false
+			handleModalCancel() {
 				if (this.currentMessage.readState === 0) {
 					this.$refs.loading.open()
 					setMessageToReadApi(this.currentMessage.id).then(res => {
