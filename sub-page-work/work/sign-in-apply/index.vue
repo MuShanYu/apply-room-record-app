@@ -10,7 +10,8 @@
 		</tn-nav-bar>
 
 		<view class="tn-bg-white notice tabs-fixed" :style="{marginTop: vuex_custom_bar_height + 'px'}">
-			<tn-notice-bar :show="noticeShow" :list="list" :closeBtn="true" @close="handleNoticeClose"></tn-notice-bar>
+			<tn-notice-bar :fontSize="24" :show="noticeShow" :list="list" :closeBtn="true"
+				@close="handleNoticeClose"></tn-notice-bar>
 		</view>
 
 		<view class="tn-padding"
@@ -19,25 +20,29 @@
 				<view @click="tn(item)" class="tn-bg-white box-shadow tn-padding tn-margin-bottom"
 					v-for="(item, index) in accessReocrdList" :key="item.id">
 					<view class="tn-flex tn-flex-row-between">
-						<view class="tn-text-bold tn-text-lg tn-text-ellipsis">
+						<view class="tn-text-bold tn-text-ellipsis tn-text-md">
 							{{item.entryTime | dateFormat2}}-{{item.roomName}}
 						</view>
-						<view class="">
-							<tn-tag backgroundColor="#0081ff" shape="circle" fontColor="#FFFFFF">待处理</tn-tag>
+					</view>
+					<!-- tag -->
+					<view class="" style="position: absolute;top: 0;right: 0;">
+						<view class=""
+							style="border-top-right-radius: 15rpx;padding: 4rpx;font-size: 18rpx;background-color: #0081ff;color: #FFFFFF;">
+							待处理
 						</view>
 					</view>
-					<view class="tn-margin-top-sm tn-color-gray">
+					<view class="tn-margin-top-sm tn-color-gray" style="font-size: 26rpx;">
 						该房间于{{item.entryTime | dateFormat}}进入，未进行签退。
 					</view>
-					<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-df tn-margin-top">
+					<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-df tn-margin-top tn-text-sm">
 						<view class="">
-							<text class="tn-icon-company tn-text-xl" style="padding-right: 8rpx;"></text> {{item.school}}
+							<text class="tn-icon-company" style="padding-right: 6rpx;"></text> {{item.school}}
 						</view>
 						<view class="">
-							<text class="tn-icon-map tn-text-xl" style="padding-right: 8rpx;"></text> {{item.teachBuilding}}
+							<text class="tn-icon-map" style="padding-right: 6rpx;"></text> {{item.teachBuilding}}
 						</view>
 						<view class="">
-							<text class="tn-icon-menu tn-text-xl" style="padding-right: 8rpx;"></text> {{item.category}}
+							<text class="tn-icon-menu" style="padding-right: 6rpx;"></text> {{item.category}}
 						</view>
 					</view>
 				</view>
@@ -256,7 +261,7 @@
 	.box-shadow {
 		border-radius: 15rpx;
 		box-shadow: 0rpx 0rpx 50rpx 0rpx rgba(0, 0, 0, 0.07);
-		// position: relative;
+		position: relative;
 	}
 
 	.tabs-fixed {

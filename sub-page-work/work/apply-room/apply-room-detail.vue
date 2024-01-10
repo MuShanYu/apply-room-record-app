@@ -9,12 +9,12 @@
 			</view>
 		</tn-nav-bar>
 
-		<view class="tn-bg-white tn-padding" :style="{marginTop: vuex_custom_bar_height + 'px'}">
-			<view class="tn-text-lg tn-text-bold tn-margin-bottom-xs">
+		<view class="tn-bg-white tn-padding " :style="{marginTop: vuex_custom_bar_height + 'px'}">
+			<view class="tn-text-bold tn-margin-bottom-sm">
 				{{roomName}}
 			</view>
-			<view class="tn-margin-bottom tn-color-gray">
-				{{equipmentInfo}}
+			<view class="tn-margin-bottom-sm tn-color-gray">
+				拥有{{equipmentInfo}}等。
 			</view>
 			<view class="tn-color-gray">
 				<view class="tn-margin-bottom-sm">
@@ -37,7 +37,7 @@
 			</view>
 		</view>
 		<view class="tn-margin-top tn-bg-white tn-padding-sm">
-			<view class="tn-flex tn-flex-col-center tn-flex-row-center">
+			<view class="tn-flex tn-flex-col-center tn-flex-row-between">
 				<view class="">
 					<text class="tn-text-sm tn-color-gray">需要结果提醒?点击订阅审核结果通知</text>
 				</view>
@@ -54,9 +54,9 @@
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 		<tn-modal :showCloseBtn="true" @click="submit" v-model="showModal" :title="'提示'" :content="'您确认要预约该房间吗？'"
 			:button="button"></tn-modal>
-			
-		<tn-modal :showCloseBtn="true" @click="showServiceErrorModal = false" v-model="showServiceErrorModal" :title="'系统提示'"
-			:content="message" :button="serviceErrorModalButton">
+
+		<tn-modal :showCloseBtn="true" @click="showServiceErrorModal = false" v-model="showServiceErrorModal"
+			:title="'系统提示'" :content="message" :button="serviceErrorModalButton">
 		</tn-modal>
 	</view>
 </template>
@@ -142,7 +142,9 @@
 							title: '房间预约成功，已通知管理员进行审核',
 							duration: 2000
 						})
-						uni.$emit('applyRoom', {roomId: this.applyRoomDTO.roomId})
+						uni.$emit('applyRoom', {
+							roomId: this.applyRoomDTO.roomId
+						})
 					}).catch(e => {
 						this.canApply = false
 						this.$refs.loading.close()

@@ -53,10 +53,10 @@
 						{{item.state | tagTextFilter}}
 					</view>
 				</view>
-				<view class="tn-color-gray tn-margin-top-sm" style="font-size: 27rpx;">
+				<view class="tn-color-gray tn-margin-top-sm text-content">
 					申请补卡时间：{{item.reason.outTime | dateFormat}}
 				</view>
-				<view class="tn-color-gray tn-margin-top-sm" style="font-size: 27rpx;">
+				<view class="tn-color-gray tn-margin-top-sm text-content">
 					申请理由：{{item.reason.reason}}
 				</view>
 				<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-sm tn-margin-top-sm">
@@ -66,6 +66,9 @@
 					<view class="">
 						<text class="tn-icon-history" style="padding-right: 6rpx;"></text> {{item.createTime | dateFormat}}
 					</view>
+				</view>
+				<view v-if="item.state !== 0" class="tn-margin-top-sm tn-color-gray text-content">
+					备注：{{item.remarks ? item.remarks : '无'}}
 				</view>
 			</view>
 
@@ -395,6 +398,10 @@
 		width: 100%;
 		transition: all 0.25s ease-out;
 		z-index: 1;
+	}
+
+	.text-content {
+		font-size: 26rpx;
 	}
 
 	.box-shadow {

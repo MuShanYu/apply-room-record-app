@@ -10,7 +10,7 @@
 		</tn-nav-bar>
 
 		<view class="tn-bg-white tabs-fixed box-shadow" :style="{marginTop: vuex_custom_bar_height + 'px'}">
-			<view class="tn-padding-sm">
+			<view class="tn-padding-sm" style="font-size: 26rpx;">
 				<view class="tn-flex tn-flex-row-between">
 					<view class="tn-text-left" @click="showSchools = true">
 						<view class="">
@@ -38,7 +38,7 @@
 					</view>
 				</view>
 			</view>
-			<view class="tn-padding-left-sm tn-padding-right-sm tn-padding-bottom-xs">
+			<view class="tn-padding-left-sm tn-padding-right-sm tn-padding-bottom-xs" style="font-size: 26rpx;">
 				<view class="tn-flex tn-flex-row-between">
 					<view class="" @click="showStartTime = true">
 						<view class="">
@@ -62,27 +62,30 @@
 		<view class="tn-padding" :style="{marginTop: (vuex_custom_bar_height + optionHeight) + 'px'}">
 			<view @click="tn(item)" style="position: relative;" class="tn-padding tn-margin-bottom tn-bg-white box-shadow"
 				v-for="(item, index) in roomList" :key="item.id">
-				<view class="tn-text-lg tn-text-bold">
+				<view class="tn-text-bold tn-text-md">
 					{{item.roomName}}
 				</view>
-				<view class="tn-color-gray tn-margin-top-xs tn-margin-bottom">
+				<view class="tn-color-gray tn-margin-top-sm tn-margin-bottom" style="font-size: 26rpx;">
 					可容纳{{item.capacity}}人，拥有{{item.equipmentInfo}}等。
 				</view>
-				<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-df">
+				<view class="tn-flex tn-flex-row-between tn-color-gray">
 					<view class="">
-						<text class="tn-icon-company tn-text-xl" style="padding-right: 8rpx;"></text> {{item.school}}
+						<text class="tn-icon-company tn-text-sm" style="padding-right: 6rpx;"></text> <text
+							style="font-size: 23rpx;">{{item.school}}</text>
 					</view>
 					<view class="">
-						<text class="tn-icon-map tn-text-xl" style="padding-right: 8rpx;"></text> {{item.teachBuilding}}
+						<text class="tn-icon-map tn-text-sm" style="padding-right: 6rpx;"></text> <text
+							style="font-size: 23rpx;">{{item.teachBuilding}}</text>
 					</view>
 					<view class="">
-						<text class="tn-icon-menu tn-text-xl" style="padding-right: 8rpx;"></text> {{item.category}}
+						<text class="tn-icon-menu tn-text-sm" style="padding-right: 6rpx;"></text> <text
+							style="font-size: 23rpx;">{{item.category}}</text>
 					</view>
 				</view>
 			</view>
 			<tn-load-more :status='status'></tn-load-more>
 		</view>
-		
+
 		<!-- 悬浮按钮-->
 		<view class="">
 			<view @click="handleClick"
@@ -380,19 +383,19 @@
 		z-index: 1001;
 		border-radius: 100px;
 	}
-	
+
 	/* 图标容器15 start */
 	.icon15 {
 		&__item {
 			width: 30%;
-	
+
 			border-radius: 10rpx;
 			padding: 30rpx;
 			margin: 20rpx 10rpx;
 			transform: scale(1);
 			transition: transform 0.3s linear;
 			transform-origin: center center;
-	
+
 			&--icon {
 				width: 100rpx;
 				height: 100rpx;
@@ -400,7 +403,7 @@
 				border-radius: 50%;
 				margin-bottom: 18rpx;
 				z-index: 1;
-	
+
 				&::after {
 					content: " ";
 					position: absolute;
@@ -413,8 +416,8 @@
 					opacity: 1;
 					transform: scale(1, 1);
 					background-size: 100% 100%;
-	
-	
+
+
 				}
 			}
 		}

@@ -35,14 +35,14 @@
 					<view class="tn-text-bold tn-text-md tn-text-ellipsis">
 						{{item.roomName}}
 					</view>
-					<view class="tn-color-gray tn-text-md">
+					<view class="tn-color-gray text-content">
 						{{item.createTime | dateFormat}}
 					</view>
 				</view>
-				<view class="tn-margin-top-sm tn-text-bold tn-text-md">
+				<view class="tn-margin-top-sm tn-text-bold text-content">
 					预约时间：{{item.reserveStartTime | dateFormat}}~{{item.reserveEndTime | dateHourFormat}}
 				</view>
-				<view class="tn-margin-top-sm tn-color-gray" style="font-size: 27rpx;">
+				<view class="tn-margin-top-sm tn-color-gray text-content">
 					房间用途：{{item.roomUsage}}
 				</view>
 				<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-sm tn-margin-top-sm">
@@ -55,6 +55,9 @@
 					<view class="">
 						<text class="tn-icon-menu" style="padding-right: 6rpx;"></text> {{item.category}}
 					</view>
+				</view>
+				<view v-if="item.state !== 0" class="tn-margin-top-sm tn-color-gray text-content">
+					备注：{{item.remark ? item.remark : '无'}}
 				</view>
 			</view>
 			<tn-load-more :status='status'></tn-load-more>
@@ -335,6 +338,10 @@
 
 	}
 
+	.text-content {
+		font-size: 26rpx;
+	}
+
 	.tabs-fixed {
 		position: fixed;
 		top: 0;
@@ -402,7 +409,7 @@
 
 	.left-line {
 		height: 100%;
-		width: 2%;
+		width: 1%;
 		background-color: red;
 		position: absolute;
 		left: 0;

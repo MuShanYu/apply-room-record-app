@@ -8,7 +8,11 @@
 				帮助中心
 			</view>
 		</tn-nav-bar>
+
+		<view class="" :style="{marginTop: vuex_custom_bar_height + 'px'}">
+		</view>
 	</view>
+
 </template>
 
 <script>
