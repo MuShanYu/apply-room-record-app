@@ -88,7 +88,7 @@
 							<tn-radio name="none">任意</tn-radio>
 							<tn-radio name="today">今天</tn-radio>
 							<tn-radio name="yesterday">昨天</tn-radio>
-							<tn-radio name="beforeYesterday">前天</tn-radio>
+							<tn-radio name="oneWeek">本周</tn-radio>
 						</tn-radio-group>
 					</tn-form-item>
 				</tn-form>
