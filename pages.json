@@ -153,6 +153,27 @@
 						"navigationBarTitleText": "",
 						"enablePullDownRefresh": false
 					}
+				},
+				{
+					"path": "profile/other/about",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "profile/other/help",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "profile/other/version",
+					"style": {
+						"navigationBarTitleText": "",
+						"enablePullDownRefresh": false
+					}
 				}
 			]
 		}

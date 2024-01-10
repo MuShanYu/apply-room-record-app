@@ -104,7 +104,7 @@
 					</view>
 				</button>
 			</view>
-			<view class="tn-flex tn-flex-row-between menu-item">
+			<view @click="tn('/sub-page-profile/profile/other/about')" class="tn-flex tn-flex-row-between menu-item">
 				<view class="tn-flex">
 					<view style="color: #FFAC00;" class="tn-icon-bookmark-fill tn-margin-right tn-text-lg cell menu-icon_cell">
 					</view>
@@ -133,7 +133,7 @@
 					</view>
 				</button>
 			</view>
-			<view class="tn-flex tn-flex-row-between menu-item">
+			<view @click="tn('/sub-page-profile/profile/other/help')" class="tn-flex tn-flex-row-between menu-item">
 				<view class="tn-flex">
 					<view style="color: #9c26b0;" class="tn-icon-help-fill tn-margin-right tn-text-lg cell menu-icon_cell"></view>
 					<view class="cell tn-text-lg">
@@ -144,7 +144,7 @@
 					<view class="tn-icon-right"></view>
 				</view>
 			</view>
-			<view class="tn-flex tn-flex-row-between menu-item">
+			<view @click="tn('/sub-page-profile/profile/other/version')" class="tn-flex tn-flex-row-between menu-item">
 				<view class="tn-flex">
 					<view style="color: #00C8B0;" class="tn-icon-up-fill tn-margin-right tn-text-lg cell menu-icon_cell"></view>
 					<view class="cell tn-text-lg">
