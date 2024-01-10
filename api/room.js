@@ -46,3 +46,7 @@ export function cancelReserveRoomApi(roomReservationId, reason) {
 		reason
 	})
 }
+
+export function queryAccessRecordRoomListApi() {
+	return http.get('/room/access/list')
+}

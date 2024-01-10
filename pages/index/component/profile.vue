@@ -57,13 +57,13 @@
 		<view v-if="isLogin" class="tn-flex tn-flex-row-between tn-padding tn-bg-white" style="margin-top: 20rpx;">
 			<view @click="tn('/sub-page-profile/profile/apply-room-process/index')" class="">
 				<view class="tn-flex tn-flex-row-center tn-flex-col-center icon">
-					<view class="tn-icon-book"></view>
+					<view class="tn-icon-clock-fill"></view>
 				</view>
 				<view class="tn-text-center tn-margin-top-xs">
 					<text class="tn-text-ellipsis menu-text">预约进程</text>
 				</view>
 			</view>
-			<view  @click="tn('/sub-page-profile/profile/application-process/index')" class="">
+			<view @click="tn('/sub-page-profile/profile/application-process/index')" class="">
 				<view class="tn-flex tn-flex-row-center tn-flex-col-center icon">
 					<view class="tn-icon-task-fill"></view>
 				</view>
@@ -71,7 +71,7 @@
 					<text class="tn-text-ellipsis menu-text">申请进程</text>
 				</view>
 			</view>
-			<view class="">
+			<view @click="tn('/sub-page-profile/profile/attendance/index')" class="">
 				<view class="tn-flex tn-flex-row-center tn-flex-col-center icon">
 					<view class="tn-icon-location-fill"></view>
 				</view>
