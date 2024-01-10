@@ -14,7 +14,7 @@
 				:style="{marginTop: vuex_custom_bar_height + 'px'}">
 				<view style="width: 100vw;overflow: hidden;">
 					<tn-tabs :list="scrollList" :current="current" :isScroll="true" activeColor="#3668FC" :bold="true"
-						:fontSize="32" @change="tabChange" backgroundColor="#FFFFFF" :height="70"></tn-tabs>
+						:fontSize="26" @change="tabChange" backgroundColor="#FFFFFF" :height="60"></tn-tabs>
 				</view>
 			</view>
 		</view>
@@ -23,28 +23,28 @@
 			<view class="tn-bg-white box-shadow tn-padding tn-margin-bottom" v-for="(item, index) in reservationList"
 				:key="item.id">
 				<view class="tn-flex tn-flex-row-between tn-flex-col-center">
-					<view class="tn-text-lg tn-text-bold">
+					<view class="tn-text-bold tn-text-md">
 						{{item.roomName}}
 					</view>
-					<view class="tn-color-gray">
+					<view class="tn-color-gray text-content">
 						{{item.createTime | dateFormat}}
 					</view>
 				</view>
-				<view class="tn-margin-top-sm">
+				<view class="tn-margin-top-sm text-content tn-color-gray">
 					申请理由：{{item.roomUsage}}
 				</view>
-				<view class="tn-margin-top-sm tn-text-bold">
+				<view class="tn-margin-top-sm tn-text-bold text-content">
 					预约时间：{{item.reserveStartTime | dateFormat}}~{{item.reserveEndTime | dateHourFormat}}
 				</view>
-				<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-df tn-margin-top-sm">
+				<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-sm tn-margin-top-sm">
 					<view class="">
-						<text class="tn-icon-identity tn-text-xl" style="padding-right: 8rpx;"></text> {{item.stuNum}}
+						<text class="tn-icon-identity" style="padding-right: 6rpx;"></text> {{item.stuNum}}
 					</view>
 					<view class="">
-						<text class="tn-icon-my tn-text-xl" style="padding-right: 8rpx;"></text> {{item.name}}
+						<text class="tn-icon-my" style="padding-right: 6rpx;"></text> {{item.name}}
 					</view>
 					<view class="">
-						<text class="tn-icon-menu tn-text-xl" style="padding-right: 8rpx;"></text> {{item.category}}
+						<text class="tn-icon-menu" style="padding-right: 6rpx;"></text> {{item.category}}
 					</view>
 				</view>
 				<view class="tn-margin-top-sm tn-flex tn-flex-row-between">
@@ -61,12 +61,12 @@
 						</tn-button>
 					</view>
 				</view>
-				<view v-if="item.state !== 0" class="tn-margin-top-sm tn-color-gray tn-text-df">
+				<view v-if="item.state !== 0" class="tn-margin-top-sm tn-color-gray text-content">
 					<view class="tn-margin-bottom-sm">
 						操作时间：{{item.updateTime | dateFormat}}
 					</view>
 					<view class="">
-						备注：{{item.remark}}
+						备注：{{item.remark ? item.remark : '无'}}
 					</view>
 				</view>
 			</view>
@@ -380,6 +380,10 @@
 		border-radius: 15rpx;
 		box-shadow: 0rpx 0rpx 50rpx 0rpx rgba(0, 0, 0, 0.07);
 		// position: relative;
+	}
+
+	.text-content {
+		font-size: 26rpx;
 	}
 
 	/* 按钮 */

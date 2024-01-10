@@ -1,10 +1,5 @@
 <template>
 	<view class="page-e tn-safe-area-inset-bottom">
-		<!-- <view class="top-backgroup">
-			<image src='https://mushanyu-app-arr.oss-cn-beijing.aliyuncs.com/static/background/my-bg4.png' mode='widthFix'
-				class='backgroud-image'></image>
-		</view> -->
-
 
 		<!-- 图标logo/头像 -->
 		<view v-if="isLogin" class="tn-padding-left tn-padding-right tn-padding-bottom tn-bg-white"
@@ -25,11 +20,11 @@
 								<view class="tn-color-wallpaper tn-text-xl tn-text-bold">{{userInfo.name}}</view>
 								<view class="tn-text-xs tn-color-white" :style="{backgroundColor: isBindWx ? '#39b54a' : '#aaaaaa'}"
 									style="padding: 6rpx;margin-left: 15rpx;border-radius: 16rpx;">
-									<text>{{isBindWx ? '微信已绑定' : '微信未绑定'}}</text>
+									<text style="font-size: 18rpx;">{{isBindWx ? '微信已绑定' : '微信未绑定'}}</text>
 								</view>
 							</view>
-							<view class="tn-padding-right tn-padding-top-sm tn-padding-left-sm tn-text-ellipsis">
-								<text class="tn-color-gray">{{role}}</text>
+							<view class="tn-padding-right tn-padding-top-xs tn-padding-left-sm tn-text-ellipsis">
+								<text class="tn-color-gray" style="font-size: 25rpx;">{{role}}</text>
 								<text class="tn-color-gray tn-padding-left-sm tn-text-sm">{{mail}}</text>
 							</view>
 						</view>
@@ -48,8 +43,8 @@
 			:style="{paddingTop: vuex_custom_bar_height + 'px'}">
 			<view class="tn-flex-1 justify-content-item tn-margin-xs tn-text-center">
 				<tn-button shape="round" backgroundColor="#3668FC" fontColor="#ffffff" padding="20rpx 0" width="40%" shadow>
-					<text class="tn-icon-wechat-fill tn-padding-right-xs tn-text-xl"></text>
-					<text class="">授权登录</text>
+					<text class="tn-icon-my-fill tn-padding-right-xs tn-text-xl"></text>
+					<text class="">点击登录</text>
 				</tn-button>
 			</view>
 		</view>
@@ -93,9 +88,9 @@
 			<view class="">
 				<button class="tn-flex tn-flex-row-between tn-button--clear-style" open-type="contact">
 					<view class="tn-flex">
-						<view style="color: #4B98FE;" class="tn-icon-team-fill tn-margin-right tn-text-lg cell menu-icon_cell">
+						<view style="color: #4B98FE;" class="tn-icon-team-fill tn-margin-right cell menu-icon_cell">
 						</view>
-						<view class="cell tn-text-lg">
+						<view class="cell">
 							<text class="menu-text_cell">在线客服</text>
 						</view>
 					</view>
@@ -106,9 +101,9 @@
 			</view>
 			<view @click="tn('/sub-page-profile/profile/other/about')" class="tn-flex tn-flex-row-between menu-item">
 				<view class="tn-flex">
-					<view style="color: #FFAC00;" class="tn-icon-bookmark-fill tn-margin-right tn-text-lg cell menu-icon_cell">
+					<view style="color: #FFAC00;" class="tn-icon-bookmark-fill tn-margin-right cell menu-icon_cell">
 					</view>
-					<view class="cell tn-text-lg">
+					<view class="cell">
 						<text class="menu-text_cell">关于我们</text>
 					</view>
 				</view>
@@ -122,9 +117,9 @@
 			<view class="">
 				<button class="tn-flex tn-flex-row-between tn-button--clear-style" open-type="feedback">
 					<view class="tn-flex">
-						<view style="color: #FE871B;" class="tn-icon-tip-fill tn-margin-right tn-text-lg cell menu-icon_cell">
+						<view style="color: #FE871B;" class="tn-icon-tip-fill tn-margin-right cell menu-icon_cell">
 						</view>
-						<view class="cell tn-text-lg">
+						<view class="cell">
 							<text class="menu-text_cell">问题反馈</text>
 						</view>
 					</view>
@@ -135,8 +130,8 @@
 			</view>
 			<view @click="tn('/sub-page-profile/profile/other/help')" class="tn-flex tn-flex-row-between menu-item">
 				<view class="tn-flex">
-					<view style="color: #9c26b0;" class="tn-icon-help-fill tn-margin-right tn-text-lg cell menu-icon_cell"></view>
-					<view class="cell tn-text-lg">
+					<view style="color: #9c26b0;" class="tn-icon-help-fill tn-margin-right cell menu-icon_cell"></view>
+					<view class="cell ">
 						<text class="menu-text_cell">帮助中心</text>
 					</view>
 				</view>
@@ -146,8 +141,8 @@
 			</view>
 			<view @click="tn('/sub-page-profile/profile/other/version')" class="tn-flex tn-flex-row-between menu-item">
 				<view class="tn-flex">
-					<view style="color: #00C8B0;" class="tn-icon-up-fill tn-margin-right tn-text-lg cell menu-icon_cell"></view>
-					<view class="cell tn-text-lg">
+					<view style="color: #00C8B0;" class="tn-icon-up-fill tn-margin-right cell menu-icon_cell"></view>
+					<view class="cell">
 						<text class="menu-text_cell">版本更新</text>
 					</view>
 				</view>
@@ -268,7 +263,7 @@
 	}
 
 	.menu-text_cell {
-		font-size: 28rpx;
+		font-size: 26rpx;
 	}
 
 	.menu-icon_cell {

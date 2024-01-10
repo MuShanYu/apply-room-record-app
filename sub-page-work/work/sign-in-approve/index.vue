@@ -14,7 +14,7 @@
 				:style="{marginTop: vuex_custom_bar_height + 'px'}">
 				<view style="width: 100vw;overflow: hidden;">
 					<tn-tabs :list="scrollList" :current="current" :isScroll="false" activeColor="#3668FC" :bold="true"
-						:fontSize="32" @change="tabChange" backgroundColor="#FFFFFF" :height="70"></tn-tabs>
+						:fontSize="26" @change="tabChange" backgroundColor="#FFFFFF" :height="60"></tn-tabs>
 				</view>
 			</view>
 		</view>
@@ -35,17 +35,21 @@
 							{{item.state | tagTextFilter}}
 						</view>
 					</view>
-					<view class="tn-margin-top-xs tn-color-gray" style="font-size: 27rpx;">
+					<view class="tn-margin-top-sm tn-color-gray" style="font-size: 26rpx;">
 						申请理由：{{JSON.parse(item.reason).reason}}
 					</view>
 					<view class="tn-margin-top tn-flex tn-flex-row-between tn-color-gray tn-text-sm">
 						<view class="">
-							<text class="tn-icon-identity tn-text-sm" style="padding-right: 8rpx;"></text> {{item.stuNum}}
+							<text class="tn-icon-identity tn-text-sm" style="padding-right: 6rpx;"></text> {{item.stuNum}}
 						</view>
 						<view class="">
-							<text class="tn-icon-time tn-text-sm" style="padding-right: 8rpx;"></text>
+							<text class="tn-icon-time tn-text-sm" style="padding-right: 6rpx;"></text>
 							{{item.createTime | dateFormat}}
 						</view>
+					</view>
+
+					<view v-if="item.state !== 0" class="tn-color-gray tn-margin-top-sm" style="font-size: 26rpx;">
+						备注：{{item.remarks}}
 					</view>
 				</view>
 				<tn-load-more :status='status'></tn-load-more>
@@ -233,6 +237,9 @@
 				})
 			},
 			tn(item) {
+				if (item.state !== 0) {
+					return
+				}
 				this.$Router.push({
 					path: '/sub-page-work/work/sign-in-approve/sign-in-approve-detail',
 					query: {
