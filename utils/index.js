@@ -215,6 +215,26 @@ export function getBeforeTime(dateOption) {
 			// 获取后天 23:59:59 的时间戳
 			let dayAfterTomorrowEndTimestamp = dayAfterTomorrowStartTimestamp + 24 * 60 * 60 * 1000 - 1;
 			return [dayAfterTomorrowStartTimestamp, dayAfterTomorrowEndTimestamp]
+		case 'oneWeek':
+			// 获取当前日期是星期几（0 表示星期日，1 表示星期一，以此类推）
+			let currentDayOfWeek = today.getDay();
+
+			// 获取当前日期的年、月、日部分
+			let currentYear = today.getFullYear();
+			let currentMonth = today.getMonth();
+			let currentDay = today.getDate();
+
+			// 计算本周的周一的日期
+			let firstDayOfWeek = new Date(currentYear, currentMonth, currentDay - currentDayOfWeek + 1);
+
+			// 计算本周的周日的日期
+			let lastDayOfWeek = new Date(currentYear, currentMonth, currentDay + (6 - currentDayOfWeek) + 1, 23, 59, 59,
+				999);
+
+			// 获取时间戳
+			let timestampFirstDayOfWeek = firstDayOfWeek.getTime();
+			let timestampLastDayOfWeek = lastDayOfWeek.getTime();
+			return [timestampFirstDayOfWeek, timestampLastDayOfWeek]
 		default:
 			return [null, null]
 	}
