@@ -62,7 +62,7 @@
 					}
 				},
 				{
-					"path": "work/approve-room/approve-reject",
+					"path": "work/approve-room/approve-detail",
 					"style": {
 						"navigationBarTitleText": "",
 						"enablePullDownRefresh": false
