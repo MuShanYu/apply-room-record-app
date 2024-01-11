@@ -10,17 +10,40 @@
 		</tn-nav-bar>
 
 		<view class="" :style="{marginTop: vuex_custom_bar_height + 'px'}">
+			<view class="tn-bg-white">
+				<view class="tn-text-bold tn-margin-bottom" style="padding-left: 20rpx;font-size: 30rpx;">
+					常见问题
+				</view>
+				<view class="">
+					<tn-collapse :headStyle="{paddingTop: '36rpx;', fontSize: '28rpx;'}" :bodyStyle="{fontSize: '26rpx;'}">
+						<tn-collapse-item v-for="(item, index) in list" :key="index" :title="item.title" :disabled="item.disabled">
+							<view class="collapse-item-content">
+								{{ item.content }}
+							</view>
+						</tn-collapse-item>
+					</tn-collapse>
+				</view>
+			</view>
 		</view>
 	</view>
 
 </template>
 
 <script>
+	import {
+		querySysConfigByKeyApi
+	} from '@/api/config.js'
 	export default {
 		data() {
 			return {
-
+				list: []
 			}
+		},
+		onLoad() {
+			querySysConfigByKeyApi('helpInfo').then(res => {
+				console.log(res);
+				this.list = JSON.parse(res.configValue).list
+			})
 		},
 		methods: {
 
@@ -51,5 +74,9 @@
 			text-align: center;
 		}
 
+	}
+
+	.collapse-item-content {
+		word-wrap: break-word;
 	}
 </style>

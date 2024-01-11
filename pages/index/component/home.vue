@@ -47,7 +47,7 @@
 				</view>
 				<view style="margin-top: 23rpx;" class="tn-flex tn-flex-row-between tn-color-gray tn-text-sm">
 					<view class="">
-						<text class="tn-icon-history" style="padding-right: 6rpx;"></text> {{item.createTime | dateFormat}}
+						<text class="tn-icon-time" style="padding-right: 6rpx;"></text> {{item.createTime | dateFormat}}
 					</view>
 					<view class="">
 						<text class="tn-icon-my" style="padding-right: 6rpx;"></text> {{item.senderUserName}}
@@ -65,7 +65,7 @@
 				</view>
 				<view style="margin-top: 23rpx;" class="tn-flex tn-flex-row-between tn-color-gray tn-text-sm">
 					<view class="">
-						<text class="tn-icon-history" style="padding-right: 6rpx;"></text> {{item.createTime | dateFormat}}
+						<text class="tn-icon-time" style="padding-right: 6rpx;"></text> {{item.createTime | dateFormat}}
 					</view>
 					<view class="">
 						<text class="tn-icon-my" style="padding-right: 6rpx;"></text> {{item.senderUserName}}
@@ -153,7 +153,7 @@
 		},
 		filters: {
 			dateFormat(date) {
-				return dateShow(date)
+				return dateShow(date, 'yyyy年MM月dd日 hh:mm')
 			}
 		},
 		mounted() {

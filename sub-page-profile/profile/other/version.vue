@@ -10,16 +10,28 @@
 		</tn-nav-bar>
 
 		<view class="" :style="{marginTop: vuex_custom_bar_height + 'px'}">
+			<view class="tn-margin-top tn-text-center">
+				{{version}}
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import {
+		querySysConfigByKeyApi
+	} from '@/api/config.js'
 	export default {
 		data() {
 			return {
-
+				version: ''
 			}
+		},
+		onLoad() {
+			querySysConfigByKeyApi('versionInfo').then(res => {
+				console.log(res);
+				this.version = JSON.parse(res.configValue).versionCode
+			})
 		},
 		methods: {
 

@@ -139,11 +139,11 @@
 					<view class="tn-icon-right"></view>
 				</view>
 			</view>
-			<view @click="tn('/sub-page-profile/profile/other/version')" class="tn-flex tn-flex-row-between menu-item">
+			<view @click="showVersion" class="tn-flex tn-flex-row-between menu-item">
 				<view class="tn-flex">
 					<view style="color: #00C8B0;" class="tn-icon-up-fill tn-margin-right cell menu-icon_cell"></view>
 					<view class="cell">
-						<text class="menu-text_cell">版本更新</text>
+						<text class="menu-text_cell">版本信息</text>
 					</view>
 				</view>
 				<view class="tn-color-gray cell">
@@ -156,6 +156,7 @@
 			© MuShanYu
 		</view>
 
+		<tn-toast ref="toast"></tn-toast>
 
 		<view class='tn-tabbar-height'></view>
 		<view class="bg-tabbar-shadow"></view>
@@ -164,6 +165,9 @@
 
 <script>
 	import STATIC_CONFIG from '@/config/static.config.js'
+	import {
+		querySysConfigByKeyApi
+	} from '@/api/config.js'
 	export default {
 		data() {
 			return {
@@ -172,10 +176,14 @@
 				isBindWx: false,
 				role: '',
 				mail: '',
-				randomHeader: ''
+				randomHeader: '',
+				version: ''
 			}
 		},
 		mounted() {
+			querySysConfigByKeyApi('versionInfo').then(res => {
+				this.version = JSON.parse(res.configValue).versionCode
+			})
 			this.onShowMethod()
 			uni.$on('infoUpdate', () => {
 				this.onShowMethod()
@@ -214,6 +222,12 @@
 				} else {
 					this.$Router.push(page)
 				}
+			},
+			showVersion() {
+				this.$refs.toast.show({
+					title: '当前版本为：' + this.version,
+					duration: 2000
+				})
 			}
 		}
 	}
