@@ -9,14 +9,15 @@
 			</view>
 		</tn-nav-bar>
 		<view class="tn-padding" :style="{marginTop: vuex_custom_bar_height + 'px'}">
-			<view @click="handleNoticeClick(item)" class="tn-bg-white tn-padding tn-margin-bottom box-shadow" v-for="(item, index) in noticeList" :key="item.id">
-				<view class="tn-margin-bottom-sm tn-text-bold tn-text-lg tn-text-ellipsis">
+			<view @click="handleNoticeClick(item)" class="tn-bg-white tn-padding tn-margin-bottom box-shadow"
+				v-for="(item, index) in noticeList" :key="item.id">
+				<view class="tn-margin-bottom-sm tn-text-bold tn-text-md tn-text-ellipsis">
 					<text class="tn-icon-notice-fill tn-color-red tn-text-lg tn-margin-right-xs"></text>{{item.title}}
 				</view>
-				<view class="tn-color-gray tn-margin-bottom-sm tn-text-ellipsis-2" style="word-break: break-all;">
+				<view class="tn-color-gray tn-margin-bottom-sm tn-text-ellipsis-2 text-content" style="word-break: break-all;">
 					{{item.content}}
 				</view>
-				<view class="tn-flex tn-flex-row-between tn-color-gray">
+				<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-sm">
 					<view class="">
 						{{item.publishUserName}}
 					</view>
@@ -37,9 +38,9 @@
 				</view>
 			</view>
 		</tn-modal>
-		
-		
-		
+
+
+
 	</view>
 </template>
 
@@ -47,7 +48,9 @@
 	import {
 		queryNoticeListApi
 	} from '@/api/notice.js'
-	import {dateShow} from '@/utils/index.js'
+	import {
+		dateShow
+	} from '@/utils/index.js'
 	export default {
 		data() {
 			return {
@@ -69,7 +72,7 @@
 		},
 		filters: {
 			dateFormat(date) {
-				return dateShow(date)
+				return dateShow(date, "yyyy年MM月dd日 hh:mm")
 			}
 		},
 		onLoad() {
@@ -136,17 +139,20 @@
 		}
 
 	}
-	
+
+	.text-content {
+		font-size: 26rpx;
+	}
+
 	.box-shadow {
 		border-radius: 15rpx;
 		box-shadow: 0rpx 0rpx 50rpx 0rpx rgba(0, 0, 0, 0.07);
 		// position: relative;
 	}
-	
+
 	.tn-tabbar-height {
 		min-height: 120rpx;
 		height: calc(140rpx + env(safe-area-inset-bottom) / 2);
 		height: calc(140rpx + constant(safe-area-inset-bottom));
 	}
-	
 </style>
