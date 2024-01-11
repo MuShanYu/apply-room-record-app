@@ -10,36 +10,31 @@
 		</tn-nav-bar>
 
 		<view class="tn-bg-white tn-padding " :style="{marginTop: vuex_custom_bar_height + 'px'}">
-			<view class="tn-text-bold tn-margin-bottom-sm">
+			<view class="tn-text-bold tn-margin-bottom-sm tn-text-md">
 				{{roomName}}
 			</view>
-			<view class="tn-margin-bottom-sm tn-color-gray">
+			<view class="tn-margin-bottom-sm text-content tn-text-bold">
+				预约时间：{{startTimeStr}}~{{endTimeStr}}
+			</view>
+			<view class="tn-margin-bottom-sm tn-color-gray text-content">
 				拥有{{equipmentInfo}}等。
 			</view>
-			<view class="tn-color-gray">
-				<view class="tn-margin-bottom-sm">
-					负责人：{{name}}
-				</view>
-				<view class="tn-margin-bottom-sm">
-					预约开始时间：{{startTimeStr}}
-				</view>
-				<view class="tn-margin-bottom-sm">
-					预约结束时间：{{endTimeStr}}
-				</view>
+			<view class="tn-margin-bottom-sm tn-color-gray text-content">
+				负责人：{{name}}
 			</view>
 			<view class="tn-margin-bottom">
-				<tn-input :maxLength="500" placeholder="请输入预约理由" v-model="applyRoomDTO.roomUsage" type="textarea" :border="true"
-					:height="150" :autoHeight="true" />
+				<tn-input placeholderStyle="color: #AAAAAA;font-size:26rpx;" :maxLength="500" placeholder="请输入预约理由"
+					v-model="applyRoomDTO.roomUsage" type="textarea" :border="true" :height="150" :autoHeight="true" />
 			</view>
 			<view class="">
-				<tn-button :disabled="!canApply" @click="handleSubmitClick" :shadow="true" width="100%"
-					:backgroundColor="!canApply ? '#E6E6E6' : '#3668FC'" fontColor="#FFFFFF" margin="10rpx 0">确 认 预 约</tn-button>
+				<tn-button :disabled="!canApply" @click="handleSubmitClick" :shadow="true" width="100%" :fontSize="26"
+					:backgroundColor="!canApply ? '#E6E6E6' : '#3668FC'" fontColor="#FFFFFF">确 认 预 约</tn-button>
 			</view>
 		</view>
 		<view class="tn-margin-top tn-bg-white tn-padding-sm">
 			<view class="tn-flex tn-flex-col-center tn-flex-row-between">
 				<view class="">
-					<text class="tn-text-sm tn-color-gray">需要结果提醒?点击订阅审核结果通知</text>
+					<text class="tn-text-sm tn-color-gray">需要结果提醒？点击订阅审核结果通知</text>
 				</view>
 				<view class="">
 					<tn-button @click="subscribe" class="tn-margin-left" size="sm" :shadow="true" backgroundColor="#39b54a"
@@ -116,8 +111,8 @@
 			this.roomName = param.roomName
 			this.equipmentInfo = param.equipmentInfo
 			this.name = param.name
-			this.startTimeStr = dateShow(Number(param.startTime))
-			this.endTimeStr = dateShow(Number(param.endTime))
+			this.startTimeStr = dateShow(Number(param.startTime), "yyyy年MM月dd日 hh:mm")
+			this.endTimeStr = dateShow(Number(param.endTime), 'hh:mm')
 		},
 		methods: {
 			handleSubmitClick() {
@@ -198,5 +193,9 @@
 			text-align: center;
 		}
 
+	}
+
+	.text-content {
+		font-size: 26rpx;
 	}
 </style>

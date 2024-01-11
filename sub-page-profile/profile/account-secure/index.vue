@@ -40,6 +40,10 @@
 			:content="isBindWx ? '确定要解除微信绑定吗?届时您将无法通过微信进行快捷登录。' : '授权系统获取您的用户标识ID，绑定微信后方便您使用微信快捷登录App。'"
 			:button="button"></tn-modal>
 
+		<tn-modal :showCloseBtn="true" @click="showServiceErrorModal = false" v-model="showServiceErrorModal"
+			:title="'系统提示'" :content="message" :button="serviceErrorModalButton">
+		</tn-modal>
+
 
 	</view>
 </template>
@@ -64,7 +68,14 @@
 						fontColor: '#FFFFFF'
 					}
 				],
-				showAuthorizationModal: false
+				showAuthorizationModal: false,
+				showServiceErrorModal: false,
+				message: '',
+				serviceErrorModalButton: [{
+					text: '我知道了',
+					backgroundColor: '#3668FC',
+					fontColor: '#FFFFFF',
+				}],
 			}
 		},
 		onLoad() {

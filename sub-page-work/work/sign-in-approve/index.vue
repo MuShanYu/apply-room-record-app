@@ -21,35 +21,42 @@
 
 		<view class="" :style="{marginTop: optionHeight + 'px'}">
 			<view class="tn-padding">
-				<view @click="tn(item)" class="tn-bg-white box-shadow tn-padding tn-margin-bottom"
-					v-for="(item, index) in applicationList" :key="item.id">
-					<view class="tn-flex">
-						<text class="tn-text-bold tn-text-ellipsis tn-text-md">
-							{{item.title}}
-						</text>
-					</view>
-					<!-- tag -->
-					<view class="" style="position: absolute;top: 0;right: 0;">
-						<view class="" style="border-top-right-radius: 15rpx;padding: 4rpx;font-size: 18rpx;"
-							:style="{backgroundColor: item.bgColor, color: item.color}">
-							{{item.state | tagTextFilter}}
+				<view @click="tn(item)" class="tn-bg-white box-shadow tn-margin-bottom" v-for="(item, index) in applicationList"
+					:key="item.id">
+					<view class="tn-padding-top tn-padding-left tn-padding-right tn-padding-bottom-sm"
+						style="position: relative;">
+						<view class="tn-flex">
+							<text class="tn-text-bold tn-text-ellipsis tn-text-md">
+								{{item.title}}
+							</text>
+						</view>
+						<!-- tag -->
+						<view class="" style="position: absolute;top: 0;right: 0;">
+							<view class="" style="border-top-right-radius: 15rpx;padding: 8rpx;font-size: 18rpx;"
+								:style="{backgroundColor: item.bgColor, color: item.color}">
+								{{item.state | tagTextFilter}}
+							</view>
+						</view>
+						<view class="tn-margin-top-sm tn-color-gray" style="font-size: 26rpx;">
+							申请理由：{{JSON.parse(item.reason).reason}}
+						</view>
+						<view class="tn-margin-top tn-flex tn-flex-row-between tn-color-gray tn-text-sm">
+							<view class="">
+								<text class="tn-icon-identity tn-text-sm" style="padding-right: 6rpx;"></text> {{item.stuNum}}
+							</view>
+							<view class="">
+								<text class="tn-icon-time tn-text-sm" style="padding-right: 6rpx;"></text>
+								{{item.createTime | dateFormat}}
+							</view>
 						</view>
 					</view>
-					<view class="tn-margin-top-sm tn-color-gray" style="font-size: 26rpx;">
-						申请理由：{{JSON.parse(item.reason).reason}}
-					</view>
-					<view class="tn-margin-top tn-flex tn-flex-row-between tn-color-gray tn-text-sm">
-						<view class="">
-							<text class="tn-icon-identity tn-text-sm" style="padding-right: 6rpx;"></text> {{item.stuNum}}
-						</view>
-						<view class="">
-							<text class="tn-icon-time tn-text-sm" style="padding-right: 6rpx;"></text>
-							{{item.createTime | dateFormat}}
-						</view>
-					</view>
+					<view v-if="item.state !== 0" class="" style="background-color: #F4F4F4;width: 100%;padding: 2rpx;">
 
-					<view v-if="item.state !== 0" class="tn-color-gray tn-margin-top-sm" style="font-size: 26rpx;">
-						备注：{{item.remarks}}
+					</view>
+					<view v-if="item.state !== 0"
+						class="tn-color-gray tn-text-center tn-padding-left tn-padding-right tn-padding-bottom-sm"
+						style="padding-top: 15rpx;font-size: 26rpx;">
+						备注：{{item.remarks ? item.remarks : '无'}}
 					</view>
 				</view>
 				<tn-load-more :status='status'></tn-load-more>
@@ -356,7 +363,7 @@
 	.box-shadow {
 		border-radius: 15rpx;
 		box-shadow: 0rpx 0rpx 50rpx 0rpx rgba(0, 0, 0, 0.07);
-		position: relative;
+		// position: relative;
 	}
 
 	/* 按钮 */

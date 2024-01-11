@@ -23,43 +23,53 @@
 			<tn-notice-bar leftIconName="tip" :show="noticeShow" :list="noticeList" :closeBtn="true" :fontSize="24"
 				@close="noticeShow = false"></tn-notice-bar>
 		</view>
-
 		<view class="tn-padding"
 			:style="{marginTop: noticeShow ? (optionHeight + noticeHeight) + 'px' : optionHeight + 'px'}">
-			<view @click="tn(index)" class="tn-bg-white box-shadow tn-padding tn-margin-bottom"
-				v-for="(item, index) in reservationList" :key="item.id">
-				<!-- 线 -->
-				<view class="left-line" :style="{backgroundColor: tagBgColor}">
-				</view>
-				<view class="tn-flex tn-flex-row-between">
-					<view class="tn-text-bold tn-text-md tn-text-ellipsis">
-						{{item.roomName}}
+
+			<view @click="tn(index)" class="tn-bg-white box-shadow tn-margin-bottom" v-for="(item, index) in reservationList"
+				:key="item.id">
+				<view style="position: relative;" class="tn-padding-top tn-padding-left tn-padding-right tn-padding-bottom-sm">
+					<!-- 线 -->
+					<view class="left-line"
+						:style="{backgroundColor: tagBgColor, borderBottomLeftRadius: item.state === 0 ? '15rpx;' : '0'}">
 					</view>
-					<view class="tn-color-gray text-content">
-						{{item.createTime | dateFormat}}
+					<view class="tn-flex tn-flex-row-between">
+						<view class="tn-text-bold tn-text-md tn-text-ellipsis">
+							{{item.roomName}}
+						</view>
+						<view class="tn-color-gray text-content">
+							{{item.createTime | dateFormat}}
+						</view>
 					</view>
-				</view>
-				<view class="tn-margin-top-sm tn-text-bold text-content">
-					预约时间：{{item.reserveStartTime | dateFormat}}~{{item.reserveEndTime | dateHourFormat}}
-				</view>
-				<view class="tn-margin-top-sm tn-color-gray text-content">
-					房间用途：{{item.roomUsage}}
-				</view>
-				<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-sm tn-margin-top-sm">
-					<view class="">
-						<text class="tn-icon-company" style="padding-right: 6rpx;"></text> {{item.school}}
+					<view class="tn-margin-top-sm tn-text-bold text-content">
+						预约时间：{{item.reserveStartTime | dateFormat}}~{{item.reserveEndTime | dateHourFormat}}
 					</view>
-					<view class="">
-						<text class="tn-icon-map" style="padding-right: 6rpx;"></text> {{item.teachBuilding}}
+					<view class="tn-margin-top-sm tn-color-gray text-content">
+						房间用途：{{item.roomUsage}}
 					</view>
-					<view class="">
-						<text class="tn-icon-menu" style="padding-right: 6rpx;"></text> {{item.category}}
+					<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-sm tn-margin-top-sm">
+						<view class="">
+							<text class="tn-icon-company" style="padding-right: 6rpx;"></text> {{item.school}}
+						</view>
+						<view class="">
+							<text class="tn-icon-map" style="padding-right: 6rpx;"></text> {{item.teachBuilding}}
+						</view>
+						<view class="">
+							<text class="tn-icon-menu" style="padding-right: 6rpx;"></text> {{item.category}}
+						</view>
 					</view>
+
 				</view>
-				<view v-if="item.state !== 0" class="tn-margin-top-sm tn-color-gray text-content">
+				<view v-if="item.state !== 0" class="" style="background-color: #F4F4F4;width: 100%;padding: 2rpx;">
+
+				</view>
+				<view v-if="item.state !== 0"
+					class="text-content tn-color-gray tn-text-center tn-padding-left tn-padding-right tn-padding-bottom-sm"
+					style="padding-top: 15rpx;">
 					备注：{{item.remark ? item.remark : '无'}}
 				</view>
 			</view>
+
 			<tn-load-more :status='status'></tn-load-more>
 
 		</view>
@@ -353,7 +363,7 @@
 	.box-shadow {
 		border-radius: 15rpx;
 		box-shadow: 0rpx 0rpx 50rpx 0rpx rgba(0, 0, 0, 0.07);
-		position: relative;
+		// position: relative;
 	}
 
 	/* 按钮 */
@@ -410,11 +420,9 @@
 	.left-line {
 		height: 100%;
 		width: 1%;
-		background-color: red;
 		position: absolute;
 		left: 0;
 		top: 0;
 		border-top-left-radius: 15rpx;
-		border-bottom-left-radius: 15rpx;
 	}
 </style>

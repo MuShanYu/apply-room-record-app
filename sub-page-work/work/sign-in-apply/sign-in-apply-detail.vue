@@ -11,26 +11,26 @@
 		<view class="" :style="{marginTop: vuex_custom_bar_height + 'px'}">
 			<view class="tn-padding tn-bg-white">
 				<view class="">
-					<view class="tn-text-bold tn-text-lg tn-text-ellipsis">
+					<view class="tn-text-bold tn-text-md tn-text-ellipsis">
 						{{roomName}}补卡申请
 					</view>
-					<view class="tn-color-gray tn-text-df tn-margin-top-sm">
+					<view class="tn-color-gray tn-margin-top-sm" style="font-size: 26rpx;">
 						<view class="">
 							签到时间：{{entryTime | dateFormat}}
 						</view>
 					</view>
 				</view>
 				<view class="tn-margin-top">
-					<tn-input :selectOpen="showTimePicker" placeholder='请选择您的签退时间' v-model="time" type="select" :border="true"
-						@click="showTimePicker = true" />
+					<tn-input placeholderStyle="color: #AAAAAA;font-size:26rpx;" :selectOpen="showTimePicker"
+						placeholder='请选择您的签退时间' v-model="time" type="select" :border="true" @click="showTimePicker = true" />
 				</view>
 				<view class="tn-margin-top">
-					<tn-input v-model="application.reason" type='textarea' placeholder='请输入申请理由，用于审核' :maxLength="128"
-						:border="true" :height="150" />
+					<tn-input placeholderStyle="color: #AAAAAA;font-size:26rpx;" v-model="application.reason" type='textarea'
+						placeholder='请输入申请理由，用于审核' :maxLength="128" :border="true" :height="150" />
 				</view>
 				<view class="tn-margin-top tn-text-right">
-					<tn-button :disabled="disabled" @click="handleSubmitClick" :backgroundColor="disabled ? '#E6E6E6' : '#39b54a'"
-						:shadow="false" fontColor="#FFFFFF"> 确 认
+					<tn-button :fontSize="26" :disabled="disabled" @click="handleSubmitClick" width="100%"
+						:backgroundColor="disabled ? '#E6E6E6' : '#3668FC'" :shadow="true" fontColor="#FFFFFF">确 认 申 请
 					</tn-button>
 				</view>
 			</view>

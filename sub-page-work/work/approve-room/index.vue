@@ -20,55 +20,55 @@
 		</view>
 
 		<view class="tn-padding" :style="{marginTop: optionHeight + 'px'}">
-			<view class="tn-bg-white box-shadow tn-padding tn-margin-bottom" v-for="(item, index) in reservationList"
-				:key="item.id">
-				<view class="tn-flex tn-flex-row-between tn-flex-col-center">
-					<view class="tn-text-bold tn-text-md">
-						{{item.roomName}}
+			<view class="tn-bg-white box-shadow tn-margin-bottom" v-for="(item, index) in reservationList" :key="item.id">
+				<view class="tn-padding-left tn-padding-right tn-padding-top tn-padding-sm">
+					<view class="tn-flex tn-flex-row-between tn-flex-col-center">
+						<view class="tn-text-bold tn-text-md">
+							{{item.roomName}}
+						</view>
+						<view class="tn-color-gray text-content">
+							{{item.createTime | dateFormat}}
+						</view>
 					</view>
-					<view class="tn-color-gray text-content">
-						{{item.createTime | dateFormat}}
+					<view class="tn-margin-top-sm tn-text-bold text-content">
+						预约时间：{{item.reserveStartTime | dateFormat}}~{{item.reserveEndTime | dateHourFormat}}
 					</view>
-				</view>
-				<view class="tn-margin-top-sm text-content tn-color-gray">
-					申请理由：{{item.roomUsage}}
-				</view>
-				<view class="tn-margin-top-sm tn-text-bold text-content">
-					预约时间：{{item.reserveStartTime | dateFormat}}~{{item.reserveEndTime | dateHourFormat}}
-				</view>
-				<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-sm tn-margin-top-sm">
-					<view class="">
-						<text class="tn-icon-identity" style="padding-right: 6rpx;"></text> {{item.stuNum}}
+					<view class="tn-margin-top-sm text-content tn-color-gray">
+						申请理由：{{item.roomUsage}}
 					</view>
-					<view class="">
-						<text class="tn-icon-my" style="padding-right: 6rpx;"></text> {{item.name}}
+					<view class="tn-flex tn-flex-row-between tn-color-gray tn-text-sm tn-margin-top-sm">
+						<view class="">
+							<text class="tn-icon-identity" style="padding-right: 6rpx;"></text> {{item.stuNum}}
+						</view>
+						<view class="">
+							<text class="tn-icon-my" style="padding-right: 6rpx;"></text> {{item.name}}
+						</view>
+						<view class="">
+							<text class="tn-icon-menu" style="padding-right: 6rpx;"></text> {{item.category}}
+						</view>
 					</view>
-					<view class="">
-						<text class="tn-icon-menu" style="padding-right: 6rpx;"></text> {{item.category}}
-					</view>
-				</view>
-				<view class="tn-margin-top-sm tn-flex tn-flex-row-between">
-					<view class="tn-flex-basic-xs">
-						<tn-button @click="handleConfirmClick(item, index, false)" :disabled="item.state !== 0"
-							:backgroundColor="item.state !== 0 ? '#E6E6E6' : '#e54d42'" class="" :shadow="false"
-							fontColor="#FFFFFF">驳回
-						</tn-button>
-					</view>
-					<view class="tn-flex-basic-xs">
-						<tn-button @click="handleConfirmClick(item, index, true)" :disabled="item.state !== 0"
-							:backgroundColor="item.state !== 0 ? '#E6E6E6' : '#39b54a'" class="" :shadow="false"
-							fontColor="#FFFFFF">通过
-						</tn-button>
-					</view>
-				</view>
-				<view v-if="item.state !== 0" class="tn-margin-top-sm tn-color-gray text-content">
-					<view class="tn-margin-bottom-sm">
-						操作时间：{{item.updateTime | dateFormat}}
-					</view>
-					<view class="">
-						备注：{{item.remark ? item.remark : '无'}}
+					<view class="tn-margin-top-sm tn-flex tn-flex-row-between" v-if="item.state === 0">
+						<view class="tn-flex-basic-xs">
+							<tn-button @click="handleConfirmClick(item, index, false)" backgroundColor="#e54d42" class="" size="sm"
+								width="100%" :shadow="false" fontColor="#FFFFFF">驳回
+							</tn-button>
+						</view>
+						<view class="tn-flex-basic-xs">
+							<tn-button @click="handleConfirmClick(item, index, true)" size="sm" backgroundColor="#39b54a" class=""
+								width="100%" :shadow="false" fontColor="#FFFFFF">通过
+							</tn-button>
+						</view>
 					</view>
 				</view>
+				<view v-if="item.state !== 0" class="" style="background-color: #F4F4F4;width: 100%;padding: 2rpx;">
+
+				</view>
+				<view v-if="item.state !== 0"
+					class="text-content tn-color-gray tn-text-center tn-padding-left tn-padding-right tn-padding-bottom-sm"
+					style="padding-top: 15rpx;">
+					备注：{{item.remark ? item.remark : '无'}}
+				</view>
+
 			</view>
 			<tn-load-more :status='status'></tn-load-more>
 		</view>
