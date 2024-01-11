@@ -20,7 +20,8 @@
 		</view>
 
 		<view class="tn-padding" :style="{marginTop: optionHeight + 'px'}">
-			<view class="tn-bg-white box-shadow tn-margin-bottom" v-for="(item, index) in reservationList" :key="item.id">
+			<view @click="tn(item)" class="tn-bg-white box-shadow tn-margin-bottom" v-for="(item, index) in reservationList"
+				:key="item.id">
 				<view class="tn-padding-left tn-padding-right tn-padding-top tn-padding-sm">
 					<view class="tn-flex tn-flex-row-between tn-flex-col-center">
 						<view class="tn-text-bold tn-text-md">
@@ -47,18 +48,6 @@
 							<text class="tn-icon-menu" style="padding-right: 6rpx;"></text> {{item.category}}
 						</view>
 					</view>
-					<view class="tn-margin-top-sm tn-flex tn-flex-row-between" v-if="item.state === 0">
-						<view class="tn-flex-basic-xs">
-							<tn-button @click="handleConfirmClick(item, index, false)" backgroundColor="#e54d42" class="" size="sm"
-								width="100%" :shadow="false" fontColor="#FFFFFF">驳回
-							</tn-button>
-						</view>
-						<view class="tn-flex-basic-xs">
-							<tn-button @click="handleConfirmClick(item, index, true)" size="sm" backgroundColor="#39b54a" class=""
-								width="100%" :shadow="false" fontColor="#FFFFFF">通过
-							</tn-button>
-						</view>
-					</view>
 				</view>
 				<view v-if="item.state !== 0" class="" style="background-color: #F4F4F4;width: 100%;padding: 2rpx;">
 
@@ -83,9 +72,6 @@
 
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 		<tn-toast @closed="" ref="toast"></tn-toast>
-
-		<tn-modal :showCloseBtn="true" @click="handleConfirm" v-model="showConfirmModal" :title="'提示'"
-			:content="'您确认要通过该房间预约申请吗'" :button="button"></tn-modal>
 
 		<tn-modal :showCloseBtn="true" @click="showServiceErrorModal = false" v-model="showServiceErrorModal"
 			:title="'系统提示'" :content="message" :button="serviceErrorModalButton">
@@ -118,8 +104,7 @@
 
 <script>
 	import {
-		queryRoomReserveToBeReviewedApi,
-		passOrRejectReserveApi
+		queryRoomReserveToBeReviewedApi
 	} from '@/api/room.js'
 	import {
 		dateShow,
@@ -166,18 +151,6 @@
 					endTime: null
 				},
 				reservationList: [],
-				showConfirmModal: false,
-				button: [{
-						text: '取消',
-						backgroundColor: 'tn-bg-gray',
-						fontColor: '#FFFFFF',
-					},
-					{
-						text: '确认',
-						backgroundColor: '#3668FC',
-						fontColor: '#FFFFFF'
-					}
-				],
 				currentItem: {},
 				currentIndex: 0,
 				showServiceErrorModal: false,
@@ -214,7 +187,7 @@
 		},
 		onLoad() {
 			// 监听驳回事件
-			uni.$on('reserveRejected', (data) => {
+			uni.$on('reserveOperated', (data) => {
 				let index = this.reservationList.findIndex(item => item.id === data.reserveId)
 				this.reservationList.splice(index, 1)
 			})
@@ -274,39 +247,22 @@
 					})
 				})
 			},
-			handleConfirmClick(item, index, pass) {
-				if (!pass) {
-					this.$Router.push({
-						path: '/sub-page-work/work/approve-room/approve-reject',
-						query: {
-							reserveId: item.id
-						}
+			tn(item) {
+				if (item.state !== 0) {
+					this.$refs.toast.show({
+						title: '该预约申请已处理',
+						duration: 2000
 					})
-				} else {
-					this.currentItem = Object.assign({}, item)
-					this.currentIndex = index
-					this.showConfirmModal = true
+					return
 				}
+				this.$Router.push({
+					path: '/sub-page-work/work/approve-room/approve-detail',
+					query: {
+						reserveId: item.id
+					}
+				})
 			},
-			handleConfirm(e) {
-				let that = this
-				this.showConfirmModal = false
-				if (e.index === 1) {
-					// confirm
-					this.$refs.loading.open()
-					passOrRejectReserveApi(this.currentItem.id, true, '').then(res => {
-						this.$refs.loading.close()
-						this.reservationList.splice(this.currentIndex, 1)
-						this.$refs.toast.show({
-							title: '操作成功',
-							duration: 1500
-						})
-					}).catch(e => {
-						this.$refs.loading.close()
-						this.handleError(e)
-					})
-				}
-			},
+
 			handleMoreClick() {
 				this.showPopup = true
 			},

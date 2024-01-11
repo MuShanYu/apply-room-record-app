@@ -28,11 +28,11 @@ export function queryRoomReserveToBeReviewedApi(roomReserveReviewedDTO) {
 }
 
 
-export function passOrRejectReserveApi(reserveId, passed, rejectReason) {
+export function passOrRejectReserveApi(reserveId, passed, reason) {
 	return http.get('/roomReservation/approval', {
 		reserveId,
 		passed,
-		rejectReason
+		reason
 	})
 }
 
