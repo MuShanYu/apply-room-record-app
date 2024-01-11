@@ -43,7 +43,7 @@
 			:style="{paddingTop: vuex_custom_bar_height + 'px'}">
 			<view class="tn-flex-1 justify-content-item tn-margin-xs tn-text-center">
 				<tn-button shape="round" backgroundColor="#3668FC" fontColor="#ffffff" padding="20rpx 0" width="40%" shadow>
-					<text class="tn-icon-my-fill tn-padding-right-xs tn-text-xl"></text>
+					<text class="tn-icon-my tn-padding-right-xs tn-text-xl"></text>
 					<text class="">点击登录</text>
 				</tn-button>
 			</view>
@@ -52,7 +52,7 @@
 		<view v-if="isLogin" class="tn-flex tn-flex-row-between tn-padding tn-bg-white" style="margin-top: 20rpx;">
 			<view @click="tn('/sub-page-profile/profile/apply-room-process/index')" class="">
 				<view class="tn-flex tn-flex-row-center tn-flex-col-center icon">
-					<view class="tn-icon-clock-fill"></view>
+					<view class="tn-icon-time-fill"></view>
 				</view>
 				<view class="tn-text-center tn-margin-top-xs">
 					<text class="tn-text-ellipsis menu-text">预约进程</text>

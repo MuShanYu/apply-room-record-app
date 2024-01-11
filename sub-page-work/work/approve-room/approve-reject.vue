@@ -11,13 +11,13 @@
 
 		<view class="tn-padding tn-bg-white" :style="{marginTop: vuex_custom_bar_height + 'px'}">
 			<view class="">
-				<tn-input v-model="rejectReason" type='textarea' placeholder='请输入驳回原因' :maxLength="128" :border="true"
-					:height="150" />
+				<tn-input placeholderStyle="color: #AAAAAA;font-size:26rpx;" v-model="rejectReason" type='textarea'
+					placeholder='请输入驳回原因' :maxLength="128" :border="true" :height="150" />
 			</view>
 
 			<view class="tn-margin-top tn-text-right">
-				<tn-button @click="handleSubmitClick" :disabled="disabled" :backgroundColor="disabled ? '#E6E6E6' : '#39b54a'"
-					class="" :shadow="false" fontColor="#FFFFFF"> 确 认
+				<tn-button @click="handleSubmitClick" :disabled="disabled" :backgroundColor="disabled ? '#E6E6E6' : '#3668FC'"
+					:fontSize="26" width="100%" class="" :shadow="true" fontColor="#FFFFFF"> 确 认 驳 回
 				</tn-button>
 			</view>
 

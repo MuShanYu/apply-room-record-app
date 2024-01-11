@@ -90,7 +90,7 @@
 		<view class="">
 			<view @click="handleClick"
 				class="icon15__item--icon tn-flex tn-flex-row-center tn-flex-col-center tn-shadow-blur button-1">
-				<view class="tn-icon-ghost tn-color-white"></view>
+				<view class="tn-icon-totop tn-color-white"></view>
 			</view>
 		</view>
 
@@ -167,7 +167,7 @@
 		},
 		filters: {
 			dateFormat(date) {
-				return dateShow(date, 'yyyy-MM-dd hh:mm')
+				return dateShow(date, 'yyyy年MM月dd日 hh:mm')
 			}
 		},
 		mounted() {

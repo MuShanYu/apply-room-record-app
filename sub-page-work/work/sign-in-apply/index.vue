@@ -27,7 +27,7 @@
 					<!-- tag -->
 					<view class="" style="position: absolute;top: 0;right: 0;">
 						<view class=""
-							style="border-top-right-radius: 15rpx;padding: 4rpx;font-size: 18rpx;background-color: #0081ff;color: #FFFFFF;">
+							style="border-top-right-radius: 15rpx;padding: 8rpx;font-size: 18rpx;background-color: #0081ff;color: #FFFFFF;">
 							待处理
 						</view>
 					</view>

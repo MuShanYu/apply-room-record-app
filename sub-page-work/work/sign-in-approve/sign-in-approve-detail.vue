@@ -10,32 +10,32 @@
 		</tn-nav-bar>
 		<view class="tn-bg-white tn-padding" :style="{marginTop: vuex_custom_bar_height + 'px'}">
 			<view class="tn-flex tn-flex-row-between">
-				<view class="tn-text-bold">
+				<view class="tn-text-bold tn-text-md">
 					{{room.roomName}}
 				</view>
-				<view class="tn-color-gray">
-					<text class="tn-icon-menu tn-text-xl" style="padding-right: 8rpx;"></text> {{room.category}}
+				<view class="tn-color-gray text-content">
+					<text class="tn-icon-menu" style="padding-right: 6rpx;"></text> {{room.category}}
 				</view>
 			</view>
-			<view class="tn-margin-top-sm">
-				<view class="tn-color-gray">
-					进入时间：{{record.entryTime | dateFormat}}
-				</view>
-				<view class="tn-margin-top-sm tn-text-bold">
+			<view class="tn-margin-top-sm text-content">
+				<view class="tn-text-bold">
 					申请补卡时间：{{dto.reason.outTime | dateFormat}}
 				</view>
+				<view class="tn-color-gray tn-margin-top-sm">
+					进入时间：{{record.entryTime | dateFormat}}
+				</view>
 			</view>
-			<view class="tn-margin-top-sm tn-color-gray">
+			<view class="tn-margin-top-sm tn-color-gray text-content">
 				<view class="">
 					申请原因：{{dto.reason.reason}}
 				</view>
 			</view>
-			<view class="tn-flex tn-flex-row-between tn-margin-top-sm tn-color-gray">
+			<view class="tn-flex tn-flex-row-between tn-margin-top-sm tn-color-gray tn-text-sm">
 				<view class="">
-					<text class="tn-icon-identity tn-text-xl" style="padding-right: 8rpx;"></text> {{dto.stuNum}}
+					<text class="tn-icon-identity" style="padding-right: 6rpx;"></text> {{dto.stuNum}}
 				</view>
 				<view class="">
-					<text class="tn-icon-my tn-text-xl" style="padding-right: 8rpx;"></text>
+					<text class="tn-icon-my" style="padding-right: 6rpx;"></text>
 					{{dto.name}}
 				</view>
 			</view>
@@ -43,16 +43,16 @@
 
 		<view class="tn-margin-top tn-bg-white tn-padding">
 			<view class="">
-				<tn-input v-model="remark" type='textarea' placeholder='请输入申请处理备注' :maxLength="128" :border="true"
-					:height="150" />
+				<tn-input placeholderStyle="color: #AAAAAA;font-size:26rpx;" v-model="remark" type='textarea'
+					placeholder='请输入申请处理备注' :maxLength="128" :border="true" :height="150" />
 			</view>
 			<view class="tn-margin-top tn-flex tn-flex-row-between">
 				<view class="tn-flex-basic-xs">
-					<tn-button :disabled="disabled" @click="handleRjectClick" :shadow="true" width="100%"
+					<tn-button :disabled="disabled" @click="handleRjectClick" :shadow="true" width="100%" :fontSize="26"
 						:backgroundColor="disabled ? '#E6E6E6' : '#e54d42'" fontColor="#FFFFFF" margin="10rpx 0">驳回</tn-button>
 				</view>
 				<view class="tn-flex-basic-xs">
-					<tn-button :disabled="disabled" @click="handleConfirmClick" :shadow="true" width="100%"
+					<tn-button :disabled="disabled" @click="handleConfirmClick" :shadow="true" width="100%" :fontSize="26"
 						:backgroundColor="disabled ? '#E6E6E6' : '#39b54a'" fontColor="#FFFFFF" margin="10rpx 0">通过</tn-button>
 				</view>
 			</view>
@@ -267,6 +267,10 @@
 			text-align: center;
 		}
 
+	}
+
+	.text-content {
+		font-size: 26rpx;
 	}
 
 	/* 按钮 */
