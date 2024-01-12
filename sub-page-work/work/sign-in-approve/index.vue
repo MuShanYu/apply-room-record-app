@@ -50,11 +50,10 @@
 							</view>
 						</view>
 					</view>
-					<view v-if="item.state !== 0" class="" style="background-color: #F4F4F4;width: 100%;padding: 2rpx;">
+					<view v-if="item.state !== 0" class="" style="background-color: #f2f2f2;width: 100%;padding: 2rpx;">
 
 					</view>
-					<view v-if="item.state !== 0"
-						class="tn-color-gray tn-text-center tn-padding-left tn-padding-right tn-padding-bottom-sm"
+					<view v-if="item.state !== 0" class="tn-color-gray tn-padding-left tn-padding-right tn-padding-bottom-sm"
 						style="padding-top: 15rpx;font-size: 26rpx;">
 						备注：{{item.remarks ? item.remarks : '无'}}
 					</view>

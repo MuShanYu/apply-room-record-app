@@ -49,11 +49,11 @@
 						</view>
 					</view>
 				</view>
-				<view v-if="item.state !== 0" class="" style="background-color: #F4F4F4;width: 100%;padding: 2rpx;">
+				<view v-if="item.state !== 0" class="" style="background-color: #f2f2f2;width: 100%;padding: 2rpx;">
 
 				</view>
 				<view v-if="item.state !== 0"
-					class="text-content tn-color-gray tn-text-center tn-padding-left tn-padding-right tn-padding-bottom-sm"
+					class="text-content tn-color-gray tn-padding-left tn-padding-right tn-padding-bottom-sm"
 					style="padding-top: 15rpx;">
 					备注：{{item.remark ? item.remark : '无'}}
 				</view>
