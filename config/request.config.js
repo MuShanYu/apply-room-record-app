@@ -45,7 +45,7 @@ export default {
 			let _config = null
 
 			options.complete = (response) => {
-				
+
 				let statusCode = response.statusCode
 				response.config = _config
 				if (this.interceptor.response) {
@@ -173,16 +173,14 @@ function _reslog(res) {
 
 function handleServiceError(code, message) {
 	if (code === -2 || code === -3 || code === -4 || code === -5) {
-		store.dispatch('logout').then(() => {
-			// 跳转在路由钩子中统一控制
-			uni.showToast({
-				title: '您的登录状态过期或者无效',
-				icon: 'none',
-				duration: 3000
-			})
+		// 跳转在路由钩子中统一控制
+		uni.showToast({
+			title: '您的登录状态过期',
+			icon: 'none',
+			duration: 3000
 		})
 	} else if (code === -1) {
-		store.dispatch('logout').then(() => {
+		store.dispatch('clear').then(() => {
 			// 跳转在路由钩子中统一控制
 			uni.showToast({
 				title: '请您在登录后使用',
