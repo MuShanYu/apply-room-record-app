@@ -67,7 +67,7 @@
 						</view>
 					</view>
 				</view>
-				<view v-if="item.state !== 0" class="" style="background-color: #f2f2f2;width: 100%;padding: 2rpx;">
+				<view v-if="item.state !== 0" class="" style="background-color: #F8F7F8;width: 100%;padding: 2rpx;">
 
 				</view>
 				<view v-if="item.state !== 0"
