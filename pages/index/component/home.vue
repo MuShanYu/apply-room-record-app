@@ -85,7 +85,7 @@
 				<view class="tn-text-lg tn-text-center tn-text-bold">
 					<text>消息内容</text>
 				</view>
-				<view class="" style="line-height: 1.5;margin-top: 25rpx;font-size: 24rpx;">
+				<view class="tn-text-center" style="line-height: 1.5;margin-top: 25rpx;font-size: 24rpx;">
 					{{message}}
 				</view>
 			</view>
