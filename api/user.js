@@ -20,9 +20,10 @@ export function register(userRegisterDTO) {
 	return http.post('/user/register', userRegisterDTO)
 }
 
-export function getVerifyCode(stuNum) {
+export function getVerifyCode(stuNum, mail = null) {
 	return http.get('/user/get/verifyCode', {
-		stuNum
+		stuNum,
+		mail
 	})
 }
 
