@@ -99,7 +99,7 @@
 		<tn-modal @click="showServiceErrorModal = false" v-model="showServiceErrorModal" :title="'系统提示'"
 			:showCloseBtn="true" :content="message" :button="serviceErrorModalButton">
 		</tn-modal>
-		
+
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 	</view>
 </template>

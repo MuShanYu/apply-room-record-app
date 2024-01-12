@@ -65,6 +65,21 @@
 							</view>
 						</view>
 
+						<view
+							class="login__info__item__input tn-flex tn-flex-direction-row tn-flex-nowrap tn-flex-col-center tn-flex-row-left">
+							<view class="login__info__item__input__left-icon">
+								<view class="tn-icon-safe"></view>
+							</view>
+							<view class="login__info__item__input__content login__info__item__input__content--verify-code">
+								<input v-model="registerDTO.code" maxlength="4" placeholder-class="input-placeholder"
+									placeholder="请输入验证码" />
+							</view>
+							<view class="login__info__item__input__right-verify-code">
+								<tn-button @click="getCode" backgroundColor="#3668FC" fontColor="#FFFFFF" size="sm" padding="5rpx 10rpx"
+									width="100%" shape="round">{{ codeTips }}</tn-button>
+							</view>
+						</view>
+
 					</block>
 
 
@@ -90,6 +105,9 @@
 
 		</view>
 
+		<tn-verification-code :keepRunning='true' uniqueKey='forgetPwdCode' countDownText='s秒' ref="code" :seconds="60"
+			@change="codeChange"></tn-verification-code>
+
 		<tn-picker @confirm='pickerConfirm' mode="selector" v-model="showPicker" :defaultSelector="[0]"
 			:range="institutes"></tn-picker>
 		<tn-toast ref="toast"></tn-toast>
@@ -107,7 +125,8 @@
 	} from '@/api/config.js'
 	import {
 		register,
-		login
+		login,
+		getVerifyCode
 	} from '@/api/user.js'
 	export default {
 		name: 'register',
@@ -125,7 +144,8 @@
 					stuNum: '',
 					name: '',
 					institute: '',
-					mail: ''
+					mail: '',
+					code: ''
 				},
 				serviceErrorModalButton: [{
 					text: '我知道了',
@@ -134,6 +154,7 @@
 				}],
 				showServiceErrorModal: false,
 				message: '',
+				codeTips: '获取验证码',
 			}
 		},
 		methods: {
@@ -146,6 +167,13 @@
 			},
 			register() {
 				if (!this.verifyForm()) {
+					return
+				}
+				if (this.registerDTO.code == '') {
+					this.$refs.toast.show({
+						title: '请输入四位验证码',
+						duration: 1000
+					})
 					return
 				}
 				let that = this
@@ -180,6 +208,32 @@
 					this.$refs.loading.close()
 					this.handleError(e)
 				})
+			},
+			// 获取验证码
+			getCode() {
+				if (!this.verifyForm()) {
+					return
+				}
+				if (this.$refs.code.canGetCode) {
+					this.$refs.loading.open()
+					getVerifyCode(this.registerDTO.stuNum, this.registerDTO.mail).then(() => {
+						this.$refs.loading.close()
+						this.$tn.message.toast('验证码已经发送至填写的邮箱')
+						// 通知组件开始计时
+						this.$refs.code.start()
+					}).catch(e => {
+						this.$refs.toast.show({
+							title: '验证码获取失败',
+							duration: 1500
+						})
+						this.$refs.loading.close()
+					})
+				} else {
+					this.$tn.message.toast(this.$refs.code.secNum + '秒后再重试')
+				}
+			},
+			codeChange(text) {
+				this.codeTips = text
 			},
 			verifyForm() {
 				if (this.registerDTO.stuNum.length < 5 || this.registerDTO.stuNum.length > 16) {
@@ -287,7 +341,7 @@
 
 		/* 内容 start */
 		&__wrapper {
-			padding-top: 300rpx;
+			padding-top: 200rpx;
 			width: 100%;
 		}
 
