@@ -44,7 +44,12 @@ router.beforeEach((to, from, next) => {
 		let userId = userInfo.id
 		refreshTokenApi(userId, token).then(res => {
 			if (res.isNeedRefresh) {
-				store.dispatch('refreshToken', res.token).then(() => {})
+				store.dispatch('refreshToken', res.token).then(() => {
+					uni.showToast({
+						title: '已为您续期会话, 请重新进入界面',
+						icon: 'none'
+					})
+				})
 			}
 		}).catch(e => {
 			console.log(e);
