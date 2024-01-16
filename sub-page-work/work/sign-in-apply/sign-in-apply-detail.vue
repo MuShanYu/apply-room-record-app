@@ -120,11 +120,11 @@
 					backgroundColor: '#3668FC',
 					fontColor: '#FFFFFF',
 				}],
-				tmplIds: ['KDq-tcXy2GiJAE37geDtN838iz7YfsG9ctnwj0hZkUw'],
+				tmplIds: ['KDq-tcXy2GiJAE37geDtN5Ta-G5wJ2szj0U_4dgHSro'],
 			}
 		},
 		onLoad(params) {
-			console.log(params);
+			// console.log(params);
 			this.accessRecordId = params.accessRecordId
 			this.application.matterRecordId = params.accessRecordId
 			this.entryTime = Number(params.entryTime)
