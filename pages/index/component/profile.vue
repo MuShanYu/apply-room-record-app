@@ -153,7 +153,10 @@
 		</view>
 
 		<view class="tn-margin-top-xl tn-text-center tn-color-gray">
-			© MuShanYu
+			<view class="">
+				© MuShanYu
+			</view>
+
 		</view>
 
 		<tn-toast ref="toast"></tn-toast>

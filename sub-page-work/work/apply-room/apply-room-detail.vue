@@ -34,7 +34,7 @@
 		<view class="tn-margin-top tn-bg-white tn-padding-sm">
 			<view class="tn-flex tn-flex-col-center tn-flex-row-between">
 				<view class="">
-					<text class="tn-text-sm tn-color-gray">需要结果提醒？点击订阅审核结果通知</text>
+					<text class="tn-text-sm tn-color-gray">点击订阅审核结果通知</text>
 				</view>
 				<view class="">
 					<tn-button @click="subscribe" class="tn-margin-left" size="sm" :shadow="true" backgroundColor="#39b54a"

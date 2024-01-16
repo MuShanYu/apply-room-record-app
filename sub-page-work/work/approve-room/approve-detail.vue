@@ -28,6 +28,19 @@
 
 		</view>
 
+		<view class="tn-margin-top tn-bg-white tn-padding-sm">
+			<view class="tn-flex tn-flex-col-center tn-flex-row-between">
+				<view class="">
+					<text class="tn-text-sm tn-color-gray">点击订阅用户取消预约通知、预约审核通知</text>
+				</view>
+				<view class="">
+					<tn-button @click="subscribe" class="tn-margin-left" size="sm" :shadow="false" backgroundColor="#3668FC"
+						fontColor="#FFFFFF">订阅
+					</tn-button>
+				</view>
+			</view>
+		</view>
+
 		<!-- 悬浮按钮-->
 		<view class="">
 			<view @click="showSelect = true"
@@ -89,6 +102,9 @@
 				showConfirmModal: false,
 				phrases: [],
 				showSelect: false,
+				tmplIds: ['Y12YmCT2wYbtSI38JGcuOmPQcFysZEfEiMnzYCfuJgI',
+					'legIlVVfukDUkNavrILDAwWjy1H0upCXO00IontC8p4'
+				],
 			}
 		},
 		onLoad(param) {
@@ -170,7 +186,26 @@
 			},
 			handleSelectConfirm(e) {
 				this.reason = e[0].value
-			}
+			},
+			subscribe() {
+				let that = this
+				wx.requestSubscribeMessage({
+					tmplIds: that.tmplIds,
+					success(res) {
+						that.tmplIds.forEach(item => {
+							if (res[item] === 'accept') {
+								// 用户同意订阅这一条消息
+								that.$refs.toast.show({
+									title: '订阅成功'
+								})
+							}
+						})
+					},
+					fail(e) {
+						console.log("error: ", e);
+					}
+				})
+			},
 		}
 	}
 </script>

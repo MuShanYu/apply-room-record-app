@@ -91,6 +91,9 @@
 			</view>
 		</tn-modal>
 
+		<tn-modal @click="showModalNotice = false" v-model="showModalNotice" :title="notice.title" :content="notice.content"
+			:button="noticeModalBtn"></tn-modal>
+
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 		<tn-toast ref="toast"></tn-toast>
 		<view class='tn-tabbar-height'></view>
@@ -106,7 +109,9 @@
 		queryMyMessageListApi,
 		setMessageToReadApi
 	} from '@/api/message.js'
-
+	import {
+		querySysConfigByKeyApi
+	} from '@/api/config.js'
 	import {
 		dateShow
 	} from '@/utils/index.js'
@@ -144,11 +149,21 @@
 					backgroundColor: '#3668FC',
 					fontColor: '#FFFFFF',
 				}],
+				noticeModalBtn: [{
+					text: '知道了',
+					backgroundColor: '#3668FC',
+					fontColor: '#FFFFFF',
+				}],
 				currentMessage: {},
 				currentMessageIndex: 0,
 				status: 'nomore',
 				isLogin: false,
-				optionHeight: 0
+				optionHeight: 0,
+				notice: {
+					title: '',
+					content: ''
+				},
+				showModalNotice: false
 			}
 		},
 		filters: {
@@ -157,9 +172,22 @@
 			}
 		},
 		mounted() {
-			if (uni.getStorageSync("token")) {
+			if (uni.getStorageSync("token") !== '') {
 				this.isLogin = true
 			}
+			querySysConfigByKeyApi('modalNotice').then(res => {
+				this.notice = JSON.parse(res.configValue)
+				if (uni.getStorageSync('modalNoticeVersion') !== '') {
+					let version = uni.getStorageSync('modalNoticeVersion')
+					// 比较version
+					this.showModalNotice = !(this.notice.version === version)
+				} else {
+					// 展示弹窗
+					this.showModalNotice = true
+				}
+				uni.setStorageSync('modalNoticeVersion', this.notice.version)
+			})
+
 			queryNoticeListApi(1, 3).then(res => {
 				let resList = res.pageData
 				this.list.splice(0, 1)
