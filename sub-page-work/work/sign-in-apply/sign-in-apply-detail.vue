@@ -36,6 +36,20 @@
 			</view>
 		</view>
 
+		<view class="tn-margin-top tn-bg-white tn-padding-sm">
+			<view class="tn-flex tn-flex-col-center tn-flex-row-between">
+				<view class="">
+					<text class="tn-text-sm tn-color-gray">点击订阅申请审批结果通知</text>
+				</view>
+				<view class="">
+					<tn-button @click="subscribe" class="tn-margin-left" size="sm" :shadow="false" backgroundColor="#39b54a"
+						fontColor="#FFFFFF">订阅
+					</tn-button>
+				</view>
+			</view>
+		</view>
+
+
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 		<tn-toast ref="toast"></tn-toast>
 
@@ -106,6 +120,7 @@
 					backgroundColor: '#3668FC',
 					fontColor: '#FFFFFF',
 				}],
+				tmplIds: ['KDq-tcXy2GiJAE37geDtN838iz7YfsG9ctnwj0hZkUw'],
 			}
 		},
 		onLoad(params) {
@@ -213,7 +228,26 @@
 			},
 			handleCancel(e) {
 				this.time = ''
-			}
+			},
+			subscribe() {
+				let that = this
+				wx.requestSubscribeMessage({
+					tmplIds: that.tmplIds,
+					success(res) {
+						that.tmplIds.forEach(item => {
+							if (res[item] === 'accept') {
+								// 用户同意订阅这一条消息
+								that.$refs.toast.show({
+									title: '订阅成功'
+								})
+							}
+						})
+					},
+					fail(e) {
+						console.log("error: ", e);
+					}
+				})
+			},
 		}
 	}
 </script>

@@ -10,23 +10,4 @@ export function queryCanApplyAccessRecordListApi(query) {
 
 export function findByIdApi(id) {
 	return http.get('/record/get/' + id)
-} 
-
-export default {
-	userAccessRecordListApi: (page, size) => {
-		return http.get('/record/query/list', {
-			params: {
-				page: page,
-				size: size
-			}
-		})
-	},
-	userAccessCountApi: (page, size) => {
-		return http.get('/record/query/list/count', {
-			params: {
-				page: page,
-				size: size
-			}
-		})
-	}
 }
