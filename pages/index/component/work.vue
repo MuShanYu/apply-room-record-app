@@ -1,7 +1,7 @@
 <template>
 	<view class="page">
 
-		<view class="tn-margin-top-lg" :style="{marginTop: vuex_custom_bar_height + 'px'}">
+		<view class="tn-margin-top" :style="{marginTop: vuex_custom_bar_height + 'px'}">
 			<view class="nav_title--wrap">
 				<view class="nav_title tn-cool-bg-color-5">
 					<text class="tn-icon-calendar tn-padding-right-sm"></text>
@@ -37,12 +37,12 @@
 
 		</view>
 
-		<view class="tn-margin-top-lg">
+		<view class="tn-margin-top">
 			<view class="nav_title--wrap">
-				<view class="nav_title tn-cool-bg-color-15">
-					<text class="tn-icon-circle-more tn-padding-right-sm"></text>
+				<view class="nav_title tn-cool-bg-color-3">
+					<text class="tn-icon-edit-write tn-padding-right-sm"></text>
 					事 / 项 / 审 / 批
-					<text class="tn-icon-circle-more tn-padding-left-sm"></text>
+					<text class="tn-icon-edit-write tn-padding-left-sm"></text>
 				</view>
 			</view>
 		</view>
@@ -72,6 +72,33 @@
 			</view>
 
 		</view>
+
+		<view class="tn-margin-top">
+			<view class="nav_title--wrap">
+				<view class="nav_title tn-cool-bg-color-1">
+					<text class="tn-icon-menu-classify tn-padding-right-sm"></text>
+					其 / 它 / 功 / 能
+					<text class="tn-icon-menu-classify tn-padding-left-sm"></text>
+				</view>
+			</view>
+		</view>
+
+		<view class='nav-list tn-margin-bottom tn-margin-top'>
+
+			<view @click="tn('/sub-page-work/work/sign-in/index')"
+				class="nav-list-item tn-shadow-blur tn-cool-bg-image home-shadow">
+				<view class="nav-link">
+					<view class='title tn-text-bold' style="color: #080808;">房间签到</view>
+					<view class='join'></view>
+				</view>
+				<view class="icon tn-shadow-blur tn-main-gradient-red--reverse">
+					<view class="tn-icon-login"></view>
+				</view>
+			</view>
+
+		</view>
+
+
 		<tn-toast ref="toast"></tn-toast>
 
 		<view class='tn-tabbar-height'></view>
