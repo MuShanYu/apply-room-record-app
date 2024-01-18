@@ -11,3 +11,11 @@ export function queryCanApplyAccessRecordListApi(query) {
 export function findByIdApi(id) {
 	return http.get('/record/get/' + id)
 }
+
+export function addAccessRecordApi(addRecordDTO) {
+	return http.post('/record/add/in/or/out', addRecordDTO)
+}
+
+export function queryRoomAccessRecordNowApi() {
+	return http.get('/record/query/room/sign')
+}
