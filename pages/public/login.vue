@@ -101,6 +101,7 @@
 		</tn-modal>
 
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
+
 	</view>
 </template>
 
@@ -111,9 +112,6 @@
 	} from '@/api/user.js'
 	export default {
 		name: 'login',
-		onLoad() {
-
-		},
 		data() {
 			return {
 				// 是否显示密码
@@ -148,6 +146,7 @@
 				}],
 				showServiceErrorModal: false,
 				message: '',
+				privacyName: ''
 			}
 		},
 		watch: {
@@ -155,6 +154,9 @@
 				const sliderWidth = uni.upx2px(476 / 2)
 				this.modeSliderStyle.left = `${sliderWidth * value}px`
 			}
+		},
+		onLoad() {
+
 		},
 		methods: {
 			// 跳转
