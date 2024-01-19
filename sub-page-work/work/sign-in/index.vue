@@ -290,7 +290,6 @@
 				// 计算总秒数
 				let now = Date.now()
 				let subTimeSeconds = now - this.dataList[this.current].record.entryTime
-				console.log(subTimeSeconds, "bbbbbbbbbs");
 				this.start(subTimeSeconds)
 			},
 			end() {

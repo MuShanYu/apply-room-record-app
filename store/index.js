@@ -82,6 +82,8 @@ const store = new Vuex.Store({
 			// uni.removeStorageSync('userInfo');
 			// uni.removeStorageSync('isBindWx');
 			// uni.removeStorageSync('roles');
+			// uni.removeStorageSync('signInApplyTip')
+			// uni.removeStorageSync('signInProcessTip')
 		},
 		CLEAR() {
 			uni.clearStorage()
@@ -91,16 +93,24 @@ const store = new Vuex.Store({
 		}
 	},
 	actions: {
-		login({commit}, loginInfo) {
+		login({
+			commit
+		}, loginInfo) {
 			commit('LOGIN', loginInfo)
 		},
-		logout({commit}) {
+		logout({
+			commit
+		}) {
 			commit('LOGOUT')
 		},
-		refreshToken({commit}, token) {
+		refreshToken({
+			commit
+		}, token) {
 			commit('REFRESH_TOKEN', token)
 		},
-		clear({commit}) {
+		clear({
+			commit
+		}) {
 			commit('CLEAR')
 		},
 	}

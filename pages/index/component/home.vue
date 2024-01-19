@@ -98,10 +98,13 @@
 		<tn-toast ref="toast"></tn-toast>
 		<view class='tn-tabbar-height'></view>
 		<view class="bg-tabbar-shadow"></view>
+
+		<privacy-popup ref="privacyComponent"></privacy-popup>
 	</view>
 </template>
 
 <script>
+	import PrivacyPopup from '@/components/privacy-popup.vue';
 	import {
 		queryNoticeListApi
 	} from '@/api/notice.js'
@@ -116,6 +119,9 @@
 		dateShow
 	} from '@/utils/index.js'
 	export default {
+		components: {
+			PrivacyPopup
+		},
 		data() {
 			return {
 				show: true,
@@ -175,28 +181,31 @@
 			if (uni.getStorageSync("token") !== '') {
 				this.isLogin = true
 			}
-			querySysConfigByKeyApi('modalNotice').then(res => {
-				this.notice = JSON.parse(res.configValue)
-				if (uni.getStorageSync('modalNoticeVersion') !== '') {
-					let version = uni.getStorageSync('modalNoticeVersion')
-					// 比较version
-					this.showModalNotice = !(this.notice.version === version)
-				} else {
-					// 展示弹窗
-					this.showModalNotice = true
-				}
-				uni.setStorageSync('modalNoticeVersion', this.notice.version)
-			})
-
-			queryNoticeListApi(1, 3).then(res => {
-				let resList = res.pageData
-				this.list.splice(0, 1)
-				resList.forEach(item => {
-					this.list.push(item.title)
+			if (this.isLogin) {
+				querySysConfigByKeyApi('modalNotice').then(res => {
+					this.notice = JSON.parse(res.configValue)
+					if (uni.getStorageSync('modalNoticeVersion') !== '') {
+						let version = uni.getStorageSync('modalNoticeVersion')
+						// 比较version
+						this.showModalNotice = !(this.notice.version === version)
+					} else {
+						// 展示弹窗
+						this.showModalNotice = true
+					}
+					uni.setStorageSync('modalNoticeVersion', this.notice.version)
 				})
-			}).catch(e => {
-				// console.log(e);
-			})
+
+				queryNoticeListApi(1, 3).then(res => {
+					let resList = res.pageData
+					this.list.splice(0, 1)
+					resList.forEach(item => {
+						this.list.push(item.title)
+					})
+				}).catch(e => {
+					// console.log(e);
+				})
+			}
+
 			this.getToDoMessageList()
 			this.getResultMessageList()
 			this.$nextTick(() => {
