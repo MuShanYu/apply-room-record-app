@@ -208,10 +208,10 @@
 						}
 						this.scrollList.push(obj)
 					})
+					this.current = 0
 					if (this.dataList.length > 0) {
 						this.resetClock()
 					}
-					this.current = 0
 					this.$refs.loading.close()
 				})
 			},
@@ -290,6 +290,7 @@
 				// 计算总秒数
 				let now = Date.now()
 				let subTimeSeconds = now - this.dataList[this.current].record.entryTime
+				console.log(subTimeSeconds, "bbbbbbbbbs");
 				this.start(subTimeSeconds)
 			},
 			end() {
@@ -303,7 +304,7 @@
 			},
 			start(subTimeSeconds) {
 				let that = this;
-				let count = Math.floor(subTimeSeconds / 1000); // 总秒数
+				let count = Math.max(0, Math.floor(subTimeSeconds / 1000)); // 总秒数，确保不为负值
 				that.clock.timer = setInterval(function() {
 					that.clock.hour = that.showNum(parseInt(count / 60 / 60));
 					that.clock.minute = that.showNum(parseInt(count / 60) % 60);
