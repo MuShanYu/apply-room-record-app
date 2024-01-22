@@ -75,8 +75,7 @@
 					:translateCenter="false"></tn-badge>
 			</view>
 			<tn-load-more v-if="isLogin" :status='status'></tn-load-more>
-			<tn-empty v-else icon="https://resource.tuniaokj.com/images/empty/alien/2.png" text="请先登录" :imgWidth="200"
-				:imgHeight="200"></tn-empty>
+			<tn-empty v-else text="请先登录" mode="data" :imgWidth="200" :imgHeight="200"></tn-empty>
 		</view>
 
 		<tn-modal :showCloseBtn="true" @click="handleTipModalConfirm" v-model="showTipModal" :custom="true"
