@@ -7,7 +7,7 @@ import user, {
 } from '@/api/user.js'
 import store from '@/store/index.js'
 const witeList = ['/pages/public/login', '/pages/public/register',
-	'/pages/public/forget-pwd', '/pages/index/index'
+	'/pages/public/forget-pwd', '/pages/index/index', '/pages/public/privacy'
 ]
 
 const router = createRouter({
