@@ -11,7 +11,7 @@
 						<br />
 					</view>
 				</view>
-				<view class="" style="display: flex;margin-top: 30rpx;">
+				<view class="" style="display: flex;margin-top: 30rpx;margin-bottom: 30rpx;">
 					<button class="reject-btn" @tap="exitMiniProgram">拒绝</button>
 					<button id="agree-btn" class="aggree-btn" open-type="agreePrivacyAuthorization"
 						@agreeprivacyauthorization="handleAgreePrivacyAuthorization">同意</button>
@@ -42,6 +42,7 @@
 			if (wx.getPrivacySetting) {
 				wx.getPrivacySetting({
 					success: (res) => {
+						// console.log(res);
 						if (res.needAuthorization) {
 							this.privacyContractName = res.privacyContractName;
 							this.showPrivacy = true;
