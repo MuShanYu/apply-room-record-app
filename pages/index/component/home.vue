@@ -98,7 +98,7 @@
 		<view class='tn-tabbar-height'></view>
 		<view class="bg-tabbar-shadow"></view>
 
-		<privacy-popup ref="privacyComponent"></privacy-popup>
+		<privacy-popup :previewFileUrl="previewFileUrl" ref="privacyComponent"></privacy-popup>
 	</view>
 </template>
 
@@ -168,7 +168,8 @@
 					title: '',
 					content: ''
 				},
-				showModalNotice: false
+				showModalNotice: false,
+				previewFileUrl: ''
 			}
 		},
 		filters: {
@@ -180,6 +181,9 @@
 			if (uni.getStorageSync("token") !== '') {
 				this.isLogin = true
 			}
+			querySysConfigByKeyApi('userPrivacyPdfUrl').then(res => {
+				this.previewFileUrl = JSON.parse(res.configValue).url
+			})
 			if (this.isLogin) {
 				querySysConfigByKeyApi('modalNotice').then(res => {
 					this.notice = JSON.parse(res.configValue)

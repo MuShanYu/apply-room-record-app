@@ -5,9 +5,10 @@
 				<view class="">
 					<view class="content-title" style="">隐私保护指引</view>
 					<view class="content" style="">
-						感谢选择我们的小程序，我们非常重视您的个人信息安全和隐私保护。根据最新法律要求，使用我们的产品前，请仔细阅读“<text style="color: #07c160;" class=""
+						感谢选择我们的小程序，我们非常重视您的个人信息安全和隐私保护。根据最新法律要求，使用我们的产品前，请仔细阅读<text style="color: #07c160;" class=""
 							@tap="openPrivacyContract">{{privacyContractName}}
-						</text>”，以便我们向您提供更优质的服务！<br />我们将尽全力保护您的个人信息及合法权益，感谢您的信任！如您拒绝将无法使用所提供的服务，感谢您的理解！
+						</text>和<text style="color: #07c160;" class="" @tap="handleOpenPrivacy">《用户隐私协议》
+						</text>，以便我们向您提供更优质的服务！<br />我们将尽全力保护您的个人信息及合法权益，感谢您的信任！如您拒绝将无法使用所提供的服务，感谢您的理解！
 						<br />
 					</view>
 				</view>
@@ -29,8 +30,11 @@
 				privacyContractName: '',
 				showPrivacy: false,
 				isRead: false,
-				resolvePrivacyAuthorization: null,
+				resolvePrivacyAuthorization: null
 			};
+		},
+		props: {
+			previewFileUrl: ''
 		},
 		mounted() {
 			if (wx.onNeedPrivacyAuthorization) {
@@ -38,7 +42,6 @@
 					this.resolvePrivacyAuthorization = resolve;
 				});
 			}
-
 			if (wx.getPrivacySetting) {
 				wx.getPrivacySetting({
 					success: (res) => {
@@ -51,7 +54,6 @@
 				});
 			}
 		},
-
 		methods: {
 			openPrivacyContract() {
 				wx.openPrivacyContract({
@@ -67,14 +69,14 @@
 				});
 			},
 			exitMiniProgram() {
-				this.$emit('reject-privacy'); // 当用户拒绝隐私政策时发出事件
+				// this.$emit('reject-privacy'); // 当用户拒绝隐私政策时发出事件
 				wx.exitMiniProgram();
 
 			},
 			handleAgreePrivacyAuthorization() {
 				// if (this.isRead) {
 				this.showPrivacy = false;
-				this.$emit('agree-privacy'); // 当用户同意隐私政策时发出事件
+				// this.$emit('agree-privacy'); // 当用户同意隐私政策时发出事件
 				if (typeof this.resolvePrivacyAuthorization === 'function') {
 					this.resolvePrivacyAuthorization({
 						buttonId: 'agree-btn',
@@ -82,6 +84,23 @@
 					});
 				}
 			},
+			handleOpenPrivacy() {
+				let that = this
+				wx.downloadFile({
+					// 示例 url，并非真实存在
+					url: that.previewFileUrl,
+					success: function(res) {
+						const filePath = res.tempFilePath
+						wx.openDocument({
+							filePath: filePath,
+							success: function(res) {
+								console.log('打开文档成功')
+							}
+						})
+					}
+				})
+				// this.$Router.push('/pages/public/privacy')
+			}
 		},
 	};
 </script>
