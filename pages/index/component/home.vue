@@ -4,7 +4,7 @@
 		<tn-nav-bar fixed :isBack="false" :bottomShadow="false" backgroundColor="#FFFFFF">
 			<view class="custom-nav tn-flex tn-flex-col-center tn-flex-row-left">
 				<!-- 图标logo -->
-				<view class="custom-nav__back">
+				<view @click="tn('/sub-page-profile/profile/other/about')" class="custom-nav__back">
 					<view class="logo-pic png-sussuspension1"
 						style="background-image:url('https://mushanyu-app-arr.oss-cn-beijing.aliyuncs.com/static/logo.png')">
 						<view class="logo-image ">
