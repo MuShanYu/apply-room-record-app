@@ -190,6 +190,10 @@
 						if (this.$refs.profile) {
 							this.$refs.profile.onShowMethod()
 						}
+					} else if (index === 0) {
+						if (this.$refs.home) {
+							this.$refs.home.homeOnShow()
+						}
 					}
 				})
 			},

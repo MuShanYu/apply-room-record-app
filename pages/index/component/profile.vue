@@ -174,7 +174,7 @@
 	export default {
 		data() {
 			return {
-				isLogin: false,
+				isLogin: true,
 				userInfo: '',
 				isBindWx: false,
 				role: '',
@@ -194,9 +194,12 @@
 		},
 		methods: {
 			onShowMethod() {
-				this.isLogin = uni.getStorageSync('token') ? true : false
+				let token = uni.getStorageSync('token')
 				this.userInfo = uni.getStorageSync('userInfo') || null
 				this.isBindWx = uni.getStorageSync('isBindWx') || false
+				if (!token || !this.userInfo) {
+					this.isLogin = false
+				}
 				if (uni.getStorageSync('roles')) {
 					let roles = uni.getStorageSync('roles')
 					if (roles.includes('super-admin')) {

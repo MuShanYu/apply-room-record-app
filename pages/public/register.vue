@@ -187,7 +187,8 @@
 					setTimeout(() => {
 						let loginDTO = {
 							stuNum: that.registerDTO.stuNum,
-							pwd: that.registerDTO.stuNum
+							pwd: that.registerDTO.stuNum,
+							device: 'wechat'
 						}
 						login(loginDTO).then(res => {
 							that.$store.dispatch('login', res).then(() => {
