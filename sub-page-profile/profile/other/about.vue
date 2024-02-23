@@ -8,11 +8,20 @@
 			</view>
 		</tn-nav-bar>
 
-		<canvas canvas-id="bubble" id="bubble" class="bubble"
-			:style="{width: `${windowWidth}px`, height: `${windowHeight}px`}"></canvas>
-
-		<view class="container about-bg">
-
+		<view :style="{marginTop: vuex_custom_bar_height + 'px'}" class="container about-bg tn-text-white tn-padding"
+			style="font-size: 32rpx;line-height: 1.5;">
+			<view class="" style="text-indent: 30rpx;">
+				您好Ya！欢迎使用我们的房间预约与流动统计应用！感谢您的使用与支持！
+			</view>
+			<view style="text-indent: 30rpx;" class="tn-margin-top-sm tn-margin-bottom-sm">
+				我们的项目于2022年8月9日启动，并发布了首个H5版本，历时2年迭代。
+			</view>
+			<view style="text-indent: 30rpx;" class="tn-margin-bottom-sm">
+				随着需求变更和产品迭代，我们正式推出了小程序版本。我们希望这款应用能为您带来优质的服务与使用体验。
+			</view>
+			<view class="tn-text-right">
+				@MuShanYu
+			</view>
 		</view>
 	</view>
 </template>
@@ -28,11 +37,6 @@
 		},
 		onLoad() {
 			this.getSystemInfo()
-		},
-		onReady() {
-			this.$nextTick(() => {
-				this.ctx = uni.createCanvasContext("bubble", this)
-			})
 		},
 		onUnload() {
 
@@ -94,6 +98,19 @@
 		}
 	}
 
+	.logo-pic {
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-attachment: fixed;
+
+	}
+
+	.logo-image {
+		width: 100%;
+		height: 100%;
+		position: relative;
+	}
+
 	.template-bubble {
 		margin: 0;
 		width: 100%;
@@ -107,25 +124,6 @@
 		animation: gradientBG 15s ease infinite;
 
 		position: relative;
-
-		.bubble {
-			position: fixed;
-			bottom: -10vh;
-			right: 0;
-			z-index: 1024;
-			pointer-events: none;
-			// background-color: red;
-		}
-	}
-
-
-	.about-bg {
-		background-size: cover;
-		width: 100vw;
-		height: 100vh;
-		justify-content: center;
-		flex-direction: column;
-		color: #fff;
 	}
 
 
@@ -148,6 +146,5 @@
 	.container {
 		width: 100%;
 		position: absolute;
-		text-align: center;
 	}
 </style>

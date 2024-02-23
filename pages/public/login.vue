@@ -188,9 +188,9 @@
 					return
 				}
 				// console.log(this.userLoginDTO);
-				this.btnLoading = true
+				this.$refs.loading.open();
 				login(this.userLoginDTO).then(res => {
-					this.btnLoading = false
+					that.$refs.loading.close()
 					this.$store.dispatch('login', res).then(() => {
 						this.$refs.toast.show({
 							title: '登录成功，正在跳转',
@@ -201,7 +201,7 @@
 						}, 1500)
 					})
 				}).catch(e => {
-					this.btnLoading = false
+					that.$refs.loading.close()
 					this.handleError(e)
 				})
 			},
