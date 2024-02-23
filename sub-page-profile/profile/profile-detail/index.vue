@@ -140,7 +140,8 @@
 		querySysConfigByKeyApi
 	} from '@/api/config.js'
 	import {
-		updateUserInfoApi
+		updateUserInfoApi,
+		logout
 	} from '@/api/user.js'
 	export default {
 		data() {
@@ -288,16 +289,24 @@
 			handleExit(e) {
 				this.showExitModal = false
 				if (e.index === 1) {
-					this.$store.dispatch('clear').then(() => {
-						this.$refs.toast.show({
-							title: '退出登录',
-							duration: 1000
+					// 退出登录
+					this.$refs.loading.open()
+					logout().then(() => {
+						this.$store.dispatch('clear').then(() => {
+							this.$refs.loading.close()
+							this.$refs.toast.show({
+								title: '退出登录',
+								duration: 1000
+							})
+							setTimeout(() => {
+								uni.$emit('infoUpdate')
+								this.$Router.back(1)
+							}, 1000)
 						})
-						setTimeout(() => {
-							uni.$emit('infoUpdate')
-							this.$Router.back(1)
-						}, 1000)
+					}).catch(e => {
+						this.$refs.loading.close()
 					})
+
 				}
 			},
 		}

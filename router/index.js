@@ -2,9 +2,6 @@ import {
 	RouterMount,
 	createRouter
 } from 'uni-simple-router';
-import user, {
-	refreshTokenApi
-} from '@/api/user.js'
 import store from '@/store/index.js'
 const witeList = ['/pages/public/login', '/pages/public/register',
 	'/pages/public/forget-pwd', '/pages/index/index', '/pages/public/privacy'
@@ -25,9 +22,12 @@ router.beforeEach((to, from, next) => {
 	}
 	const token = uni.getStorageSync('token')
 	const userInfo = uni.getStorageSync('userInfo')
-	if (!token && !userInfo) {
+	if (!token || !userInfo) {
 		// 是否是在白名单中的界面
-		// console.log(to.path, "aaaaaaaaaaaaaa", typeof witeList.indexOf(to.path), typeof -1);
+		// 登录信息还在，但是token丢失，不拦截，请求会刷新token
+		if (!token && userInfo) {
+			next()
+		}
 		if (witeList.indexOf(to.path) !== -1) {
 			next()
 		} else {
@@ -39,21 +39,6 @@ router.beforeEach((to, from, next) => {
 			})
 		}
 	} else {
-		// 无痛刷新token
-		// token存在，说明userinfo也存在，校验token有效期
-		let userId = userInfo.id
-		refreshTokenApi(userId, token).then(res => {
-			if (res.isNeedRefresh) {
-				store.dispatch('refreshToken', res.token).then(() => {
-					uni.showToast({
-						title: '已为您续期会话, 请重新进入界面',
-						icon: 'none'
-					})
-				})
-			}
-		}).catch(e => {
-			console.log(e);
-		})
 		next()
 	}
 });

@@ -4,6 +4,11 @@ export function login(userLoginDTO) {
 	return http.post('/user/login', userLoginDTO)
 }
 
+export function logout() {
+	return http.get('/user/logout')
+}
+
+
 export function wxLogin(code) {
 	return http.post('/user/wx/login/' + code)
 }

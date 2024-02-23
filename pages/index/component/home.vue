@@ -81,7 +81,7 @@
 		<tn-modal :showCloseBtn="true" @click="handleTipModalConfirm" v-model="showTipModal" :custom="true"
 			@cancel="handleModalCancel">
 			<view class="">
-				<view class="tn-text-lg tn-text-center tn-text-bold">
+				<view class="tn-text-center tn-text-bold" style="font-size: 26rpx;">
 					<text>消息内容</text>
 				</view>
 				<view class="tn-text-center" style="line-height: 1.5;margin-top: 25rpx;font-size: 24rpx;">
@@ -90,8 +90,16 @@
 			</view>
 		</tn-modal>
 
-		<tn-modal @click="showModalNotice = false" v-model="showModalNotice" :title="notice.title" :content="notice.content"
-			:button="noticeModalBtn"></tn-modal>
+		<tn-modal @click="showModalNotice = false" v-model="showModalNotice" :custom="true" showCloseBtn="true">
+			<view class="">
+				<view class="tn-text-center tn-text-bold" style="font-size: 26rpx;">
+					<text>{{notice.title}}</text>
+				</view>
+				<view class="tn-text-center" style="line-height: 1.5;margin-top: 25rpx;font-size: 24rpx;">
+					{{notice.content}}
+				</view>
+			</view>
+		</tn-modal>
 
 		<w-loading text="拼命处理中..." mask="true" click="true" ref="loading"></w-loading>
 		<tn-toast ref="toast"></tn-toast>
@@ -154,15 +162,10 @@
 					backgroundColor: '#3668FC',
 					fontColor: '#FFFFFF',
 				}],
-				noticeModalBtn: [{
-					text: '知道了',
-					backgroundColor: '#3668FC',
-					fontColor: '#FFFFFF',
-				}],
 				currentMessage: {},
 				currentMessageIndex: 0,
 				status: 'nomore',
-				isLogin: false,
+				isLogin: true,
 				optionHeight: 0,
 				notice: {
 					title: '',
@@ -178,8 +181,11 @@
 			}
 		},
 		mounted() {
-			if (uni.getStorageSync("token") !== '') {
-				this.isLogin = true
+			// 没有登录的情况
+			const userInfo = uni.getStorageSync('userInfo')
+			const token = uni.getStorageSync('token')
+			if (!userInfo || !token) {
+				this.isLogin = false
 			}
 			querySysConfigByKeyApi('userPrivacyPdfUrl').then(res => {
 				this.previewFileUrl = JSON.parse(res.configValue).url
@@ -208,7 +214,6 @@
 					// console.log(e);
 				})
 			}
-
 			this.getToDoMessageList()
 			this.getResultMessageList()
 			this.$nextTick(() => {
@@ -221,6 +226,14 @@
 
 		},
 		methods: {
+			homeOnShow() {
+				const userInfo = uni.getStorageSync('userInfo')
+				const token = uni.getStorageSync('token')
+				if (!userInfo || !token) {
+					this.isLogin = false
+					this.list = ['请先登录']
+				}
+			},
 			tn(page) {
 				this.$Router.push(page)
 			},
@@ -354,6 +367,13 @@
 				}
 			},
 			refresh() {
+				if (!this.isLogin) {
+					this.$refs.toast.show({
+						title: '请登录',
+						duration: 2000
+					})
+					return
+				}
 				this.messageQuery.page = 1
 				this.resMessageQuery.page = 1
 				this.getToDoMessageList()

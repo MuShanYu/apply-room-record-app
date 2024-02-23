@@ -33,15 +33,17 @@ export default {
 		options.url = options.baseUrl + options.url
 		options.data = options.data || {}
 		options.method = options.method || this.config.method
+		const token = uni.getStorageSync('token')
 		// token处理
-		if (uni.getStorageSync('token')) {
+		if (token) {
 			// 可以在此通过vm引用vuex中的变量，具体值在vm.$store.state中
 			let _token = {
-				'token': uni.getStorageSync('token') || 'undefined'
+				'token': token
 			}
 			options.header = Object.assign({}, options.header, _token)
 		}
 		return new Promise((resolve, reject) => {
+
 			let _config = null
 
 			options.complete = (response) => {
@@ -171,23 +173,85 @@ function _reslog(res) {
 	}
 }
 
+function handleRefreshToken() {
+	// 判断是否有其他请求正在执行
+	const isOnRefreshToken = uni.getStorageSync('isOnRefreshToken')
+	if (isOnRefreshToken) {
+		return true
+	}
+	// 没有从请求中读取到有效token
+	const userInfo = uni.getStorageSync('userInfo')
+	// 如果userInfo存在，那么直接续期token即可，刷新token也相当于进行了一次登录信息刷新
+	if (userInfo) {
+		// 正在刷新，记录一个状态，避免多次请求
+		uni.setStorageSync('isOnRefreshToken', true)
+		uni.showLoading()
+		uni.request({
+			url: indexConfig.baseUrl + '/user/refresh/token',
+			data: {
+				userId: userInfo.id,
+				device: 'wechat'
+			},
+			success(res) {
+				let newToken = res.data.queryData.token
+				store.dispatch('refreshToken', newToken).then(() => {
+					uni.hideLoading()
+					uni.showToast({
+						title: '已为您续期会话，3s后刷新',
+						icon: 'none',
+						duration: 3000,
+
+					})
+					setTimeout(() => {
+						// 获取当前页面
+						// 获取当前页面的实例对象
+						const currentPage = getCurrentPages()[getCurrentPages().length - 1];
+						// 获取当前页面的路径
+						const currentPath = '/' + currentPage.route;
+						// relaunch当前界面，相当于刷新
+						uni.redirectTo({
+							url: currentPath
+						})
+					}, 3000)
+				})
+			},
+			fail(e) {
+				uni.hideLoading()
+				console.log(e);
+			},
+			complete() {
+				// 无论成功与否都要删除这个状态，防止影响其他异常返回结果处理
+				uni.removeStorageSync('isOnRefreshToken')
+			}
+		})
+		return true
+	}
+	return false
+}
+
 function handleServiceError(code, message) {
 	if (code === -2 || code === -3 || code === -4 || code === -5) {
-		// 跳转在路由钩子中统一控制
-		uni.showToast({
-			title: '您的登录状态过期',
-			icon: 'none',
-			duration: 3000
-		})
-	} else if (code === -1) {
-		store.dispatch('clear').then(() => {
-			// 跳转在路由钩子中统一控制
-			uni.showToast({
-				title: '请您在登录后使用',
-				icon: 'none',
-				duration: 3000
+		if (!handleRefreshToken()) {
+			store.dispatch('clear').then(() => {
+				// 跳转在路由钩子中统一控制
+				uni.showToast({
+					title: '登录状态异常，请重新登录',
+					icon: 'none',
+					duration: 2000
+				})
 			})
-		})
+		}
+	} else if (code === -1) {
+		if (!handleRefreshToken()) {
+			store.dispatch('clear').then(() => {
+				// 跳转在路由钩子中统一控制
+				uni.showToast({
+					title: '请您在登录后使用',
+					icon: 'none',
+					duration: 2000
+				})
+			})
+		}
 	} else if (code === 500) {
 		uni.showModal({
 			title: '提示',

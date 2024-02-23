@@ -118,7 +118,8 @@
 				showPassword: false,
 				userLoginDTO: {
 					stuNum: '',
-					pwd: ''
+					pwd: '',
+					device: 'wechat'
 				},
 				btnLoading: false,
 				showLoginModal: false,

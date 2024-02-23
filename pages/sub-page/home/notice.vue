@@ -29,18 +29,15 @@
 			<tn-load-more :status='status'></tn-load-more>
 		</view>
 		<tn-modal v-model="showTipModal" custom :showCloseBtn="true">
-			<view class="" style="border-radius: 30rpx;">
-				<view class="tn-text-bold tn-text-center tn-margin-bottom">
-					公告内容
+			<view class="">
+				<view class="tn-text-center tn-text-bold" style="font-size: 26rpx;">
+					<text>公告内容</text>
 				</view>
-				<view class="" style="word-break: break-all;">
+				<view class="tn-text-center" style="line-height: 1.5;margin-top: 25rpx;font-size: 24rpx;">
 					{{message}}
 				</view>
 			</view>
 		</tn-modal>
-
-
-
 	</view>
 </template>
 
