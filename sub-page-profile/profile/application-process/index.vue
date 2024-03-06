@@ -166,7 +166,8 @@
 				showPopup: false,
 				timeOption: 'none',
 				noticeShow: true,
-				noticeList: ['需要撤销申请？点击申请项，取消正在审批中的房间预约。']
+				noticeList: ['需要撤销申请？点击申请项，取消正在审批中的申请。'],
+
 			}
 		},
 		filters: {
@@ -278,7 +279,7 @@
 					})
 					this.setTagBgAndColor(res.pageData)
 					this.applicationList = res.pageData
-					console.log(this.applicationList);
+					// console.log(this.applicationList);
 					this.$refs.loading.close()
 				}).catch(e => {
 					this.$refs.loading.close()

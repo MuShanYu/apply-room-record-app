@@ -40,7 +40,7 @@
 							<text class="tn-icon-menu" style="padding-right: 6rpx;"></text> {{currentRoom.category}}
 						</view>
 						<!-- tag -->
-						<view v-if="isToday(item.entryTime) && item.outTime === null" class=""
+						<view v-if="isToday(item.entryTime) && checkIsCached(item.id) && item.outTime === null" class=""
 							style="position: absolute;top: 0;right: 0;">
 							<view class=""
 								style="border-top-right-radius: 15rpx;padding: 6rpx;font-size: 16rpx;background-color: #39b54a;color: #fff;">
@@ -96,6 +96,9 @@
 		queryAccessRecordRoomListApi
 	} from '@/api/room.js'
 	import {
+		queryRoomAccessRecordNowApi
+	} from '@/api/record.js'
+	import {
 		dateShow,
 		getBeforeTime
 	} from '@/utils/index.js'
@@ -130,6 +133,7 @@
 				status: 'nomore',
 				showPopup: false,
 				timeOption: 'none',
+				cachedRecordIds: []
 			}
 		},
 		filters: {
@@ -167,6 +171,7 @@
 					this.currentRoom.teachBuilding = this.scrollList[this.current].room.teachBuilding
 					this.currentRoom.category = this.scrollList[this.current].room.category
 					this.getDataList()
+					this.getCachedRoomAccessRecord()
 				}
 			})
 
@@ -174,6 +179,9 @@
 		onPullDownRefresh() {
 			this.query.page = 1
 			this.loadmore = true
+			// 清空旧的缓存id
+			this.cachedRecordIds = []
+			this.getCachedRoomAccessRecord()
 			queryAttendanceCountDetailList(this.query).then(res => {
 				this.attendanceList = res.pageData
 				uni.stopPullDownRefresh()
@@ -226,6 +234,14 @@
 						this.$refs.loading.close()
 					})
 				}
+
+			},
+			getCachedRoomAccessRecord() {
+				queryRoomAccessRecordNowApi().then(res => {
+					res.forEach(item => {
+						this.cachedRecordIds.push(item.record.id)
+					})
+				})
 			},
 			handleClearQuery() {
 				this.timeOption = 'none'
@@ -254,6 +270,9 @@
 				this.query.startTime = null
 				this.query.endTime = null
 				this.loadmore = true
+			},
+			checkIsCached(recordId) {
+				return this.cachedRecordIds.includes(recordId)
 			},
 			isToday(entryTime) {
 				// 获取当前日期
