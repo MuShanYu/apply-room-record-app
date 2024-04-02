@@ -19,6 +19,9 @@
 			<view style="text-indent: 30rpx;" class="tn-margin-bottom-sm">
 				随着需求变更和产品迭代，我们正式推出了小程序版本。我们希望这款应用能为您带来优质的服务与使用体验。
 			</view>
+			<view style="text-indent: 30rpx;" class="tn-margin-bottom-sm">
+				项目开源地址，包括后端、管理端、小程序：https://github.com/MuShanYu
+			</view>
 			<view class="tn-text-right">
 				@MuShanYu
 			</view>

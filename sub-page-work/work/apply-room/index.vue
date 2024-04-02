@@ -170,19 +170,9 @@
 				return dateShow(date, 'yyyy年MM月dd日 hh:mm')
 			}
 		},
-		mounted() {
+		onLoad() {
 			this.query.startTime = Number(new Date())
 			this.query.endTime = Number(new Date()) + 3600000
-			this.$nextTick(() => {
-				const query = uni.createSelectorQuery().in(this)
-				query.select('.tabs-fixed').boundingClientRect(data => {
-					this.optionHeight = Math.ceil(data.height)
-					// console.log(this.headerHeight);
-				})
-				query.exec()
-			})
-		},
-		onLoad() {
 			getRoomClassifyInfo().then(res => {
 				this.schools.push(...res.schools)
 				this.teachBuildings.push(...res.teachBuildings)
@@ -192,6 +182,16 @@
 			uni.$on('applyRoom', (data) => {
 				let index = this.roomList.findIndex(item => item.id === data.roomId)
 				this.roomList.splice(index, 1)
+			})
+		},
+		mounted() {
+			this.$nextTick(() => {
+				const query = uni.createSelectorQuery().in(this)
+				query.select('.tabs-fixed').boundingClientRect(data => {
+					this.optionHeight = Math.ceil(data.height)
+					// console.log(this.headerHeight);
+				})
+				query.exec()
 			})
 		},
 		onReachBottom() {
