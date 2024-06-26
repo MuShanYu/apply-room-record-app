@@ -200,12 +200,10 @@
 				if (!token || !this.userInfo) {
 					this.isLogin = false
 				}
-				if (uni.getStorageSync('roles')) {
-					let roles = uni.getStorageSync('roles')
-					if (roles.includes('super-admin')) {
-						this.role = '超级管理员'
-					} else if (roles.includes('admin')) {
-						this.role = '管理员'
+				if (uni.getStorageSync('permissions')) {
+					let permissions = uni.getStorageSync('permissions')
+					if (permissions.length > 0) {
+						this.role = '后台管理员'
 					} else {
 						this.role = '普通用户'
 					}

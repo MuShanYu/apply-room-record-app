@@ -172,7 +172,7 @@ function _reslog(res) {
 			break;
 	}
 }
-
+// 这里的目的是会话过期（token过期），续期会话即可
 function handleRefreshToken() {
 	// 判断是否有其他请求正在执行
 	const isOnRefreshToken = uni.getStorageSync('isOnRefreshToken')
@@ -194,6 +194,12 @@ function handleRefreshToken() {
 			},
 			success(res) {
 				let newToken = res.data.queryData.token
+				let newUserInfo = res.data.queryData.userInfo
+				let permissions = res.data.queryData.permissions
+				let roles = res.data.queryData.roles
+				uni.setStorageSync('userInfo', newUserInfo); //更新用户信息
+				uni.setStorageSync('roles', roles);
+				uni.setStorageSync('permissions', permissions);
 				store.dispatch('refreshToken', newToken).then(() => {
 					uni.hideLoading()
 					uni.showToast({

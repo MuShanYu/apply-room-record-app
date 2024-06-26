@@ -118,10 +118,22 @@
 		},
 		methods: {
 			tn(page) {
-				if (uni.getStorageSync('roles') && this.adminPage.some(item => item === page)) {
-					let roles = uni.getStorageSync('roles')
-					let flag = roles.some(item => item === 'admin') || roles.some(item => item === 'super-admin')
-					if (!flag) {
+				let permissions = uni.getStorageSync('permissions')
+				if (!permissions) {
+					this.$refs.toast.show({
+						title: '权限信息为空，请重新登录'
+					})
+					return
+				}
+				if (page === this.adminPage[0]) {
+					if (!permissions.some(item => item === 'system:room:wxSignInApprove')) {
+						this.$refs.toast.show({
+							title: '无权限访问'
+						})
+						return
+					}
+				} else if (page === this.adminPage[1]) {
+					if (!permissions.some(item => item === 'system:room:wxSignInApprove')) {
 						this.$refs.toast.show({
 							title: '无权限访问'
 						})
