@@ -75,12 +75,16 @@
 				})
 			}
 			// #endif
+			// 初始化socket连接
 		},
 		onShow: function() {
 			// console.log('App Show')
 		},
 		onHide: function() {
 			// console.log('App Hide')
+		},
+		onExit: function() {
+
 		}
 	}
 </script>

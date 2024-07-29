@@ -125,6 +125,8 @@
 	import {
 		dateShow
 	} from '@/utils/index.js'
+
+	import indexConfig from '@/config/index.config.js'
 	export default {
 		components: {
 			PrivacyPopup
@@ -172,7 +174,10 @@
 					content: ''
 				},
 				showModalNotice: false,
-				previewFileUrl: ''
+				previewFileUrl: '',
+				socketTask: null,
+				tryReConnectTimes: 5,
+				tryInterval: null
 			}
 		},
 		filters: {
@@ -223,7 +228,16 @@
 				})
 				query.exec()
 			})
-
+			// 初始化websocket相关
+			this.buildSocketConnect().then(() => {
+				this.sendSocketMsg()
+				this.socketOnClose()
+			}).catch((e) => {})
+		},
+		beforeDestroy() {
+			if (this.socketTask) {
+				this.socketTask.close()
+			}
 		},
 		methods: {
 			homeOnShow() {
@@ -381,6 +395,62 @@
 				this.current = 0
 				this.loadmore = true
 				this.resultLoadmore = true
+			},
+			buildSocketConnect() {
+				let that = this
+				return new Promise((resolve, reject) => {
+					// 主要用于统计在线人数
+					let userInfo = uni.getStorageSync('userInfo') || null
+					if (userInfo) {
+						this.socketTask = wx.connectSocket({
+							url: indexConfig.socketUrl + '?userId=' + userInfo.id,
+							success(e) {
+								resolve()
+							},
+							fail(e) {
+								reject()
+							}
+						})
+					} else {
+						reject()
+					}
+				})
+			},
+			sendSocketMsg() {
+				let that = this
+				uni.getSystemInfo({
+					success(info) {
+						let device = info.deviceBrand + '(' + info.deviceType + ')';
+						that.socketTask.onOpen((header, profile) => {
+							that.socketTask.send({
+								data: device,
+								success(e) {
+									if (that.tryInterval) {
+										clearInterval(that.tryInterval)
+									}
+								},
+								fail(e) {
+									console.log('消息发送失败');
+								}
+							})
+						})
+					}
+				})
+			},
+			socketOnClose(msg) {
+				this.socketTask.onClose(() => {
+					// 关闭事件，尝试三次重新连接
+					this.tryInterval = setInterval(() => {
+						this.tryReConnectTimes--
+						this.buildSocketConnect().then(() => {
+							this.sendSocketMsg()
+						}).catch((e) => {})
+						if (this.tryReConnectTimes == 0) {
+							clearInterval(this.tryInterval)
+						}
+					}, 3000)
+				})
+
 			}
 		}
 	}

@@ -53,7 +53,8 @@
         "appid" : "wx3cdb834f59308215",
         "setting" : {
             "urlCheck" : false,
-            "es6" : true
+            "es6" : true,
+            "minified" : true
         },
         "usingComponents" : true,
         "__usePrivacyCheck__" : true

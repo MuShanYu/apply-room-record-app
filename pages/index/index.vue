@@ -145,7 +145,7 @@
 				// 自定义底栏对应页面的加载情况
 				tabberPageLoadFlag: [],
 				scrollTop: 0,
-				oldScrollTop: 0
+				oldScrollTop: 0,
 			}
 		},
 		onLoad(options) {
