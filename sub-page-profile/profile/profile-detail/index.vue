@@ -201,7 +201,8 @@
 					this.role = '普通用户'
 				}
 			}
-			this.encodeMail = this.userInfo.mail.replace(/(.{0,3}).*@(.*)/, "$1***@$2")
+			this.encodeMail = this.userInfo.mail === null ? '请绑定邮箱' : this.userInfo.mail.replace(/(.{0,3}).*@(.*)/,
+				"$1***@$2")
 			querySysConfigByKeyApi('institutes').then(res => {
 				let configValue = JSON.parse(res.configValue)
 				this.institutes = configValue.institutes

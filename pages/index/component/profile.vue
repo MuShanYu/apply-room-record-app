@@ -209,7 +209,7 @@
 					}
 				}
 				if (this.userInfo !== null) {
-					this.mail = this.userInfo.mail.replace(/(.{0,3}).*@(.*)/, "$1***@$2")
+					this.mail = this.userInfo.mail === null ? '未绑定邮箱' : this.userInfo.mail.replace(/(.{0,3}).*@(.*)/, "$1***@$2")
 				}
 				let index = Math.floor(Math.random() * 6)
 				this.randomHeader = STATIC_CONFIG.headerImage[index]
