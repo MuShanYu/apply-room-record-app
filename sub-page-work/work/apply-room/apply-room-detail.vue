@@ -90,7 +90,7 @@
 						fontColor: '#FFFFFF'
 					}
 				],
-				tmplIds: ['48xKmWfwx9x13ErSEcaN-Q74tBtmO8QOSSXKZTzdSI0',
+				tmplIds: ['48xKmWfwx9x13ErSEcaN-bDECReifFAUIQ1GV5AgSg8',
 					'1S8cwxpW5OqEb_iUwZfk1NpO8rxcWJgFirAQWdYd-Ro'
 				],
 				isSubscribed: true,

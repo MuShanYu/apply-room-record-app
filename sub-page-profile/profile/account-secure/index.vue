@@ -126,6 +126,7 @@
 				let that = this
 				uni.login({
 					provider: 'weixin',
+					onlyAuthorize: true,
 					scopes: '',
 					success(res) {
 						let code = res.code
