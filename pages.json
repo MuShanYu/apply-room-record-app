@@ -102,7 +102,7 @@
 					"path": "work/sign-in/index",
 					"style": {
 						"navigationBarTitleText": "",
-						"enablePullDownRefresh": false
+						"enablePullDownRefresh": true
 					}
 				}
 			]

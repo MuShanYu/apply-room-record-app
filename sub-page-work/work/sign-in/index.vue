@@ -9,7 +9,7 @@
 			</view>
 		</tn-nav-bar>
 
-		<view v-if="dataList.length === 0" class="tabs-fixed tn-bg-white">
+		<view v-if="dataList.length === 0" class="tabs-fixed tn-bg-white box-shadow">
 			<view class="tn-flex tn-flex-col-between tn-flex-col-center tn-padding-top-sm"
 				:style="{marginTop: vuex_custom_bar_height + 'px'}">
 				<view style="width: 100vw;overflow: hidden;">
@@ -19,7 +19,7 @@
 			</view>
 		</view>
 
-		<view v-else class="tabs-fixed tn-bg-white">
+		<view v-else class="tabs-fixed tn-bg-white box-shadow">
 			<view class="tn-flex tn-flex-col-between tn-flex-col-center tn-padding-top-sm"
 				:style="{marginTop: vuex_custom_bar_height + 'px'}">
 				<view style="width: 100vw;overflow: hidden;">
@@ -28,11 +28,9 @@
 				</view>
 			</view>
 		</view>
+		<view>
 
-
-		<view :style="{marginTop: optionHeight + 'px'}">
-
-			<view v-if="dataList.length > 0" :style="{height: (windowHight - optionHeight) + 'px'}" class="tn-padding">
+			<view v-if=" dataList.length> 0" :style="{height: (windowHight - optionHeight) + 'px'}" class="tn-padding">
 				<view class="box-shadow tn-padding tn-bg-white">
 					<view class="tn-text-center tn-text-bold" style="font-size: 55rpx;">
 						{{clock.hour}}:{{clock.minute}}:{{clock.second}}
@@ -77,14 +75,6 @@
 
 			</view>
 
-		</view>
-
-		<!-- 悬浮按钮-->
-		<view class="">
-			<view @click="handleScanCode"
-				class="icon15__item--icon tn-flex tn-flex-row-center tn-flex-col-center tn-shadow-blur button-1">
-				<view class="tn-icon-scan tn-color-white"></view>
-			</view>
 		</view>
 
 		<tn-modal :showCloseBtn="true" @click="showServiceErrorModal = false" v-model="showServiceErrorModal"
@@ -163,6 +153,7 @@
 				},
 				showEntryPopup: false,
 				scanRoom: {},
+				roomId: {},
 				serviceErrorModalButton: [{
 					text: '我知道了',
 					backgroundColor: '#3668FC',
@@ -181,6 +172,7 @@
 			}
 		},
 		onLoad(params) {
+			this.roomId = decodeURIComponent(params.scene)
 			let res = uni.getWindowInfo()
 			this.windowHight = res.windowHeight
 			this.getDataList()
@@ -193,6 +185,12 @@
 				})
 				query.exec()
 			})
+		},
+		onPullDownRefresh() {
+			this.getDataList()
+		},
+		onShow() {
+			this.getDataList()
 		},
 		methods: {
 			getDataList() {
@@ -212,40 +210,32 @@
 					if (this.dataList.length > 0) {
 						this.resetClock()
 					}
+					// 数据处理完毕
+					let find = this.scrollList.findIndex(item => item.roomId === this.roomId)
 					this.$refs.loading.close()
+					if (find === -1 && !(this.roomId === 'undefined' || this.roomId === 'null' || this.roomId.length === 0)) {
+						// 表示所扫描的房间id不在列表中，打开房间详情弹窗
+						this.handleFirstScanInit(this.roomId)
+					}
 				})
 			},
 			tabChange(index) {
 				this.current = index
 				this.resetClock()
 			},
-			handleScanCode() {
-				let that = this
-				wx.scanCode({
-					onlyFromCamera: true,
-					success(res) {
-						that.handleFirstScanInit(res.result)
-					},
-					fail(e) {
-						that.$refs.toast.show({
-							title: '二维码扫描失败',
-							duration: 2000
-						})
-					}
-				})
-			},
 			handleFirstScanInit(id) {
 				this.$refs.loading.open()
 				getRoomById(id).then(res => {
-					this.scanRoom = res
 					this.$refs.loading.close()
-					this.showEntryPopup = true
+					if (res === null) {
+						this.$refs.toast.show({
+							title: '未查询到房间信息，请联系管理员重新生成'
+						})
+					} else {
+						this.scanRoom = res
+						this.showEntryPopup = true
+					}
 				})
-				// this.roomId = id
-				// 存储正在进行的签到房间
-				// uni.setStorageSync('scanedRoomId', this.roomId)
-				// 获取房间信息，存储房间签到信息，开始计时
-
 			},
 			handleEntryClick() {
 				this.$refs.loading.open()
@@ -341,7 +331,7 @@
 	}
 
 	.tabs-fixed {
-		position: fixed;
+		// position: fixed;
 		top: 0;
 		width: 100%;
 		transition: all 0.25s ease-out;

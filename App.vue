@@ -83,9 +83,7 @@
 		onHide: function() {
 			// console.log('App Hide')
 		},
-		onExit: function() {
-
-		}
+		onExit: function() {}
 	}
 </script>
 

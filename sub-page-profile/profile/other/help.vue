@@ -41,7 +41,6 @@
 		},
 		onLoad() {
 			querySysConfigByKeyApi('helpInfo').then(res => {
-				console.log(res);
 				this.list = JSON.parse(res.configValue).list
 			})
 		},
