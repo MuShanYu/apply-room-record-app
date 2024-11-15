@@ -7,8 +7,8 @@ const CONFIG = {
 	},
 	// 生产环境配置
 	production: {
-		baseUrl: 'https://ip:8500', // 后台接口请求地址
-		socketUrl: 'wss://ip:9500/websocket',
+		baseUrl: 'https://ip:port', // 后台接口请求地址
+		socketUrl: 'wss://ip:port/websocket',
 		loginExpiredTime: 604800000 // 登录过期时间,单位毫秒 7天
 	}
 };
