@@ -6,8 +6,8 @@
 		{
 			"path": "pages/index",
 			"style": {
-        "navigationBarTitleText": "首页"
-      }
+				"navigationBarTitleText": "首页"
+			}
 		},
 		{
 			"path": "pages/public/login",
@@ -33,6 +33,12 @@
 				"navigationBarTitleText": "通知",
 				"onReachBottomDistance": 10,
 				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/message/index",
+			"style": {
+				"navigationBarTitleText": "消息列表"
 			}
 		}
 	],
@@ -197,7 +203,10 @@
 	},
 	"preloadRule": {
 		"pages/index": {
-			"packages": ["page-work", "page-profile"],
+			"packages": [
+				"page-work",
+				"page-profile"
+			],
 			"network": "all"
 		}
 	}

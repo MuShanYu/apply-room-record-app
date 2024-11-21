@@ -16,6 +16,21 @@ export function sendMessageApi(message) {
 	return http.post('/message/list', message)
 }
 
-export function setMessageToReadApi(mesageId) {
-	return http.put('/message/' + mesageId)
+export function queryMyMsgDetailList(page, size = 10, senderId, receiverId, type) {
+	return http.get(`/message/my/list`, {
+		page,
+		size,
+		type,
+		senderId,
+		receiverId
+	})
+}
+
+export function saveMessageApi(message) {
+	return http.post('/message/send', message)
+}
+
+
+export function setMessageToReadApi(idList) {
+	return http.put('/message/read', idList)
 }

@@ -19,7 +19,7 @@
 			</view>
 			<view class="tn-margin-top-sm text-content">
 				<view class="tn-text-bold">
-					申请补卡时间：{{dto.reason.outTime | dateFormat}}
+					申请补卡时间：{{dto.outTime | dateFormat}}
 				</view>
 				<view class="tn-color-gray tn-margin-top-sm">
 					进入时间：{{record.entryTime | dateFormat}}
@@ -27,7 +27,7 @@
 			</view>
 			<view class="tn-margin-top-sm tn-color-gray text-content">
 				<view class="">
-					申请原因：{{dto.reason.reason}}
+					申请原因：{{dto.reason}}
 				</view>
 			</view>
 			<view class="tn-flex tn-flex-row-between tn-margin-top-sm tn-color-gray tn-text-sm">
@@ -126,7 +126,8 @@
 					title: '',
 					name: '',
 					id: '',
-					createTime: 0
+					createTime: 0,
+					outTime: 0
 				},
 				remark: '',
 				record: {},
@@ -158,13 +159,14 @@
 			}
 		},
 		onLoad(params) {
-			this.dto.matterRecordId = params.query.matterRecordId
-			this.dto.reason = JSON.parse(params.query.reason)
-			this.dto.stuNum = params.query.stuNum
-			this.dto.title = params.query.title
-			this.dto.name = params.query.name
-			this.dto.id = params.query.id
-			this.dto.createTime = Number(params.query.createTime)
+			this.dto.matterRecordId = params.matterRecordId
+			this.dto.reason = params.reason
+			this.dto.stuNum = params.stuNum
+			this.dto.title = params.title
+			this.dto.name = params.name
+			this.dto.id = params.id
+			this.dto.createTime = Number(params.createTime)
+			this.dto.outTime = Number(params.outTime)
 			findByIdApi(this.dto.matterRecordId).then(res => {
 				this.record = res
 				getRoomById(this.record.roomId).then(res1 => {

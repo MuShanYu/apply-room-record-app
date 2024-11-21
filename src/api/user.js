@@ -46,3 +46,9 @@ export function refreshTokenApi(userId, token) {
 export function updateUserInfoApi(userUpdateDTO) {
 	return http.post('/user/update/userInfo', userUpdateDTO)
 }
+
+export function getUserIdApi(name) {
+	return http.get('/user/get/by-name', {
+		name
+	})
+}

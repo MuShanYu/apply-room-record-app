@@ -249,14 +249,16 @@
 					path: '/page-work/sign-in-approve/sign-in-approve-detail',
 					query: {
 						matterRecordId: item.matterRecordId,
-						reason: item.reason,
+						reason: JSON.parse(item.reason).reason,
 						stuNum: item.stuNum,
 						title: item.title,
 						name: item.name,
 						id: item.id,
-						createTime: item.createTime
+						createTime: item.createTime,
+						outTime: JSON.parse(item.reason).outTime
 					}
 				})
+			
 			},
 			handleMoreClick() {
 				this.showPopup = true

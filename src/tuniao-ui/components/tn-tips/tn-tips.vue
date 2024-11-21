@@ -188,9 +188,11 @@
       word-break: break-all;
       width: 100%;
       height: auto;
+      padding: 20rpx;
       text-align: center;
       background-color: rgba(0, 0, 0, 0.7);
       color: #FFFFFF;
+      font-size: 26rpx;
     }
     
     &--top {

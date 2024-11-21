@@ -219,6 +219,10 @@ function handleRefreshToken() {
         let newUserInfo = res.data.queryData.userInfo;
         let permissions = res.data.queryData.permissions;
         let roles = res.data.queryData.roles;
+        // 如果socket断开则重新连接
+        if (!store.state.websocket.webSocketIsOpen) {
+          store.dispatch("websocketInit")
+        }
         uni.setStorageSync("userInfo", newUserInfo); //更新用户信息
         // 更新登录有效时间
         uni.setStorageSync(
@@ -239,10 +243,11 @@ function handleRefreshToken() {
             // 获取当前页面的实例对象
             const currentPage = getCurrentPages()[getCurrentPages().length - 1];
             // 获取当前页面的路径
-            const currentPath = "/" + currentPage.route;
+            console.log('页面数据', currentPage);
+            console.log("decode", decodeURIComponent(decodeURIComponent(currentPage.$page.fullPath)))
             // relaunch当前界面，相当于刷新
             uni.redirectTo({
-              url: currentPath,
+              url: decodeURIComponent(decodeURIComponent(currentPage.$page.fullPath)),
             });
           }, 3000);
         });
