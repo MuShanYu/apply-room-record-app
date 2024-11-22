@@ -5,7 +5,7 @@
 				<text class='icon tn-icon-left'></text>
 			</view>
 			<view slot="default" class="">
-				预约审批
+				补卡审批
 			</view>
 		</tn-nav-bar>
 
